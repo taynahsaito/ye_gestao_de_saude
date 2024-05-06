@@ -1,0 +1,7 @@
+
+<resources>
+    <string name="app_name">YE Gestão de Saúde</string>
+    <string name="facebook_app_id">395029220165250</string>
+    <string name="fb_login_protocol_scheme">fb395029220165250</string>
+    <string name="facebook_client_token">fa0b95c6935aa967e86be13be8b4d30f</string>
+</resources>
