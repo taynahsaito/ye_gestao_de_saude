@@ -14,6 +14,7 @@ class _HomePage extends State<HomePage> {
   Widget build(BuildContext context) {
     User? user = FirebaseAuth.instance.currentUser;
     String userName = user != null ? user.displayName ?? '' : '';
+      int currentPageIndex = 0;
 
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 245, 246, 241),
@@ -285,6 +286,33 @@ class _HomePage extends State<HomePage> {
               ),
             ),
           ],
+      //   bottomNavigationBar: NavigationBar(
+      //   onDestinationSelected: (int index) {
+      //     setState(() {
+      //       currentPageIndex = index;
+      //     });
+      //   },
+      //   indicatorColor: Colors.amber,
+      //   selectedIndex: currentPageIndex,
+      //   destinations: const <Widget>[
+      //     NavigationDestination(
+      //       selectedIcon: Icon(Icons.home),
+      //       icon: Icon(Icons.home_outlined),
+      //       label: 'Home',
+      //     ),
+      //     NavigationDestination(
+      //       icon: Badge(child: Icon(Icons.notifications_sharp)),
+      //       label: 'Notifications',
+      //     ),
+      //     NavigationDestination(
+      //       icon: Badge(
+      //         label: Text('2'),
+      //         child: Icon(Icons.messenger_sharp),
+      //       ),
+      //       label: 'Messages',
+      //     ),
+      //   ],
+      // ),
         ),
       ),
     );
