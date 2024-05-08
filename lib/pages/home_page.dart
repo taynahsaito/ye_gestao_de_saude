@@ -3,18 +3,17 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class HomePage extends StatefulWidget {
-  const HomePage({Key? key});
+  const HomePage({super.key});
 
   @override
-  State<HomePage> createState() => _HomePage();
+  State<HomePage> createState() => _HomePageState();
 }
 
-class _HomePage extends State<HomePage> {
+class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     User? user = FirebaseAuth.instance.currentUser;
     String userName = user != null ? user.displayName ?? '' : '';
-      int currentPageIndex = 0;
 
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 245, 246, 241),
@@ -87,7 +86,7 @@ class _HomePage extends State<HomePage> {
               ),
             ),
             const SizedBox(
-              height: 30,
+              height: 25,
             ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 90),
@@ -286,33 +285,6 @@ class _HomePage extends State<HomePage> {
               ),
             ),
           ],
-      //   bottomNavigationBar: NavigationBar(
-      //   onDestinationSelected: (int index) {
-      //     setState(() {
-      //       currentPageIndex = index;
-      //     });
-      //   },
-      //   indicatorColor: Colors.amber,
-      //   selectedIndex: currentPageIndex,
-      //   destinations: const <Widget>[
-      //     NavigationDestination(
-      //       selectedIcon: Icon(Icons.home),
-      //       icon: Icon(Icons.home_outlined),
-      //       label: 'Home',
-      //     ),
-      //     NavigationDestination(
-      //       icon: Badge(child: Icon(Icons.notifications_sharp)),
-      //       label: 'Notifications',
-      //     ),
-      //     NavigationDestination(
-      //       icon: Badge(
-      //         label: Text('2'),
-      //         child: Icon(Icons.messenger_sharp),
-      //       ),
-      //       label: 'Messages',
-      //     ),
-      //   ],
-      // ),
         ),
       ),
     );

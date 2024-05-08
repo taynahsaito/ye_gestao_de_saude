@@ -1,5 +1,6 @@
 import 'package:app_ye_gestao_de_saude/components/snackbar.dart';
 import 'package:app_ye_gestao_de_saude/services/auth_service.dart';
+import 'package:app_ye_gestao_de_saude/widgets/nav_bar.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:app_ye_gestao_de_saude/pages/cadastro.dart';
@@ -113,7 +114,7 @@ class _LoginState extends State<Login> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => const HomePage(),
+                              builder: (context) => const NavBar(),
                             ),
                           );
                         } else {
@@ -217,7 +218,7 @@ class _LoginState extends State<Login> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => const HomePage(),
+                            builder: (context) => const NavBar(),
                           ),
                         );
                       },

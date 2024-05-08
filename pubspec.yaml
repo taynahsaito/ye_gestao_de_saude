@@ -76,6 +76,10 @@ flutter:
       - lib/assets/face.png
       - lib/assets/google.png
       - lib/assets/perfil.png
+      - lib/assets/icone_homepage.png
+      - lib/assets/icone_exames.png
+      - lib/assets/icone_consultas.png
+      - lib/assets/icone_medicamentos.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
