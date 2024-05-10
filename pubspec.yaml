@@ -77,7 +77,7 @@ flutter:
       - lib/assets/google.png
       - lib/assets/perfil.png
       - lib/assets/icone_homepage.png
-      - lib/assets/icone_exames.png
+      - lib/assets/icon_exames.png
       - lib/assets/icone_consultas.png
       - lib/assets/icone_medicamentos.png
 

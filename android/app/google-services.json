@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "660941902840",
+    "firebase_url": "https://ye-gestao-de-saude-6843f-default-rtdb.firebaseio.com",
+    "project_id": "YE - Gestão de Saúde",
+    "storage_bucket": "ye-gestao-de-saude-6843f.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:660941902840:android:e12a4416037d2213633c0d",
+        "android_client_info": {
+          "package_name": "com.example.app_ye_gestao_de_saude"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCGll-SnKpJ6lYaZhGgZz_fLDLCM3SM1VY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -13,16 +13,9 @@ class NavBar extends StatefulWidget {
 
 class _NavBar extends State<NavBar> {
   int selectedIndex = 0;
-  static const List<Widget> pages = <Widget>[
-    HomePage(),
-    Exames(),
-    Consultas(),
-    Medicamentos(),
-  ];
 
   @override
   Widget build(BuildContext context) {
-    final ThemeData theme = Theme.of(context);
     return Scaffold(
       bottomNavigationBar: NavigationBar(
         backgroundColor: Colors.white,
@@ -34,101 +27,64 @@ class _NavBar extends State<NavBar> {
         indicatorColor: const Color.fromARGB(180, 223, 223, 223),
         indicatorShape: const CircleBorder(),
         selectedIndex: selectedIndex,
-        destinations: const <Widget>[
+        destinations: <NavigationDestination>[
           NavigationDestination(
             icon: ImageIcon(
-              size: 25,
-              AssetImage(
+              const AssetImage(
                 'lib/assets/icone_homepage.png',
-              ), // Substitua pelo caminho da imagem
+              ),
+              color: selectedIndex == 0
+                  ? const Color.fromARGB(255, 74, 83, 62)
+                  : const Color.fromARGB(
+                      137, 88, 100, 73), // Cor do ícone selecionado
+              size: 25,
             ),
             label: 'Inicio',
           ),
           NavigationDestination(
             icon: ImageIcon(
-              size: 25,
-              AssetImage(
-                  'lib/assets/icone_exames.png'), // Substitua pelo caminho da imagem
+              const AssetImage('lib/assets/icon_exames.png'),
+              color: selectedIndex == 1
+                  ? const Color.fromARGB(255, 74, 83, 62)
+                  : const Color.fromARGB(
+                      137, 88, 100, 73), // Cor do ícone selecionado
+              size: 34,
             ),
             label: 'Exames',
           ),
           NavigationDestination(
             icon: ImageIcon(
+              const AssetImage('lib/assets/icone_consultas.png'),
+              color: selectedIndex == 2
+                  ? const Color.fromARGB(255, 74, 83, 62)
+                  : const Color.fromARGB(
+                      137, 88, 100, 73), // Cor do ícone selecionado
               size: 25,
-              AssetImage(
-                  'lib/assets/icone_consultas.png'), // Substitua pelo caminho da imagem
             ),
             label: 'Consultas',
           ),
           NavigationDestination(
             icon: ImageIcon(
+              const AssetImage('lib/assets/icone_medicamentos.png'),
+              color: selectedIndex == 3
+                  ? const Color.fromARGB(255, 74, 83, 62)
+                  : const Color.fromARGB(
+                      137, 88, 100, 73), // Cor do ícone selecionado
               size: 25,
-              AssetImage(
-                  'lib/assets/icone_medicamentos.png'), // Substitua pelo caminho da imagem
             ),
             label: 'Medicamentos',
           ),
         ],
       ),
-      body: <Widget>[
-        const HomePage(),
-        const Exames(),
-        const Consultas(),
-        const Medicamentos()
-      ][selectedIndex],
+      body: IndexedStack(
+        index: selectedIndex,
+        children: const [
+          HomePage(),
+          Exames(),
+          Consultas(),
+          Medicamentos(),
+        ],
+      ),
     );
-
-    // return Scaffold(
-    //   backgroundColor: const Color.fromARGB(255, 245, 246, 241),
-    //   body: Center(
-    //     child: pages.elementAt(selectedIndex),
-    //   ),
-    //   bottomNavigationBar: BottomNavigationBar(
-    //     currentIndex: selectedIndex,
-    //     onTap: (int index) {
-    //       setState(() {
-    //         selectedIndex = index;
-    //       });
-    //     },
-    //     items: const [
-    //       BottomNavigationBarItem(
-    //         icon: ImageIcon(
-    //           AssetImage(
-    //               'lib/assets/icone_homepage.png'), // Substitua pelo caminho da imagem
-    //         ),
-    //         label: 'Início',
-    //       ),
-    //       BottomNavigationBarItem(
-    //         icon: ImageIcon(
-    //           AssetImage(
-    //               'lib/assets/icone_exames.png'), // Substitua pelo caminho da imagem
-    //         ),
-    //         label: 'Exames',
-    //       ),
-    //       BottomNavigationBarItem(
-    //         icon: ImageIcon(
-    //           AssetImage(
-    //               'lib/assets/icone_consultas.png'), // Substitua pelo caminho da imagem
-    //         ),
-    //         label: 'Consultas',
-    //       ),
-    //       BottomNavigationBarItem(
-    //         icon: ImageIcon(
-    //           AssetImage(
-    //             'lib/assets/icone_medicamentos.png',
-    //           ), // Substitua pelo caminho da imagem
-    //         ),
-    //         label: 'Medicamentos',
-    //       ),
-    //     ],
-    //     backgroundColor: Colors.white,
-    //     selectedItemColor: const Color.fromARGB(180, 14, 14, 109),
-    //     unselectedItemColor: Colors.grey,
-    //     showSelectedLabels: true,
-    //     selectedFontSize: 12,
-    //     unselectedFontSize: 12,
-    //     type: BottomNavigationBarType.fixed,
-    //   ),
-    // );
   }
 }
