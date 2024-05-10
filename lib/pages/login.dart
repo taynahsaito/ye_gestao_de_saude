@@ -5,6 +5,8 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:app_ye_gestao_de_saude/pages/cadastro.dart';
 import 'package:app_ye_gestao_de_saude/pages/home_page.dart';
+import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 class Login extends StatefulWidget {
   const Login({super.key});
@@ -21,6 +23,49 @@ class _LoginState extends State<Login> {
   final databaseReference =
       FirebaseDatabase.instance.reference().child('usuarios');
   final AuthService _autenServico = AuthService();
+
+  Future<void> loginWithGoogle(BuildContext context) async {
+    final GoogleSignIn googleSignIn = GoogleSignIn();
+
+    try {
+      final GoogleSignInAccount? googleSignInAccount =
+          await googleSignIn.signIn();
+      if (googleSignInAccount != null) {
+        // Sucesso ao fazer login com o Google
+        // Você pode prosseguir com o que deseja fazer após o login bem-sucedido
+        // Por exemplo, navegar para a próxima tela
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => const Login()),
+        );
+      } else {
+        // Cancelado pelo usuário
+        print('Login com Google cancelado.');
+      }
+    } catch (error) {
+      // Tratar erros de autenticação do Google
+      print('Erro ao fazer login com o Google: $error');
+    }
+  }
+
+  Future<void> _loginWithFacebook(BuildContext context) async {
+    try {
+      final permissions = ['email', 'public_profile'];
+      final LoginResult result =
+          await FacebookAuth.instance.login(permissions: permissions);
+
+      if (result.status == LoginStatus.success) {
+        // Sucesso ao fazer login com o Facebook
+        // Faça o que precisar aqui, como navegar para a próxima tela
+      } else {
+        // O usuário cancelou o login ou ocorreu um erro
+        print('Login com Facebook cancelado ou falhou.');
+      }
+    } catch (error) {
+      // Tratar erros de autenticação do Facebook
+      print('Erro ao fazer login com o Facebook: $error');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -162,18 +207,32 @@ class _LoginState extends State<Login> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Image.asset(
-                          'lib/assets/face.png',
-                          width: 40,
-                          height: 40,
+                        MouseRegion(
+                          cursor: SystemMouseCursors.click,
+                          child: GestureDetector(
+                              onTap: () {
+                                _loginWithFacebook(context);
+                              },
+                              child: Image.asset(
+                                'lib/assets/face.png',
+                                width: 40,
+                                height: 40,
+                              )),
                         ),
                         const SizedBox(
                           width: 30,
                         ),
-                        Image.asset(
-                          'lib/assets/google.png',
-                          width: 40,
-                          height: 40,
+                        MouseRegion(
+                          cursor: SystemMouseCursors.click,
+                          child: GestureDetector(
+                              onTap: () {
+                                loginWithGoogle(context);
+                              },
+                              child: Image.asset(
+                                'lib/assets/google.png',
+                                width: 40,
+                                height: 40,
+                              )),
                         )
                       ],
                     ),
