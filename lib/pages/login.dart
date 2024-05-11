@@ -1,6 +1,7 @@
 import 'package:app_ye_gestao_de_saude/components/snackbar.dart';
 import 'package:app_ye_gestao_de_saude/services/auth_service.dart';
 import 'package:app_ye_gestao_de_saude/widgets/nav_bar.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:app_ye_gestao_de_saude/pages/cadastro.dart';
@@ -24,29 +25,28 @@ class _LoginState extends State<Login> {
       FirebaseDatabase.instance.reference().child('usuarios');
   final AuthService _autenServico = AuthService();
 
-  Future<void> loginWithGoogle(BuildContext context) async {
-    final GoogleSignIn googleSignIn = GoogleSignIn();
+ signInWithGoogle(BuildContext context) async {
+  try {
+    final GoogleSignInAccount? gUser = await GoogleSignIn().signIn();
+    final GoogleSignInAuthentication gAuth = await gUser!.authentication;
 
-    try {
-      final GoogleSignInAccount? googleSignInAccount =
-          await googleSignIn.signIn();
-      if (googleSignInAccount != null) {
-        // Sucesso ao fazer login com o Google
-        // Você pode prosseguir com o que deseja fazer após o login bem-sucedido
-        // Por exemplo, navegar para a próxima tela
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => const Login()),
-        );
-      } else {
-        // Cancelado pelo usuário
-        print('Login com Google cancelado.');
-      }
-    } catch (error) {
-      // Tratar erros de autenticação do Google
-      print('Erro ao fazer login com o Google: $error');
+    final credential = GoogleAuthProvider.credential(
+      idToken: gAuth.idToken,
+      accessToken: gAuth.accessToken,
+    );
+
+    final authResult = await FirebaseAuth.instance.signInWithCredential(credential);
+
+    if (authResult.user != null) {
+      Navigator.pushReplacement( 
+        context,
+        MaterialPageRoute(builder: (context) => HomePage()),
+      );
     }
+  } catch (error) {
+    print('Erro ao fazer login com o Google: $error');
   }
+}
 
   Future<void> _loginWithFacebook(BuildContext context) async {
     try {
@@ -226,7 +226,7 @@ class _LoginState extends State<Login> {
                           cursor: SystemMouseCursors.click,
                           child: GestureDetector(
                               onTap: () {
-                                loginWithGoogle(context);
+                                signInWithGoogle(context);
                               },
                               child: Image.asset(
                                 'lib/assets/google.png',

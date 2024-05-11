@@ -2,7 +2,7 @@
   "project_info": {
     "project_number": "660941902840",
     "firebase_url": "https://ye-gestao-de-saude-6843f-default-rtdb.firebaseio.com",
-    "project_id": "YE - Gestão de Saúde",
+    "project_id": "ye-gestao-de-saude-6843f",
     "storage_bucket": "ye-gestao-de-saude-6843f.appspot.com"
   },
   "client": [
@@ -13,7 +13,20 @@
           "package_name": "com.example.app_ye_gestao_de_saude"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "660941902840-ke521kcgjfe8aah60tknl3ein2qnhol3.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.app_ye_gestao_de_saude",
+            "certificate_hash": "40482c50b1cd443a221e1214407e957aa9f1d41e"
+          }
+        },
+        {
+          "client_id": "660941902840-bbeefaujg701j88e380bl84hdt0uq62t.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyCGll-SnKpJ6lYaZhGgZz_fLDLCM3SM1VY"
@@ -21,7 +34,19 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "660941902840-bbeefaujg701j88e380bl84hdt0uq62t.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "660941902840-kqi961b8crjr82ft360oc82judakut8b.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.appYeGestaoDeSaude"
+              }
+            }
+          ]
         }
       }
     }
