@@ -18,8 +18,8 @@ class Login extends StatefulWidget {
 
 class _LoginState extends State<Login> {
   bool _senhaVisivel = false;
-  TextEditingController _emailController = TextEditingController();
-  TextEditingController _senhaController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _senhaController = TextEditingController();
 
   final databaseReference =
       FirebaseDatabase.instance.reference().child('usuarios');
@@ -40,7 +40,7 @@ class _LoginState extends State<Login> {
     if (authResult.user != null) {
       Navigator.pushReplacement( 
         context,
-        MaterialPageRoute(builder: (context) => HomePage()),
+        MaterialPageRoute(builder: (context) => NavBar()),
       );
     }
   } catch (error) {
