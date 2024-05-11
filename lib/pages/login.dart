@@ -40,7 +40,7 @@ class _LoginState extends State<Login> {
     if (authResult.user != null) {
       Navigator.pushReplacement( 
         context,
-        MaterialPageRoute(builder: (context) => HomePage()),
+        MaterialPageRoute(builder: (context) => NavBar()),
       );
     }
   } catch (error) {
