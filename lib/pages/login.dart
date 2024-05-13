@@ -5,7 +5,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:app_ye_gestao_de_saude/pages/cadastro.dart';
-import 'package:app_ye_gestao_de_saude/pages/home_page.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
@@ -40,7 +39,7 @@ class _LoginState extends State<Login> {
     if (authResult.user != null) {
       Navigator.pushReplacement( 
         context,
-        MaterialPageRoute(builder: (context) => NavBar()),
+        MaterialPageRoute(builder: (context) => const NavBar()),
       );
     }
   } catch (error) {
@@ -48,24 +47,31 @@ class _LoginState extends State<Login> {
   }
 }
 
-  Future<void> _loginWithFacebook(BuildContext context) async {
-    try {
-      final permissions = ['email', 'public_profile'];
-      final LoginResult result =
-          await FacebookAuth.instance.login(permissions: permissions);
+Future<void> signInWithFacebook(BuildContext context) async {
+  final LoginResult loginResult = await FacebookAuth.instance
+      .login(permissions: ['email', 'public_profile']);
 
-      if (result.status == LoginStatus.success) {
-        // Sucesso ao fazer login com o Facebook
-        // Faça o que precisar aqui, como navegar para a próxima tela
-      } else {
-        // O usuário cancelou o login ou ocorreu um erro
-        print('Login com Facebook cancelado ou falhou.');
-      }
-    } catch (error) {
-      // Tratar erros de autenticação do Facebook
-      print('Erro ao fazer login com o Facebook: $error');
+  final userData = await FacebookAuth.instance.getUserData();
+
+  final userEmail = userData['email'];
+
+  final OAuthCredential facebookAuthCredential =
+      FacebookAuthProvider.credential(loginResult.accessToken!.token);
+
+  try {
+    final authResult = await FirebaseAuth.instance.signInWithCredential(facebookAuthCredential);
+
+    if (authResult.user != null) {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => const NavBar()),
+      );
     }
+  } catch (e) {
+    print("Erro ao fazer login com o Facebook: $e");
+    // Trate o erro adequadamente, como exibindo uma mensagem de erro para o usuário.
   }
+}
 
   @override
   Widget build(BuildContext context) {
@@ -211,7 +217,7 @@ class _LoginState extends State<Login> {
                           cursor: SystemMouseCursors.click,
                           child: GestureDetector(
                               onTap: () {
-                                _loginWithFacebook(context);
+                                signInWithFacebook(context);
                               },
                               child: Image.asset(
                                 'lib/assets/face.png',
