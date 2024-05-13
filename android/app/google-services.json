@@ -23,6 +23,14 @@
           }
         },
         {
+          "client_id": "660941902840-rt78fi256r8mr8q6aas8p7ss3j8fg43u.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.app_ye_gestao_de_saude",
+            "certificate_hash": "aaada62377742e28a34b9f67fb1d7555b9a38bd6"
+          }
+        },
+        {
           "client_id": "660941902840-bbeefaujg701j88e380bl84hdt0uq62t.apps.googleusercontent.com",
           "client_type": 3
         }
