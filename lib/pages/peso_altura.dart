@@ -1,46 +1,25 @@
+import 'package:app_ye_gestao_de_saude/pages/home_page.dart';
 import 'package:app_ye_gestao_de_saude/pages/nova_pressao.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_database/firebase_database.dart';
+import 'package:app_ye_gestao_de_saude/pages/novo_peso_altura.dart';
 import 'package:flutter/material.dart';
+import 'package:firebase_database/firebase_database.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
-class Pressao extends StatefulWidget {
-  const Pressao({Key? key});
+class PesoAltura extends StatefulWidget {
+  // final List<Pressao> historicoPressao = [];
+  // final String pressao
+  // const Pressao({Key? key}) : super (key: key);
 
   @override
-  State<Pressao> createState() => _PressaoState();
+  State<PesoAltura> createState() => _PesoAlturaState();
 }
 
-class _PressaoState extends State<Pressao> {
-  final databaseReference = FirebaseDatabase.instance.ref().child('pressoes');
-  List<DocumentSnapshot> historicoPressao =
-      []; // List to store retrieved pressure data
+class _PesoAlturaState extends State<PesoAltura> {
   @override
   void initState() {
     super.initState();
-    _getHistoricoPressao();
-  }
-
-  Future<void> _getHistoricoPressao() async {
-    final snapshot = await databaseReference.get();
-    print(snapshot.value);
-    Object? historicoPressao = snapshot.value;
-
-    await databaseReference.push().set({
-      'diastólica': "_diastolicaController",
-      'sistólica': "_sistolicaController",
-      'data': "_senhaController",
-      'dataNascimento': "dataNascimento",
-    });
-    // Get reference to 'pressao_sanguinea' collection
-    //CollectionReference pressureRef = firestore.collection('pressao_sanguinea');
-
-    // Get all documents from the collection
-    //QuerySnapshot querySnapshot = await pressureRef.get();
-
-    // Update state with retrieved documents
-    // setState(() {
-    //   historicoPressao = querySnapshot.docs;
-    // });
   }
 
   @override
@@ -64,22 +43,22 @@ class _PressaoState extends State<Pressao> {
       ),
       body: Stack(
         children: [
-          const SingleChildScrollView(
+          SingleChildScrollView(
             child: Center(
               child: Column(
                 children: [
-                  SizedBox(
+                  const SizedBox(
                     height: 20,
                   ),
-                  Text(
-                    'Histórico da pressão',
+                  const Text(
+                    'Histórico do peso e altura',
                     style: TextStyle(
                       fontSize: 22,
                       color: Color.fromARGB(220, 105, 126, 80),
                       fontWeight: FontWeight.w900,
                     ),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 20,
                   ),
                   // Outros widgets aqui...
@@ -95,8 +74,7 @@ class _PressaoState extends State<Pressao> {
                 onPressed: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(
-                        builder: (context) => const NovaPressao()),
+                    MaterialPageRoute(builder: (context) => NovoPesoAltura()),
                   );
                 },
                 style: ElevatedButton.styleFrom(

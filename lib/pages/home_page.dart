@@ -1,3 +1,6 @@
+import 'package:app_ye_gestao_de_saude/pages/glicemia.dart';
+import 'package:app_ye_gestao_de_saude/pages/imc.dart';
+import 'package:app_ye_gestao_de_saude/pages/peso_altura.dart';
 import 'package:app_ye_gestao_de_saude/pages/pressao.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -29,9 +32,7 @@ class _HomePageState extends State<HomePage> {
                 Icons.settings,
                 color: Color.fromARGB(220, 105, 126, 80),
               ),
-              onPressed: () {
-                
-              },
+              onPressed: () {},
             ),
           )
         ],
@@ -160,7 +161,12 @@ class _HomePageState extends State<HomePage> {
                     height: 10,
                   ),
                   ElevatedButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => Glicemia()),
+                      );
+                    },
                     style: ElevatedButton.styleFrom(
                       padding: const EdgeInsets.fromLTRB(
                           30, 15, 15, 15), // Adiciona espaço à direita
@@ -206,7 +212,12 @@ class _HomePageState extends State<HomePage> {
                     height: 10,
                   ),
                   ElevatedButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => PesoAltura()),
+                      );
+                    },
                     style: ElevatedButton.styleFrom(
                       padding: const EdgeInsets.fromLTRB(
                           30, 15, 15, 15), // Adiciona espaço à direita
@@ -252,7 +263,13 @@ class _HomePageState extends State<HomePage> {
                     height: 10,
                   ),
                   ElevatedButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const IMCPage()),
+                      );
+                    },
                     style: ElevatedButton.styleFrom(
                       padding: const EdgeInsets.fromLTRB(
                           30, 15, 15, 15), // Adiciona espaço à direita

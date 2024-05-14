@@ -105,7 +105,7 @@ class _LoginState extends State<Login> {
                         borderSide: BorderSide.none,
                         borderRadius: BorderRadius.all(Radius.circular(25)),
                       ),
-                      labelText: "Login",
+                      labelText: "E-mail",
                       contentPadding: EdgeInsets.fromLTRB(25, 0, 0, 0),
                       labelStyle: TextStyle(
                           fontSize: 18,
@@ -285,16 +285,16 @@ class _LoginState extends State<Login> {
                       ),
                     ),
                   ),
-                  ElevatedButton(
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const NavBar(),
-                          ),
-                        );
-                      },
-                      child: const Text("homepage")),
+                  // ElevatedButton(
+                  //     onPressed: () {
+                  //       Navigator.push(
+                  //         context,
+                  //         MaterialPageRoute(
+                  //           builder: (context) => const NavBar(),
+                  //         ),
+                  //       );
+                  //     },
+                  //     child: const Text("homepage")),
                 ],
               ),
             ),
