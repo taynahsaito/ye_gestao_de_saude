@@ -27,16 +27,19 @@
 // }
 import 'package:app_ye_gestao_de_saude/main.dart';
 import 'package:app_ye_gestao_de_saude/pages/home_page.dart';
+import 'package:app_ye_gestao_de_saude/pages/login.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
-  testWidgets('Teste de navegação para tela inicial após pressionar botão de entrar', (WidgetTester tester) async {
+  testWidgets(
+      'Teste de navegação para tela inicial após pressionar botão de entrar',
+      (WidgetTester tester) async {
     // Construa o widget principal do aplicativo
-    await tester.pumpWidget(const MyApp()); 
+    await tester.pumpWidget(const MaterialApp(home: Login()));
 
     expect(find.text('Entrar'), findsOneWidget);
-    
+    expect(find.byIcon(Icons.visibility), findsOneWidget);
     // Encontre e toque no botão de entrar
     await tester.tap(find.text('Entrar'));
     await tester.pumpAndSettle();
@@ -45,4 +48,3 @@ void main() {
     expect(find.byType(HomePage), findsOneWidget);
   });
 }
-
