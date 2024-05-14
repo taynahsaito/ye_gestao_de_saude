@@ -228,38 +228,44 @@ class _CadastroState extends State<Cadastro> {
                         });
                       },
                     ),
-                    Center(
-                        child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        const Text(
-                          "Concordo com os ",
-                          style: TextStyle(
-                              fontSize: 11,
-                              fontWeight: FontWeight.w500,
-                              color: Color.fromARGB(220, 133, 152, 100)),
-                        ),
-                        MouseRegion(
-                          cursor: SystemMouseCursors.click,
-                          child: GestureDetector(
-                            onTap: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => const Cadastro()),
-                              );
-                            },
-                            child: const Text(
-                              "Termos de uso e privacidade",
+                    Container(
+                      constraints: const BoxConstraints(
+                          maxWidth: 200), // Defina a largura máxima desejada
+                      child: Center(
+                        child: Wrap(
+                          alignment: WrapAlignment.start,
+                          children: [
+                            const Text(
+                              "Concordo com os ",
                               style: TextStyle(
                                   fontSize: 11,
-                                  fontWeight: FontWeight.w900,
+                                  fontWeight: FontWeight.w500,
                                   color: Color.fromARGB(220, 133, 152, 100)),
                             ),
-                          ),
-                        )
-                      ],
-                    ))
+                            MouseRegion(
+                              cursor: SystemMouseCursors.click,
+                              child: GestureDetector(
+                                onTap: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => const Cadastro()),
+                                  );
+                                },
+                                child: const Text(
+                                  "Termos de uso e privacidade",
+                                  style: TextStyle(
+                                      fontSize: 11,
+                                      fontWeight: FontWeight.w900,
+                                      color:
+                                          Color.fromARGB(220, 133, 152, 100)),
+                                ),
+                              ),
+                            )
+                          ],
+                        ),
+                      ),
+                    ),
                   ],
                 ),
                 const SizedBox(

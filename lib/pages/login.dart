@@ -24,54 +24,56 @@ class _LoginState extends State<Login> {
       FirebaseDatabase.instance.reference().child('usuarios');
   final AuthService _autenServico = AuthService();
 
- signInWithGoogle(BuildContext context) async {
-  try {
-    final GoogleSignInAccount? gUser = await GoogleSignIn().signIn();
-    final GoogleSignInAuthentication gAuth = await gUser!.authentication;
+  signInWithGoogle(BuildContext context) async {
+    try {
+      final GoogleSignInAccount? gUser = await GoogleSignIn().signIn();
+      final GoogleSignInAuthentication gAuth = await gUser!.authentication;
 
-    final credential = GoogleAuthProvider.credential(
-      idToken: gAuth.idToken,
-      accessToken: gAuth.accessToken,
-    );
-
-    final authResult = await FirebaseAuth.instance.signInWithCredential(credential);
-
-    if (authResult.user != null) {
-      Navigator.pushReplacement( 
-        context,
-        MaterialPageRoute(builder: (context) => const NavBar()),
+      final credential = GoogleAuthProvider.credential(
+        idToken: gAuth.idToken,
+        accessToken: gAuth.accessToken,
       );
+
+      final authResult =
+          await FirebaseAuth.instance.signInWithCredential(credential);
+
+      if (authResult.user != null) {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => const NavBar()),
+        );
+      }
+    } catch (error) {
+      print('Erro ao fazer login com o Google: $error');
     }
-  } catch (error) {
-    print('Erro ao fazer login com o Google: $error');
   }
-}
 
-Future<void> signInWithFacebook(BuildContext context) async {
-  final LoginResult loginResult = await FacebookAuth.instance
-      .login(permissions: ['email', 'public_profile']);
+  Future<void> signInWithFacebook(BuildContext context) async {
+    final LoginResult loginResult = await FacebookAuth.instance
+        .login(permissions: ['email', 'public_profile']);
 
-  final userData = await FacebookAuth.instance.getUserData();
+    final userData = await FacebookAuth.instance.getUserData();
 
-  final userEmail = userData['email'];
+    final userEmail = userData['email'];
 
-  final OAuthCredential facebookAuthCredential =
-      FacebookAuthProvider.credential(loginResult.accessToken!.token);
+    final OAuthCredential facebookAuthCredential =
+        FacebookAuthProvider.credential(loginResult.accessToken!.token);
 
-  try {
-    final authResult = await FirebaseAuth.instance.signInWithCredential(facebookAuthCredential);
+    try {
+      final authResult = await FirebaseAuth.instance
+          .signInWithCredential(facebookAuthCredential);
 
-    if (authResult.user != null) {
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => const NavBar()),
-      );
+      if (authResult.user != null) {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => const NavBar()),
+        );
+      }
+    } catch (e) {
+      print("Erro ao fazer login com o Facebook: $e");
+      // Trate o erro adequadamente, como exibindo uma mensagem de erro para o usuário.
     }
-  } catch (e) {
-    print("Erro ao fazer login com o Facebook: $e");
-    // Trate o erro adequadamente, como exibindo uma mensagem de erro para o usuário.
   }
-}
 
   @override
   Widget build(BuildContext context) {
@@ -246,38 +248,43 @@ Future<void> signInWithFacebook(BuildContext context) async {
                   const SizedBox(
                     height: 20,
                   ),
-                  Center(
-                      child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      const Text(
-                        "Não tem uma conta? ",
-                        style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.w500,
-                            color: Color.fromARGB(220, 133, 152, 100)),
-                      ),
-                      MouseRegion(
-                        cursor: SystemMouseCursors.click,
-                        child: GestureDetector(
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => const Cadastro()),
-                            );
-                          },
-                          child: const Text(
-                            "Cadastre-se",
+                  Container(
+                    constraints: const BoxConstraints(
+                        maxWidth: 600), // Defina a largura máxima desejada
+                    child: Center(
+                      child: Wrap(
+                        alignment: WrapAlignment.center,
+                        children: [
+                          const Text(
+                            "Não tem uma conta? ",
                             style: TextStyle(
                                 fontSize: 18,
-                                fontWeight: FontWeight.w900,
+                                fontWeight: FontWeight.w500,
                                 color: Color.fromARGB(220, 133, 152, 100)),
                           ),
-                        ),
-                      )
-                    ],
-                  )),
+                          MouseRegion(
+                            cursor: SystemMouseCursors.click,
+                            child: GestureDetector(
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => const Cadastro()),
+                                );
+                              },
+                              child: const Text(
+                                "Cadastre-se",
+                                style: TextStyle(
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.w900,
+                                    color: Color.fromARGB(220, 133, 152, 100)),
+                              ),
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+                  ),
                   ElevatedButton(
                       onPressed: () {
                         Navigator.push(
