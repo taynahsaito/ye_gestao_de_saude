@@ -76,11 +76,11 @@ class _PressaoState extends State<Pressao> {
                     style: TextStyle(
                       fontSize: 22,
                       color: Color.fromARGB(220, 105, 126, 80),
-                      fontWeight: FontWeight.w900,
+                      fontWeight: FontWeight.bold,
                     ),
                   ),
                   SizedBox(
-                    height: 20,
+                    height: 30,
                   ),
                   // Outros widgets aqui...
                 ],
@@ -100,15 +100,15 @@ class _PressaoState extends State<Pressao> {
                   );
                 },
                 style: ElevatedButton.styleFrom(
-                  padding: const EdgeInsets.all(15),
                   backgroundColor: const Color.fromARGB(
                       50, 105, 126, 80), // Cor de fundo do botão
                   foregroundColor: Colors.white,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(600),
-                  ),
+                  shape: const CircleBorder(),  
                 ),
-                child: const Icon(Icons.add),
+                child: const Padding(
+                  padding: EdgeInsets.all(8.0),
+                  child: Icon(Icons.add),
+                ),
               ),
             ),
           ),
