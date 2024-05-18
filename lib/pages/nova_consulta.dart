@@ -1,17 +1,50 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
-class NovoIMC extends StatefulWidget {
-  const NovoIMC({super.key});
+class NovaConsulta extends StatefulWidget {
+  const NovaConsulta({super.key});
 
   @override
-  State<NovoIMC> createState() => _NovoIMCState();
+  State<NovaConsulta> createState() => _NovaConsultaState();
 }
 
-class _NovoIMCState extends State<NovoIMC> {
+class _NovaConsultaState extends State<NovaConsulta> {
+  late DateTime? _selectedDate;
+  final DateFormat _dateFormat = DateFormat('dd/MM/yyyy');
   final _formKey = GlobalKey<FormState>();
-  final TextEditingController _alturaController = TextEditingController();
-  final TextEditingController _pesoController = TextEditingController();
-  final TextEditingController _dataController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    _selectedDate = null; // Inicializando _selectedDate com a data atual
+  }
+
+  Future<void> _selectDate(BuildContext context) async {
+    final ThemeData theme = Theme.of(context);
+    final DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: _selectedDate,
+      firstDate: DateTime(1900),
+      lastDate: DateTime.now(),
+      builder: (BuildContext context, Widget? child) {
+        return Theme(
+          data: theme.copyWith(
+            // Personalize a cor de fundo da seleção aqui
+            colorScheme: theme.colorScheme.copyWith(
+              primary: const Color.fromARGB(
+                  220, 105, 126, 80), // Cor de fundo da seleção
+            ),
+          ),
+          child: child!,
+        );
+      },
+    );
+    if (picked != null && picked != _selectedDate) {
+      setState(() {
+        _selectedDate = picked;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -32,18 +65,16 @@ class _NovoIMCState extends State<NovoIMC> {
           ),
         ),
       ),
-      body: Center(
-        child: Padding(
-          padding: const EdgeInsets.fromLTRB(70, 0, 70, 0),
-          child: Form(
-            key: _formKey,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
+      body: Padding(
+        padding: const EdgeInsets.fromLTRB(70, 0, 70, 0),
+        child: SingleChildScrollView(
+          child: Center(
+            child: Form(
+                child: Column(
               children: [
-                const SizedBox(
-                    height: 20), // Espaço adicionado acima do formulário
+                const SizedBox(height: 20),
                 const Text(
-                  'Registre seu IMC',
+                  'Registre uma nova consulta',
                   style: TextStyle(
                     fontSize: 22,
                     color: Color.fromARGB(220, 105, 126, 80),
@@ -54,14 +85,14 @@ class _NovoIMCState extends State<NovoIMC> {
                   height: 40,
                 ),
                 Column(
-                  // mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     const Text(
-                      "Altura (em metros):",
+                      "Especialidade:",
                       style: TextStyle(
                         fontSize: 18,
-                        fontWeight: FontWeight.w500,
+                        fontWeight: FontWeight.w600,
                         color: Color.fromARGB(220, 105, 126, 80),
                       ),
                     ),
@@ -69,15 +100,6 @@ class _NovoIMCState extends State<NovoIMC> {
                     SizedBox(
                       height: 40,
                       child: TextFormField(
-                        controller: _alturaController,
-                        keyboardType: const TextInputType.numberWithOptions(
-                            decimal: true),
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Por favor, insira a altura';
-                          }
-                          return null;
-                        },
                         decoration: InputDecoration(
                           border: OutlineInputBorder(
                               borderSide: const BorderSide(
@@ -97,48 +119,17 @@ class _NovoIMCState extends State<NovoIMC> {
                                       80)), // Altere a cor da borda aqui
                               borderRadius: BorderRadius.circular(20)),
                         ),
-                      ),
-                    ),
-                    const SizedBox(height: 15),
-                    const Text(
-                      "Peso (em kg):",
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w500,
-                        color: Color.fromARGB(220, 105, 126, 80),
-                      ),
-                    ),
-                    const SizedBox(height: 10),
-                    SizedBox(
-                      height: 40,
-                      child: TextFormField(
-                        controller: _pesoController,
-                        keyboardType: const TextInputType.numberWithOptions(
-                            decimal: true),
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Por favor, insira o peso';
-                          }
-                          return null;
-                        },
-                        decoration: InputDecoration(
-                          border: OutlineInputBorder(
-                              borderSide: const BorderSide(
-                                  color: Color.fromARGB(220, 105, 126, 80)),
-                              borderRadius: BorderRadius.circular(20)),
-
-                          contentPadding:
-                              const EdgeInsets.fromLTRB(25, 0, 0, 0),
-                          labelStyle: const TextStyle(
-                              fontSize: 18,
-                              color: Color.fromARGB(255, 152, 152, 152)),
-                          //quando clica na label
-                          focusedBorder: OutlineInputBorder(
-                              borderSide: const BorderSide(
-                                  color: Color.fromARGB(220, 105, 126,
-                                      80)), // Altere a cor da borda aqui
-                              borderRadius: BorderRadius.circular(20)),
-                        ),
+                        // validator: (value) {
+                        //   if (value == null || value.isEmpty) {
+                        //     return 'Por favor, insira sua glicemia';
+                        //   }
+                        //   return null;
+                        // },
+                        // onSaved: (value) {
+                        //   if (value != null) {
+                        //     _glicemia = value;
+                        //   }
+                        // },
                       ),
                     ),
                     const SizedBox(height: 15),
@@ -154,14 +145,13 @@ class _NovoIMCState extends State<NovoIMC> {
                     SizedBox(
                       height: 40,
                       child: TextFormField(
-                        controller: _dataController,
-                        keyboardType: TextInputType.datetime,
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Por favor, insira a data da aferição';
-                          }
-                          return null;
-                        },
+                        readOnly: true,
+                        onTap: () => _selectDate(context),
+                        controller: TextEditingController(
+                          text: _selectedDate != null
+                              ? _dateFormat.format(_selectedDate!)
+                              : '',
+                        ),
                         decoration: InputDecoration(
                           border: OutlineInputBorder(
                               borderSide: const BorderSide(
@@ -180,20 +170,33 @@ class _NovoIMCState extends State<NovoIMC> {
                                       80)), // Altere a cor da borda aqui
                               borderRadius: BorderRadius.circular(20)),
                         ),
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Por favor, insira uma data';
+                          }
+                          return null;
+                        },
+                        keyboardType: TextInputType.datetime,
+                        onChanged: (value) {
+                          setState(() {
+                            _selectedDate = DateTime.tryParse(value);
+                          });
+                        },
                       ),
                     ),
                   ],
                 ),
-                const SizedBox(height: 30),
+                const SizedBox(height: 30.0),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     ElevatedButton(
                       onPressed: () {
-                        if (_formKey.currentState?.validate() ?? false) {
-                          _saveData(true); // Envie "true" para indicar "Certo"
-                        }
                         Navigator.of(context).pop();
+                        _formKey.currentState!.reset();
+                        setState(() {
+                          _selectedDate = null;
+                        });
                       },
                       style: ElevatedButton.styleFrom(
                         padding: EdgeInsets
@@ -211,11 +214,27 @@ class _NovoIMCState extends State<NovoIMC> {
                     ),
                     ElevatedButton(
                       onPressed: () {
-                        if (_formKey.currentState?.validate() ?? false) {
-                          _saveData(
-                              false); // Envie "false" para indicar "Errado"
-                        }
-                        Navigator.of(context).pop();
+                        // Navigator.of(context).pop();
+                        // if (_formKey.currentState != null &&
+                        //     _formKey.currentState!.validate()) {
+                        //   _formKey.currentState!.save();
+                        //   if (_selectedDate != null) {
+                        //     // Aqui você pode salvar os dados em um banco de dados
+                        //     // ou enviá-los para onde desejar
+                        //     print('Glicemia: $_glicemia, Data: $_selectedDate');
+                        //     // Exemplo de como limpar o formulário depois de enviar
+                        //     _formKey.currentState!.reset();
+                        //     setState(() {
+                        //       _selectedDate = null;
+                        //     });
+                        //   } else {
+                        //     ScaffoldMessenger.of(context).showSnackBar(
+                        //       const SnackBar(
+                        //         content:
+                        //             Text('Por favor, insira uma data válida'),
+                        //         duration: Duration(seconds: 2),
+                        //       ),
+                        //     );
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: const Color.fromARGB(
@@ -226,30 +245,15 @@ class _NovoIMCState extends State<NovoIMC> {
                       child: const Padding(
                         padding: EdgeInsets.all(8),
                         child: Icon(Icons.check),
-                      ), // Ícone de errado com cor verde #697E50
+                      ),
                     ),
                   ],
                 ),
               ],
-            ),
+            )),
           ),
         ),
       ),
     );
-  }
-
-  void _saveData(bool certo) {
-    double altura = double.parse(_alturaController.text);
-    double peso = double.parse(_pesoController.text);
-    String data = _dataController.text;
-    // Agora você pode fazer o que quiser com os dados capturados, como salvá-los em algum lugar
-    print('Altura: $altura');
-    print('Peso: $peso');
-    print('Data: $data');
-    if (certo) {
-      print('Opção escolhida: Certo');
-    } else {
-      print('Opção escolhida: Errado');
-    }
   }
 }

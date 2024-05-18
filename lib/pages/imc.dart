@@ -1,4 +1,3 @@
-import "package:app_ye_gestao_de_saude/pages/nova_pressao.dart";
 import "package:app_ye_gestao_de_saude/pages/novo_imc.dart";
 import "package:flutter/material.dart";
 

@@ -11,18 +11,21 @@ class _NovoPesoAlturaState extends State<NovoPesoAltura> {
   final _formKey = GlobalKey<FormState>();
   final _pesoController = TextEditingController();
   final _alturaController = TextEditingController();
+  final _dataController = TextEditingController();
 
   @override
   void dispose() {
     _pesoController.dispose();
     _alturaController.dispose();
+    _dataController.dispose();
+
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color.fromARGB(255, 245, 246, 241),
+      backgroundColor: const Color.fromARGB(255, 245, 246, 241),
       appBar: AppBar(
         backgroundColor: const Color.fromARGB(255, 245, 246, 241),
         iconTheme: const IconThemeData(
@@ -38,43 +41,57 @@ class _NovoPesoAlturaState extends State<NovoPesoAltura> {
           ),
         ),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Form(
-          key: _formKey,
-          child: Column(
-            children: <Widget>[
-              const Text(
-                'Registre novo peso e altura',
-                style: TextStyle(
-                  fontSize: 22,
-                  color: Color.fromARGB(220, 105, 126, 80),
-                  fontWeight: FontWeight.w900,
-                ),
+      body: Form(
+        key: _formKey,
+        child: Column(
+          children: [
+            const SizedBox(height: 20),
+
+            const Text(
+              'Registre novo peso e altura',
+              style: TextStyle(
+                fontSize: 22,
+                color: Color.fromARGB(220, 105, 126, 80),
+                fontWeight: FontWeight.w900,
               ),
-              const SizedBox(height: 50),
-              Padding(
-                padding: const EdgeInsets.fromLTRB(30, 0, 30, 0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    const Text(
-                      "Peso",
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w600,
-                        color: Color.fromARGB(220, 105, 126, 80),
-                      ),
+            ),
+            const SizedBox(height: 40),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(70, 0, 70, 0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  const Text(
+                    "Altura (em metros):",
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w500,
+                      color: Color.fromARGB(220, 105, 126, 80),
                     ),
-                    const SizedBox(height: 10),
-                    TextFormField(
+                  ),
+                  const SizedBox(height: 10),
+                  SizedBox(
+                    height: 40,
+                    child: TextFormField(
                       controller: _pesoController,
                       decoration: InputDecoration(
                         border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(40.0),
-                        ),
-                        contentPadding: EdgeInsets.fromLTRB(0, 0, 0, 0),
+                            borderSide: const BorderSide(
+                                color: Color.fromARGB(220, 105, 126,
+                                    80)), // Altere a cor da borda aqui
+
+                            borderRadius: BorderRadius.circular(20)),
+                        contentPadding: const EdgeInsets.fromLTRB(25, 0, 0, 0),
+                        labelStyle: const TextStyle(
+                            fontSize: 18,
+                            color: Color.fromARGB(255, 152, 152, 152)),
+                        //quando clica na label
+                        focusedBorder: OutlineInputBorder(
+                            borderSide: const BorderSide(
+                                color: Color.fromARGB(220, 105, 126,
+                                    80)), // Altere a cor da borda aqui
+                            borderRadius: BorderRadius.circular(20)),
                       ),
                       keyboardType: TextInputType.number,
                       validator: (value) {
@@ -84,23 +101,38 @@ class _NovoPesoAlturaState extends State<NovoPesoAltura> {
                         return null;
                       },
                     ),
-                    SizedBox(height: 30),
-                    const Text(
-                      "Altura",
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w600,
-                        color: Color.fromARGB(220, 105, 126, 80),
-                      ),
+                  ),
+                  const SizedBox(height: 15),
+                  const Text(
+                    "Peso (em kg):",
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w600,
+                      color: Color.fromARGB(220, 105, 126, 80),
                     ),
-                    const SizedBox(height: 10),
-                    TextFormField(
+                  ),
+                  const SizedBox(height: 10),
+                  SizedBox(
+                    height: 40,
+                    child: TextFormField(
                       controller: _alturaController,
                       decoration: InputDecoration(
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(40.0),
-                          ),
-                          contentPadding: EdgeInsets.fromLTRB(0, 0, 0, 0)),
+                        border: OutlineInputBorder(
+                            borderSide: const BorderSide(
+                                color: Color.fromARGB(220, 105, 126, 80)),
+                            borderRadius: BorderRadius.circular(20)),
+
+                        contentPadding: const EdgeInsets.fromLTRB(25, 0, 0, 0),
+                        labelStyle: const TextStyle(
+                            fontSize: 18,
+                            color: Color.fromARGB(255, 152, 152, 152)),
+                        //quando clica na label
+                        focusedBorder: OutlineInputBorder(
+                            borderSide: const BorderSide(
+                                color: Color.fromARGB(220, 105, 126,
+                                    80)), // Altere a cor da borda aqui
+                            borderRadius: BorderRadius.circular(20)),
+                      ),
                       keyboardType: TextInputType.number,
                       validator: (value) {
                         if (value == null || value.isEmpty) {
@@ -109,86 +141,131 @@ class _NovoPesoAlturaState extends State<NovoPesoAltura> {
                         return null;
                       },
                     ),
-                  ],
-                ),
-              ),
-              // SizedBox(height: 40),
-              // const Text(
-              // "Altura",
-              // style: TextStyle(
-              //   fontSize: 18,
-              //   fontWeight: FontWeight.w600,
-              //   color: Color.fromARGB(220, 105, 126, 80),
-              // ),
-              //                   ),
-              //                   const SizedBox(height: 10),
-              //                   TextFormField(
-              // controller: _alturaController,
-              // decoration: InputDecoration(
-              //   border: OutlineInputBorder(
-              //     borderRadius: BorderRadius.circular(40.0),
-              //   ),
-              // ),
-              // keyboardType: TextInputType.number,
-              // validator: (value) {
-              //   if (value == null || value.isEmpty) {
-              //     return 'Por favor, insira a altura';
-              //   }
-              //   return null;
-              // },
-              //                   ),
-              SizedBox(height: 40),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  ElevatedButton(
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                    },
-                    // const Icon(
-                    //   Icons.send,
-                    //   size: 30.0,),
-                    style: ElevatedButton.styleFrom(
-                      // fixedSize: Size.fromRadius(15),
-
-                      // padding: const EdgeInsets.(15),
-                      backgroundColor: const Color.fromARGB(
-                          50, 105, 126, 80), // Cor de fundo do botão
-                      foregroundColor: Colors.white,
-                      shape: const CircleBorder(),
-                    ),
-                    child: const Icon(Icons.close),
                   ),
-                  const SizedBox(width: 20),
-                  ElevatedButton(
-                    onPressed: () {
-                      if (_formKey.currentState!.validate()) {
-                        // Aqui você pode atualizar os dados do paciente
-                        _pesoController.clear();
-                        _alturaController.clear();
-                      }
-                      // if (_formKey.currentState!.validate()) {
-                      //     setState(() {
-                      //       _pressaoData.add('Data: ${_dataController.text}, Sistólica: ${_sistolicaController.text}, Diastólica: ${_diastolicaController.text}');
-                      //       _dataController.clear();
-                      //       _sistolicaController.clear();
-                      //       _diastolicaController.clear();
-                      //     });
-                      //   }
-                    },
-                    style: ElevatedButton.styleFrom(
-                      // padding: const EdgeInsets.all(15),
-                      backgroundColor: const Color.fromARGB(
-                          50, 105, 126, 80), // Cor de fundo do botão
-                      foregroundColor: Colors.white,
-                      shape: const CircleBorder(),
+                  const SizedBox(height: 15.0),
+                  const Text(
+                    "Data da aferição:",
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w600,
+                      color: Color.fromARGB(220, 105, 126, 80),
                     ),
-                    child: const Icon(Icons.check),
+                  ),
+                  const SizedBox(height: 10),
+                  SizedBox(
+                    height: 40,
+                    child: TextFormField(
+                      controller: _dataController,
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(
+                            borderSide: const BorderSide(
+                                color: Color.fromARGB(220, 105, 126, 80)),
+                            borderRadius: BorderRadius.circular(20)),
+
+                        contentPadding: const EdgeInsets.fromLTRB(25, 0, 0, 0),
+                        labelStyle: const TextStyle(
+                            fontSize: 18,
+                            color: Color.fromARGB(255, 152, 152, 152)),
+                        //quando clica na label
+                        focusedBorder: OutlineInputBorder(
+                            borderSide: const BorderSide(
+                                color: Color.fromARGB(220, 105, 126,
+                                    80)), // Altere a cor da borda aqui
+                            borderRadius: BorderRadius.circular(20)),
+                      ),
+                      keyboardType: TextInputType.number,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Por favor, digite a data da aferição';
+                        }
+                        return null;
+                      },
+                    ),
                   ),
                 ],
               ),
-            ],
-          ),
+            ),
+            // SizedBox(height: 40),
+            // const Text(
+            // "Altura",
+            // style: TextStyle(
+            //   fontSize: 18,
+            //   fontWeight: FontWeight.w600,
+            //   color: Color.fromARGB(220, 105, 126, 80),
+            // ),
+            //                   ),
+            //                   const SizedBox(height: 10),
+            //                   TextFormField(
+            // controller: _alturaController,
+            // decoration: InputDecoration(
+            //   border: OutlineInputBorder(
+            //     borderRadius: BorderRadius.circular(40.0),
+            //   ),
+            // ),
+            // keyboardType: TextInputType.number,
+            // validator: (value) {
+            //   if (value == null || value.isEmpty) {
+            //     return 'Por favor, insira a altura';
+            //   }
+            //   return null;
+            // },
+            //                   ),
+            const SizedBox(height: 30),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                ElevatedButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  // const Icon(
+                  //   Icons.send,
+                  //   size: 30.0,),
+                  style: ElevatedButton.styleFrom(
+                    padding: EdgeInsets
+                        .zero, // Define o padding do botão como zero para não interferir com o padding do widget interno
+                    backgroundColor: const Color.fromARGB(50, 105, 126, 80),
+                    foregroundColor: const Color.fromARGB(
+                        255, 255, 255, 255), // Cor de fundo do botão
+                    shape: const CircleBorder(),
+                  ),
+                  child: const Padding(
+                    padding:
+                        EdgeInsets.all(8), // Espaçamento interno para o ícone
+                    child: Icon(Icons.close),
+                  ),
+                ),
+                ElevatedButton(
+                  onPressed: () {
+                    if (_formKey.currentState!.validate()) {
+                      // Aqui você pode atualizar os dados do paciente
+                      _pesoController.clear();
+                      _alturaController.clear();
+                    }
+                    // if (_formKey.currentState!.validate()) {
+                    //     setState(() {
+                    //       _pressaoData.add('Data: ${_dataController.text}, Sistólica: ${_sistolicaController.text}, Diastólica: ${_diastolicaController.text}');
+                    //       _dataController.clear();
+                    //       _sistolicaController.clear();
+                    //       _diastolicaController.clear();
+                    //     });
+                    //   }
+                    Navigator.of(context).pop();
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: const Color.fromARGB(
+                        50, 105, 126, 80), // Cor de fundo do botão
+                    foregroundColor: Colors.white,
+                    shape: const CircleBorder(),
+                  ),
+                  child: const Padding(
+                    padding: EdgeInsets.all(8),
+                    child: Icon(Icons.check),
+                  ),
+                ),
+              ],
+            ),
+          ],
         ),
       ),
     );

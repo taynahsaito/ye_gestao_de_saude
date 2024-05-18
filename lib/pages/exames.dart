@@ -135,8 +135,8 @@ class _ExamesState extends State<Exames> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => const InfoExames(
-                                tipo: "Colesterol Total")),
+                            builder: (context) =>
+                                const InfoExames(tipo: "Colesterol Total")),
                       );
                     },
                     child: SizedBox(

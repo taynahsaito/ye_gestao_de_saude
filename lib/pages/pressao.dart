@@ -103,7 +103,7 @@ class _PressaoState extends State<Pressao> {
                   backgroundColor: const Color.fromARGB(
                       50, 105, 126, 80), // Cor de fundo do botão
                   foregroundColor: Colors.white,
-                  shape: const CircleBorder(),  
+                  shape: const CircleBorder(),
                 ),
                 child: const Padding(
                   padding: EdgeInsets.all(8.0),

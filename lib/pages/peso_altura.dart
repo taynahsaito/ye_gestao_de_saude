@@ -39,14 +39,14 @@ class _PesoAlturaState extends State<PesoAltura> {
       ),
       body: Stack(
         children: [
-          SingleChildScrollView(
+          const SingleChildScrollView(
             child: Center(
               child: Column(
                 children: [
-                  const SizedBox(
+                  SizedBox(
                     height: 20,
                   ),
-                  const Text(
+                  Text(
                     'Histórico do peso e altura',
                     style: TextStyle(
                       fontSize: 22,
@@ -54,7 +54,7 @@ class _PesoAlturaState extends State<PesoAltura> {
                       fontWeight: FontWeight.w900,
                     ),
                   ),
-                  const SizedBox(
+                  SizedBox(
                     height: 20,
                   ),
                   // Outros widgets aqui...
@@ -74,15 +74,15 @@ class _PesoAlturaState extends State<PesoAltura> {
                   );
                 },
                 style: ElevatedButton.styleFrom(
-                  padding: const EdgeInsets.all(15),
                   backgroundColor: const Color.fromARGB(
                       50, 105, 126, 80), // Cor de fundo do botão
                   foregroundColor: Colors.white,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(600),
-                  ),
+                  shape: const CircleBorder(),
                 ),
-                child: const Icon(Icons.add),
+                child: const Padding(
+                  padding: EdgeInsets.all(8.0),
+                  child: Icon(Icons.add),
+                ),
               ),
             ),
           ),
