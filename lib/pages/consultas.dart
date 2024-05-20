@@ -52,7 +52,7 @@ class _ConsultasState extends State<Consultas> {
                         const Text(
                           "Clínico geral",
                           style: TextStyle(
-                              fontSize: 16, fontWeight: FontWeight.w900),
+                              fontSize: 16, fontWeight: FontWeight.w600),
                         ),
                         IconButton(
                           icon: const Icon(Icons.info_outline),
@@ -117,7 +117,7 @@ class _ConsultasState extends State<Consultas> {
                         const Text(
                           "Ginecologista",
                           style: TextStyle(
-                              fontSize: 16, fontWeight: FontWeight.w900),
+                              fontSize: 16, fontWeight: FontWeight.w600),
                         ),
                         IconButton(
                           icon: const Icon(Icons.info_outline),
@@ -152,7 +152,7 @@ class _ConsultasState extends State<Consultas> {
                         const Text(
                           "Dermatologista",
                           style: TextStyle(
-                              fontSize: 16, fontWeight: FontWeight.w900),
+                              fontSize: 16, fontWeight: FontWeight.w600),
                         ),
                         IconButton(
                           icon: const Icon(Icons.info_outline),
@@ -187,7 +187,7 @@ class _ConsultasState extends State<Consultas> {
                         const Text(
                           "Oftalmologista",
                           style: TextStyle(
-                              fontSize: 16, fontWeight: FontWeight.w900),
+                              fontSize: 16, fontWeight: FontWeight.w600),
                         ),
                         IconButton(
                           icon: const Icon(Icons.info_outline),

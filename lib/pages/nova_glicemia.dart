@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class NovaGlicemia extends StatefulWidget {
   const NovaGlicemia({super.key});
@@ -10,7 +11,41 @@ class NovaGlicemia extends StatefulWidget {
 class _NovaGlicemiaState extends State<NovaGlicemia> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   String _glicemia = '';
-  DateTime? _selectedDate;
+  late DateTime? _selectedDate;
+  final DateFormat _dateFormat = DateFormat('dd/MM/yyyy');
+
+  @override
+  void initState() {
+    super.initState();
+    _selectedDate = null; // Inicializando _selectedDate com a data atual
+  }
+
+  Future<void> _selectDate(BuildContext context) async {
+    final ThemeData theme = Theme.of(context);
+    final DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: _selectedDate,
+      firstDate: DateTime(1900),
+      lastDate: DateTime.now(),
+      builder: (BuildContext context, Widget? child) {
+        return Theme(
+          data: theme.copyWith(
+            // Personalize a cor de fundo da seleção aqui
+            colorScheme: theme.colorScheme.copyWith(
+              primary: const Color.fromARGB(
+                  220, 105, 126, 80), // Cor de fundo da seleção
+            ),
+          ),
+          child: child!,
+        );
+      },
+    );
+    if (picked != null && picked != _selectedDate) {
+      setState(() {
+        _selectedDate = picked;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -55,7 +90,7 @@ class _NovaGlicemiaState extends State<NovaGlicemia> {
                 "Glicemia (em mg/dL):",
                 style: TextStyle(
                   fontSize: 18,
-                  fontWeight: FontWeight.w600,
+                  fontWeight: FontWeight.w500,
                   color: Color.fromARGB(220, 105, 126, 80),
                 ),
               ),
@@ -107,6 +142,13 @@ class _NovaGlicemiaState extends State<NovaGlicemia> {
               SizedBox(
                 height: 40,
                 child: TextFormField(
+                  readOnly: true,
+                  onTap: () => _selectDate(context),
+                  controller: TextEditingController(
+                    text: _selectedDate != null
+                        ? _dateFormat.format(_selectedDate!)
+                        : '',
+                  ),
                   decoration: InputDecoration(
                     border: OutlineInputBorder(
                         borderSide: const BorderSide(

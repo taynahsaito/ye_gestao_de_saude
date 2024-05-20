@@ -71,16 +71,19 @@ class _NovaConsultaState extends State<NovaConsulta> {
           child: Center(
             child: Form(
                 child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 const SizedBox(height: 20),
-                const Text(
-                  'Registre uma nova consulta',
-                  style: TextStyle(
-                    fontSize: 22,
-                    color: Color.fromARGB(220, 105, 126, 80),
-                    fontWeight: FontWeight.w900,
+                const Wrap(children: [
+                  Text(
+                    'Registre uma nova consulta',
+                    style: TextStyle(
+                      fontSize: 22,
+                      color: Color.fromARGB(220, 105, 126, 80),
+                      fontWeight: FontWeight.w900,
+                    ),
                   ),
-                ),
+                ]),
                 const SizedBox(
                   height: 40,
                 ),
@@ -92,7 +95,7 @@ class _NovaConsultaState extends State<NovaConsulta> {
                       "Especialidade:",
                       style: TextStyle(
                         fontSize: 18,
-                        fontWeight: FontWeight.w600,
+                        fontWeight: FontWeight.w500,
                         color: Color.fromARGB(220, 105, 126, 80),
                       ),
                     ),
@@ -106,7 +109,7 @@ class _NovaConsultaState extends State<NovaConsulta> {
                                   color: Color.fromARGB(220, 105, 126,
                                       80)), // Altere a cor da borda aqui
 
-                              borderRadius: BorderRadius.circular(20)),
+                              borderRadius: BorderRadius.circular(18)),
                           contentPadding:
                               const EdgeInsets.fromLTRB(25, 0, 0, 0),
                           labelStyle: const TextStyle(
@@ -117,7 +120,7 @@ class _NovaConsultaState extends State<NovaConsulta> {
                               borderSide: const BorderSide(
                                   color: Color.fromARGB(220, 105, 126,
                                       80)), // Altere a cor da borda aqui
-                              borderRadius: BorderRadius.circular(20)),
+                              borderRadius: BorderRadius.circular(18)),
                         ),
                         // validator: (value) {
                         //   if (value == null || value.isEmpty) {
@@ -134,7 +137,7 @@ class _NovaConsultaState extends State<NovaConsulta> {
                     ),
                     const SizedBox(height: 15),
                     const Text(
-                      "Data da aferição:",
+                      "Data:",
                       style: TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.w500,
@@ -156,7 +159,7 @@ class _NovaConsultaState extends State<NovaConsulta> {
                           border: OutlineInputBorder(
                               borderSide: const BorderSide(
                                   color: Color.fromARGB(220, 105, 126, 80)),
-                              borderRadius: BorderRadius.circular(20)),
+                              borderRadius: BorderRadius.circular(18)),
 
                           contentPadding:
                               const EdgeInsets.fromLTRB(25, 0, 0, 0),
@@ -168,7 +171,7 @@ class _NovaConsultaState extends State<NovaConsulta> {
                               borderSide: const BorderSide(
                                   color: Color.fromARGB(220, 105, 126,
                                       80)), // Altere a cor da borda aqui
-                              borderRadius: BorderRadius.circular(20)),
+                              borderRadius: BorderRadius.circular(18)),
                         ),
                         validator: (value) {
                           if (value == null || value.isEmpty) {
@@ -184,6 +187,203 @@ class _NovaConsultaState extends State<NovaConsulta> {
                         },
                       ),
                     ),
+                    const SizedBox(height: 15),
+                    const Text(
+                      "Horário:",
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w500,
+                        color: Color.fromARGB(220, 105, 126, 80),
+                      ),
+                    ),
+                    const SizedBox(height: 10),
+                    SizedBox(
+                      height: 40,
+                      child: TextFormField(
+                        decoration: InputDecoration(
+                          border: OutlineInputBorder(
+                              borderSide: const BorderSide(
+                                  color: Color.fromARGB(220, 105, 126,
+                                      80)), // Altere a cor da borda aqui
+
+                              borderRadius: BorderRadius.circular(18)),
+                          contentPadding:
+                              const EdgeInsets.fromLTRB(25, 0, 0, 0),
+                          labelStyle: const TextStyle(
+                              fontSize: 18,
+                              color: Color.fromARGB(255, 152, 152, 152)),
+                          //quando clica na label
+                          focusedBorder: OutlineInputBorder(
+                              borderSide: const BorderSide(
+                                  color: Color.fromARGB(220, 105, 126,
+                                      80)), // Altere a cor da borda aqui
+                              borderRadius: BorderRadius.circular(18)),
+                        ),
+                        // validator: (value) {
+                        //   if (value == null || value.isEmpty) {
+                        //     return 'Por favor, insira sua glicemia';
+                        //   }
+                        //   return null;
+                        // },
+                        // onSaved: (value) {
+                        //   if (value != null) {
+                        //     _glicemia = value;
+                        //   }
+                        // },
+                      ),
+                    ),
+                    const SizedBox(height: 15),
+                    const Text(
+                      "Resumo da consulta:",
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w500,
+                        color: Color.fromARGB(220, 105, 126, 80),
+                      ),
+                    ),
+                    const SizedBox(height: 10),
+                    SizedBox(
+                      height: 40,
+                      child: TextFormField(
+                        keyboardType: TextInputType.multiline,
+                        maxLines: null, // Permite várias linhas
+                        textAlignVertical: TextAlignVertical.top,
+                        decoration: InputDecoration(
+                          border: OutlineInputBorder(
+                              borderSide: const BorderSide(
+                                  color: Color.fromARGB(220, 105, 126,
+                                      80)), // Altere a cor da borda aqui
+
+                              borderRadius: BorderRadius.circular(18)),
+                          contentPadding:
+                              const EdgeInsets.fromLTRB(25, 0, 0, 0),
+                          labelStyle: const TextStyle(
+                              fontSize: 18,
+                              color: Color.fromARGB(255, 152, 152, 152)),
+                          //quando clica na label
+                          focusedBorder: OutlineInputBorder(
+                              borderSide: const BorderSide(
+                                  color: Color.fromARGB(220, 105, 126,
+                                      80)), // Altere a cor da borda aqui
+                              borderRadius: BorderRadius.circular(18)),
+                        ),
+                        // validator: (value) {
+                        //   if (value == null || value.isEmpty) {
+                        //     return 'Por favor, insira sua glicemia';
+                        //   }
+                        //   return null;
+                        // },
+                        // onSaved: (value) {
+                        //   if (value != null) {
+                        //     _glicemia = value;
+                        //   }
+                        // },
+                      ),
+                    ),
+                    const SizedBox(height: 15),
+                    const Text(
+                      "Retorno em:",
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w500,
+                        color: Color.fromARGB(220, 105, 126, 80),
+                      ),
+                    ),
+                    const SizedBox(height: 10),
+                    SizedBox(
+                      height: 40,
+                      child: TextFormField(
+                        readOnly: true,
+                        onTap: () => _selectDate(context),
+                        controller: TextEditingController(
+                          text: _selectedDate != null
+                              ? _dateFormat.format(_selectedDate!)
+                              : '',
+                        ),
+                        decoration: InputDecoration(
+                          border: OutlineInputBorder(
+                              borderSide: const BorderSide(
+                                  color: Color.fromARGB(220, 105, 126,
+                                      80)), // Altere a cor da borda aqui
+
+                              borderRadius: BorderRadius.circular(18)),
+                          contentPadding:
+                              const EdgeInsets.fromLTRB(25, 0, 0, 0),
+                          labelStyle: const TextStyle(
+                              fontSize: 18,
+                              color: Color.fromARGB(255, 152, 152, 152)),
+                          //quando clica na label
+                          focusedBorder: OutlineInputBorder(
+                              borderSide: const BorderSide(
+                                  color: Color.fromARGB(220, 105, 126,
+                                      80)), // Altere a cor da borda aqui
+                              borderRadius: BorderRadius.circular(18)),
+                        ),
+                        // validator: (value) {
+                        //   if (value == null || value.isEmpty) {
+                        //     return 'Por favor, insira sua glicemia';
+                        //   }
+                        //   return null;
+                        // },
+                        // onSaved: (value) {
+                        //   if (value != null) {
+                        //     _glicemia = value;
+                        //   }
+                        // },
+                      ),
+                    ),
+                    const SizedBox(height: 15),
+                    const Text(
+                      "Lembrete para:",
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w500,
+                        color: Color.fromARGB(220, 105, 126, 80),
+                      ),
+                    ),
+                    const SizedBox(height: 10),
+                    SizedBox(
+                      height: 40,
+                      child: TextFormField(
+                        readOnly: true,
+                        onTap: () => _selectDate(context),
+                        controller: TextEditingController(
+                          text: _selectedDate != null
+                              ? _dateFormat.format(_selectedDate!)
+                              : '',
+                        ),
+                        decoration: InputDecoration(
+                          border: OutlineInputBorder(
+                              borderSide: const BorderSide(
+                                  color: Color.fromARGB(220, 105, 126,
+                                      80)), // Altere a cor da borda aqui
+
+                              borderRadius: BorderRadius.circular(18)),
+                          contentPadding:
+                              const EdgeInsets.fromLTRB(25, 0, 0, 0),
+                          labelStyle: const TextStyle(
+                              fontSize: 18,
+                              color: Color.fromARGB(255, 152, 152, 152)),
+                          //quando clica na label
+                          focusedBorder: OutlineInputBorder(
+                              borderSide: const BorderSide(
+                                  color: Color.fromARGB(220, 105, 126,
+                                      80)), // Altere a cor da borda aqui
+                              borderRadius: BorderRadius.circular(18)),
+                        ),
+                        // validator: (value) {
+                        //   if (value == null || value.isEmpty) {
+                        //     return 'Por favor, insira sua glicemia';
+                        //   }
+                        //   return null;
+                        // },
+                        // onSaved: (value) {
+                        //   if (value != null) {
+                        //     _glicemia = value;
+                        //   }
+                        // },
+                      ),
+                    ),
                   ],
                 ),
                 const SizedBox(height: 30.0),
@@ -192,11 +392,11 @@ class _NovaConsultaState extends State<NovaConsulta> {
                   children: [
                     ElevatedButton(
                       onPressed: () {
-                        Navigator.of(context).pop();
                         _formKey.currentState!.reset();
                         setState(() {
                           _selectedDate = null;
                         });
+                        Navigator.of(context).pop();
                       },
                       style: ElevatedButton.styleFrom(
                         padding: EdgeInsets
@@ -235,6 +435,7 @@ class _NovaConsultaState extends State<NovaConsulta> {
                         //         duration: Duration(seconds: 2),
                         //       ),
                         //     );
+                        Navigator.of(context).pop();
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: const Color.fromARGB(

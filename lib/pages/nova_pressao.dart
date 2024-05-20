@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:intl/intl.dart';
 
 class NovaPressao extends StatefulWidget {
   const NovaPressao({super.key});
@@ -15,6 +16,41 @@ class _NovaPressaoState extends State<NovaPressao> {
   final _sistolicaController = TextEditingController();
   final _diastolicaController = TextEditingController();
   final List<String> _pressaoData = [];
+  late DateTime? _selectedDate;
+  final DateFormat _dateFormat = DateFormat('dd/MM/yyyy');
+
+  @override
+  void initState() {
+    super.initState();
+    _selectedDate = null; // Inicializando _selectedDate com a data atual
+  }
+
+  Future<void> _selectDate(BuildContext context) async {
+    final ThemeData theme = Theme.of(context);
+    final DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: _selectedDate,
+      firstDate: DateTime(1900),
+      lastDate: DateTime.now(),
+      builder: (BuildContext context, Widget? child) {
+        return Theme(
+          data: theme.copyWith(
+            // Personalize a cor de fundo da seleção aqui
+            colorScheme: theme.colorScheme.copyWith(
+              primary: const Color.fromARGB(
+                  220, 105, 126, 80), // Cor de fundo da seleção
+            ),
+          ),
+          child: child!,
+        );
+      },
+    );
+    if (picked != null && picked != _selectedDate) {
+      setState(() {
+        _selectedDate = picked;
+      });
+    }
+  }
 
   @override
   void dispose() {
@@ -96,7 +132,13 @@ class _NovaPressaoState extends State<NovaPressao> {
                     SizedBox(
                       height: 40,
                       child: TextFormField(
-                        controller: _dataController,
+                        readOnly: true,
+                        onTap: () => _selectDate(context),
+                        controller: TextEditingController(
+                          text: _selectedDate != null
+                              ? _dateFormat.format(_selectedDate!)
+                              : '',
+                        ),
                         decoration: InputDecoration(
                           border: OutlineInputBorder(
                               borderSide: const BorderSide(

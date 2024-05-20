@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class NovoIMC extends StatefulWidget {
   const NovoIMC({super.key});
@@ -12,6 +13,42 @@ class _NovoIMCState extends State<NovoIMC> {
   final TextEditingController _alturaController = TextEditingController();
   final TextEditingController _pesoController = TextEditingController();
   final TextEditingController _dataController = TextEditingController();
+
+  late DateTime? _selectedDate;
+  final DateFormat _dateFormat = DateFormat('dd/MM/yyyy');
+
+  @override
+  void initState() {
+    super.initState();
+    _selectedDate = null; // Inicializando _selectedDate com a data atual
+  }
+
+  Future<void> _selectDate(BuildContext context) async {
+    final ThemeData theme = Theme.of(context);
+    final DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: _selectedDate,
+      firstDate: DateTime(1900),
+      lastDate: DateTime.now(),
+      builder: (BuildContext context, Widget? child) {
+        return Theme(
+          data: theme.copyWith(
+            // Personalize a cor de fundo da seleção aqui
+            colorScheme: theme.colorScheme.copyWith(
+              primary: const Color.fromARGB(
+                  220, 105, 126, 80), // Cor de fundo da seleção
+            ),
+          ),
+          child: child!,
+        );
+      },
+    );
+    if (picked != null && picked != _selectedDate) {
+      setState(() {
+        _selectedDate = picked;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -154,7 +191,13 @@ class _NovoIMCState extends State<NovoIMC> {
                     SizedBox(
                       height: 40,
                       child: TextFormField(
-                        controller: _dataController,
+                        readOnly: true,
+                        onTap: () => _selectDate(context),
+                        controller: TextEditingController(
+                          text: _selectedDate != null
+                              ? _dateFormat.format(_selectedDate!)
+                              : '',
+                        ),
                         keyboardType: TextInputType.datetime,
                         validator: (value) {
                           if (value == null || value.isEmpty) {

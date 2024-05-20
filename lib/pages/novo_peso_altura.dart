@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class NovoPesoAltura extends StatefulWidget {
   const NovoPesoAltura({super.key});
@@ -11,14 +12,46 @@ class _NovoPesoAlturaState extends State<NovoPesoAltura> {
   final _formKey = GlobalKey<FormState>();
   final _pesoController = TextEditingController();
   final _alturaController = TextEditingController();
-  final _dataController = TextEditingController();
+  late DateTime? _selectedDate;
+  final DateFormat _dateFormat = DateFormat('dd/MM/yyyy');
+
+  @override
+  void initState() {
+    super.initState();
+    _selectedDate = null; // Inicializando _selectedDate com a data atual
+  }
+
+  Future<void> _selectDate(BuildContext context) async {
+    final ThemeData theme = Theme.of(context);
+    final DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: _selectedDate,
+      firstDate: DateTime(1900),
+      lastDate: DateTime.now(),
+      builder: (BuildContext context, Widget? child) {
+        return Theme(
+          data: theme.copyWith(
+            // Personalize a cor de fundo da seleção aqui
+            colorScheme: theme.colorScheme.copyWith(
+              primary: const Color.fromARGB(
+                  220, 105, 126, 80), // Cor de fundo da seleção
+            ),
+          ),
+          child: child!,
+        );
+      },
+    );
+    if (picked != null && picked != _selectedDate) {
+      setState(() {
+        _selectedDate = picked;
+      });
+    }
+  }
 
   @override
   void dispose() {
     _pesoController.dispose();
     _alturaController.dispose();
-    _dataController.dispose();
-
     super.dispose();
   }
 
@@ -155,7 +188,13 @@ class _NovoPesoAlturaState extends State<NovoPesoAltura> {
                   SizedBox(
                     height: 40,
                     child: TextFormField(
-                      controller: _dataController,
+                      readOnly: true,
+                      onTap: () => _selectDate(context),
+                      controller: TextEditingController(
+                        text: _selectedDate != null
+                            ? _dateFormat.format(_selectedDate!)
+                            : '',
+                      ),
                       decoration: InputDecoration(
                         border: OutlineInputBorder(
                             borderSide: const BorderSide(
