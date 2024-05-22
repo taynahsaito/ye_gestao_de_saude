@@ -65,9 +65,9 @@ class _NovaConsultaState extends State<NovaConsulta> {
           ),
         ),
       ),
-      body: Padding(
-        padding: const EdgeInsets.fromLTRB(70, 0, 70, 0),
-        child: SingleChildScrollView(
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(70, 0, 70, 0),
           child: Center(
             child: Form(
                 child: Column(
@@ -334,7 +334,7 @@ class _NovaConsultaState extends State<NovaConsulta> {
                     ),
                     const SizedBox(height: 15),
                     const Text(
-                      "Lembrete para:",
+                      "Lembrete para agendamento:",
                       style: TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.w500,

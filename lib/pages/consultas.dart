@@ -39,7 +39,7 @@ class _ConsultasState extends State<Consultas> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => DataConsultas(),
+                        builder: (context) => const DataConsultas(),
                       ),
                     );
                   },
@@ -105,7 +105,8 @@ class _ConsultasState extends State<Consultas> {
                   onTap: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => DataConsultas()),
+                      MaterialPageRoute(
+                          builder: (context) => const DataConsultas()),
                     );
                   },
                   child: SizedBox(
@@ -140,7 +141,8 @@ class _ConsultasState extends State<Consultas> {
                   onTap: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => DataConsultas()),
+                      MaterialPageRoute(
+                          builder: (context) => const DataConsultas()),
                     );
                   },
                   child: SizedBox(
@@ -175,7 +177,8 @@ class _ConsultasState extends State<Consultas> {
                   onTap: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => DataConsultas()),
+                      MaterialPageRoute(
+                          builder: (context) => const DataConsultas()),
                     );
                   },
                   child: SizedBox(

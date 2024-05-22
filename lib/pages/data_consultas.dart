@@ -1,4 +1,5 @@
 import 'package:app_ye_gestao_de_saude/pages/info_consultas.dart';
+import 'package:app_ye_gestao_de_saude/pages/nova_consulta.dart';
 import 'package:flutter/material.dart';
 
 class DataConsultas extends StatefulWidget {
@@ -93,7 +94,109 @@ class _DataConsultasState extends State<DataConsultas> {
                       ),
                     ),
                   ),
+                  const SizedBox(
+                    height: 15,
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => InfoConsultas()),
+                      );
+                    },
+                    child: SizedBox(
+                      height: 40,
+                      width: 450,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          const Text(
+                            "20/12/2024",
+                            style: TextStyle(
+                                fontSize: 16, fontWeight: FontWeight.w600),
+                          ),
+                          IconButton(
+                            icon: const Icon(
+                              Icons.arrow_circle_right_outlined,
+                            ),
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        const InfoConsultas()),
+                              );
+                            },
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 15,
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => InfoConsultas()),
+                      );
+                    },
+                    child: SizedBox(
+                      height: 40,
+                      width: 450,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          const Text(
+                            "28/03/2023",
+                            style: TextStyle(
+                                fontSize: 16, fontWeight: FontWeight.w600),
+                          ),
+                          IconButton(
+                            icon: const Icon(
+                              Icons.arrow_circle_right_outlined,
+                            ),
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        const InfoConsultas()),
+                              );
+                            },
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
                 ],
+              ),
+            ),
+          ),
+        ),
+        Align(
+          alignment: Alignment.bottomCenter,
+          child: Padding(
+            padding: const EdgeInsets.all(15.0),
+            child: ElevatedButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const NovaConsulta()),
+                );
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: const Color.fromARGB(
+                    50, 105, 126, 80), // Cor de fundo do botão
+                foregroundColor: Colors.white,
+                shape: const CircleBorder(),
+              ),
+              child: const Padding(
+                padding: EdgeInsets.all(8.0),
+                child: Icon(Icons.add),
               ),
             ),
           ),

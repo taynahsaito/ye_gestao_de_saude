@@ -41,9 +41,9 @@ class _ExamesState extends State<Exames> {
       //     ),
       //   ),
       // ),
-      body: Padding(
-        padding: const EdgeInsets.fromLTRB(20, 10, 10, 20),
-        child: SingleChildScrollView(
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(20, 10, 10, 20),
           child: Center(
             child: Column(
               // crossAxisAlignment: CrossAxisAlignment.center,
