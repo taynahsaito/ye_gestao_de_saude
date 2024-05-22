@@ -112,7 +112,7 @@ class _NovaPressaoState extends State<NovaPressao> {
                 ),
               ),
               const SizedBox(
-                height: 40,
+                height: 100,
               ),
               Padding(
                 padding: const EdgeInsets.fromLTRB(70, 0, 70, 0),
@@ -305,7 +305,7 @@ class _NovaPressaoState extends State<NovaPressao> {
                           _diastolicaController.clear();
                         });
                       }
-                      Navigator.of(context).pop();
+                      //Navigator.of(context).pop();
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: const Color.fromARGB(

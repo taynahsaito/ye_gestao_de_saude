@@ -19,8 +19,8 @@ class _PressaoState extends State<Pressao> {
     super.initState();
     _getHistoricoPressao();
   }
-
   Future<void> _getHistoricoPressao() async {
+    
     final snapshot = await databaseReference.get();
     print(snapshot.value);
     Object? historicoPressao = snapshot.value;
@@ -83,6 +83,150 @@ class _PressaoState extends State<Pressao> {
                     height: 30,
                   ),
                   // Outros widgets aqui...
+                  SizedBox(
+                    height: 80,
+                    width: 450,
+                    child: DecoratedBox(
+                      decoration: const BoxDecoration(
+                        color: Color.fromRGBO(219, 127, 88, 0.53),
+                        borderRadius: BorderRadius.all(Radius.circular(17)),
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          Text(
+                            "21/05/2024",
+                            style: TextStyle(fontSize: 12),
+                          ),
+                          Text("Alta"),
+                          Text(
+                            '150x95 mmHg',
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.w900,
+                              color: Color.fromRGBO(150, 54, 30, 0.829),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: 30),
+                  SizedBox(
+                    height: 80,
+                    width: 450,
+                    child: DecoratedBox(
+                      decoration: const BoxDecoration(
+                        color: Color.fromRGBO(167, 216, 119, 0.5),
+                        borderRadius: BorderRadius.all(Radius.circular(17)),
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          Text(
+                            "20/05/2024",
+                            style: TextStyle(fontSize: 12),
+                          ),
+                          Text("Normal"),
+                          Text(
+                            '120x80 mmHg',
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.w900,
+                              color: Color.fromRGBO(62, 100, 23, 1)
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: 30),
+                  SizedBox(
+                    height: 80,
+                    width: 450,
+                    child: DecoratedBox(
+                      decoration: const BoxDecoration(
+                        color: Color.fromRGBO(219, 127, 88, 0.53),
+                        borderRadius: BorderRadius.all(Radius.circular(17)),
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          Text(
+                            "12/05/2024",
+                            style: TextStyle(fontSize: 12),
+                          ),
+                          Text("Baixa"),
+                          Text(
+                            '100x50 mmHg',
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.w900,
+                              color: Color.fromRGBO(150, 54, 30, 0.829)
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: 30),
+                  SizedBox(
+                    height: 80,
+                    width: 450,
+                    child: DecoratedBox(
+                      decoration: const BoxDecoration(
+                        color: Color.fromRGBO(219, 127, 88, 0.53),
+                        borderRadius: BorderRadius.all(Radius.circular(17)),
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          Text(
+                            "1/05/2079",
+                            style: TextStyle(fontSize: 12),
+                          ),
+                          Text("Baixa"),
+                          Text(
+                            '100x50 mmHg',
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.w900,
+                              color: Color.fromRGBO(150, 54, 30, 0.829)
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: 30),
+                  SizedBox(
+                    height: 80,
+                    width: 450,
+                    child: DecoratedBox(
+                      decoration: const BoxDecoration(
+                        color: Color.fromRGBO(167, 216, 119, 0.5),
+                        borderRadius: BorderRadius.all(Radius.circular(17)),
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          Text(
+                            "20/04/2024",
+                            style: TextStyle(fontSize: 12),
+                          ),
+                          Text("Normal"),
+                          Text(
+                            '130x90 mmHg',
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.w900,
+                              color: Color.fromRGBO(62, 100, 23, 1)
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
                 ],
               ),
             ),

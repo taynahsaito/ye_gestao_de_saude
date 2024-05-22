@@ -130,7 +130,7 @@ class _HomePageState extends State<HomePage> {
                         Expanded(
                           child: Center(
                             child: Text(
-                              "1000X400 - Alta",
+                              "150X100 - Alta",
                               style: TextStyle(
                                 fontSize: 16,
                                 fontWeight: FontWeight.w600,
