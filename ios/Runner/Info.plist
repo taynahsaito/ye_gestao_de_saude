@@ -45,5 +45,9 @@
 	<true/>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
+	<key>NSCameraUsageDescription</key>
+	<string>O aplicativo precisa de acesso à câmera para conseguir escanear os exames</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>O aplicativo precisa de acesso à galeria para acessar as fotos dos exames</string>
 </dict>
 </plist>

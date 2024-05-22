@@ -1,7 +1,9 @@
+import "dart:io";
+import "package:app_ye_gestao_de_saude/pages/camera.dart";
 import "package:app_ye_gestao_de_saude/pages/historico_exames.dart";
-import "package:firebase_database/firebase_database.dart";
 import "package:flutter/material.dart";
-import 'package:firebase_auth/firebase_auth.dart';
+import "package:image_picker/image_picker.dart";
+import 'package:image_cropper/image_cropper.dart';
 
 class Exames extends StatefulWidget {
   const Exames({super.key});
@@ -11,31 +13,15 @@ class Exames extends StatefulWidget {
 }
 
 class _ExamesState extends State<Exames> {
-  // banco de dados
-  final databaseReference = FirebaseDatabase.instance.ref().child('usuarios');
+
+
 
   @override
   Widget build(BuildContext context) {
-    User? user = FirebaseAuth.instance.currentUser;
-    var email = user!.email;
+
 
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 245, 246, 241),
-      appBar: AppBar(
-        backgroundColor: const Color.fromARGB(255, 245, 246, 241),
-        iconTheme: const IconThemeData(
-          color: Color.fromARGB(220, 105, 126, 80), // Define a cor do ícone
-        ),
-        leading: Padding(
-          padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
-          child: IconButton(
-            icon: const Icon(Icons.arrow_back),
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-          ),
-        ),
-      ),
       body: SingleChildScrollView(
         child: Center(
           child: Column(
@@ -46,7 +32,7 @@ class _ExamesState extends State<Exames> {
               const Padding(
                 padding: EdgeInsets.only(bottom: 30.0),
                 child: Text(
-                  "Histórico de Exames",
+                  "Exames",
                   style: TextStyle(
                     fontSize: 22,
                     color: Color.fromARGB(220, 105, 126, 80),
@@ -208,7 +194,7 @@ class _ExamesState extends State<Exames> {
                           child: ElevatedButton(
                             child: const Text('Fazer upload de arquivo'),
                             onPressed: () {
-                              Navigator.pop(context);
+                              //  getImageFromGallery();
                             },
                           ),
                         ),
@@ -216,7 +202,12 @@ class _ExamesState extends State<Exames> {
                           child: ElevatedButton(
                             child: const Text('Tirar foto'),
                             onPressed: () {
-                              Navigator.pop(context);
+                               Navigator.of(context).pop();
+                              // getImageFromCamera();
+                              Navigator.push(
+                                context, 
+                                MaterialPageRoute(builder: (context) => const CameraScreen())
+                                );
                             },
                           ),
                         ),

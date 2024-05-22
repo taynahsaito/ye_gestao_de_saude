@@ -11,7 +11,6 @@ class HistoricoExames extends StatefulWidget {
 }
 
 class _HistoricoExamesState extends State<HistoricoExames> {
-  final TextEditingController _exameController = TextEditingController();
   var exameTipo = '98';
 
   @override
@@ -58,34 +57,7 @@ class _HistoricoExamesState extends State<HistoricoExames> {
                   width: 450,
                   child: GestureDetector(
                     onLongPress: () {
-                      showDialog(
-                        context: context,
-                        builder: (context) => AlertDialog(
-                            title: const Text("Editar exame:"),
-                            content: SizedBox(
-                              height: 30,
-                              child: TextFormField(
-                                controller: _exameController,
-                                decoration: InputDecoration(
-                                  fillColor: Color.fromARGB(190, 223, 223, 223),
-                                  filled: true,
-                                  border: OutlineInputBorder(
-                                    borderSide: BorderSide.none,
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(25)),
-                                  ),
-                                  labelText: "Valor do exame de ${widget.tipo}",
-                                  contentPadding:
-                                      EdgeInsets.fromLTRB(25, 0, 0, 0),
-                                  labelStyle: TextStyle(
-                                      fontSize: 18,
-                                      color:
-                                          Color.fromARGB(255, 152, 152, 152)),
-                                ),
-                              ),
-                            )),
-                      );
-                      exameTipo = _exameController.text;
+                      
                     },
                     child: DecoratedBox(
                       decoration: BoxDecoration(
@@ -128,33 +100,7 @@ class _HistoricoExamesState extends State<HistoricoExames> {
                   width: 450,
                   child: GestureDetector(
                     onTap: () {
-                      showDialog(
-                        context: context,
-                        builder: (context) => AlertDialog(
-                            title: const Text("Editar exame:"),
-                            content: SizedBox(
-                              height: 30,
-                              child: TextFormField(
-                                controller: _exameController,
-                                decoration: InputDecoration(
-                                  fillColor: Color.fromARGB(190, 223, 223, 223),
-                                  filled: true,
-                                  border: OutlineInputBorder(
-                                    borderSide: BorderSide.none,
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(25)),
-                                  ),
-                                  labelText: "Valor do exame de ${widget.tipo}",
-                                  contentPadding:
-                                      EdgeInsets.fromLTRB(25, 0, 0, 0),
-                                  labelStyle: TextStyle(
-                                      fontSize: 18,
-                                      color:
-                                          Color.fromARGB(255, 152, 152, 152)),
-                                ),
-                              ),
-                            )),
-                      );
+                      
                     },
                     child: const DecoratedBox(
                       decoration: BoxDecoration(

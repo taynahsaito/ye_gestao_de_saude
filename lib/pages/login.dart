@@ -1,4 +1,5 @@
 import 'package:app_ye_gestao_de_saude/components/snackbar.dart';
+import 'package:app_ye_gestao_de_saude/pages/home_page.dart';
 import 'package:app_ye_gestao_de_saude/services/auth_service.dart';
 import 'package:app_ye_gestao_de_saude/widgets/nav_bar.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -280,7 +281,16 @@ class _LoginState extends State<Login> {
                                     color: Color.fromARGB(220, 133, 152, 100)),
                               ),
                             ),
-                          )
+                          ),
+                          GestureDetector(
+                            onTap: () {
+                              Navigator.push(
+                                context, 
+                                MaterialPageRoute(builder: (context) => const NavBar())
+                                );
+                            },
+                            child: Text("homepage")
+                          ),
                         ],
                       ),
                     ),
