@@ -295,16 +295,16 @@ class _LoginState extends State<Login> {
                       ),
                     ),
                   ),
-                  // ElevatedButton(
-                  //     onPressed: () {
-                  //       Navigator.push(
-                  //         context,
-                  //         MaterialPageRoute(
-                  //           builder: (context) => const NavBar(),
-                  //         ),
-                  //       );
-                  //     },
-                  //     child: const Text("homepage")),
+                  ElevatedButton(
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const NavBar(),
+                          ),
+                        );
+                      },
+                      child: const Text("homepage")),
                 ],
               ),
             ),

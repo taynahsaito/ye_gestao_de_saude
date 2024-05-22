@@ -2,7 +2,6 @@ import 'package:app_ye_gestao_de_saude/components/snackbar.dart';
 import 'package:app_ye_gestao_de_saude/services/auth_service.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
-import 'package:app_ye_gestao_de_saude/pages/home_page.dart';
 import 'package:app_ye_gestao_de_saude/pages/login.dart';
 import 'package:intl/intl.dart';
 import 'package:google_sign_in/google_sign_in.dart';

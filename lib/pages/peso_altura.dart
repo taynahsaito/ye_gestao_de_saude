@@ -1,13 +1,9 @@
-import 'package:app_ye_gestao_de_saude/pages/home_page.dart';
-import 'package:app_ye_gestao_de_saude/pages/nova_pressao.dart';
 import 'package:app_ye_gestao_de_saude/pages/novo_peso_altura.dart';
 import 'package:flutter/material.dart';
-import 'package:firebase_database/firebase_database.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 
 class PesoAltura extends StatefulWidget {
+  const PesoAltura({super.key});
+
   // final List<Pressao> historicoPressao = [];
   // final String pressao
   // const Pressao({Key? key}) : super (key: key);
@@ -43,14 +39,14 @@ class _PesoAlturaState extends State<PesoAltura> {
       ),
       body: Stack(
         children: [
-          SingleChildScrollView(
+          const SingleChildScrollView(
             child: Center(
               child: Column(
                 children: [
-                  const SizedBox(
+                  SizedBox(
                     height: 20,
                   ),
-                  const Text(
+                  Text(
                     'Histórico do peso e altura',
                     style: TextStyle(
                       fontSize: 22,
@@ -58,7 +54,7 @@ class _PesoAlturaState extends State<PesoAltura> {
                       fontWeight: FontWeight.w900,
                     ),
                   ),
-                  const SizedBox(
+                  SizedBox(
                     height: 20,
                   ),
                   // Outros widgets aqui...
@@ -78,15 +74,15 @@ class _PesoAlturaState extends State<PesoAltura> {
                   );
                 },
                 style: ElevatedButton.styleFrom(
-                  padding: const EdgeInsets.all(15),
                   backgroundColor: const Color.fromARGB(
                       50, 105, 126, 80), // Cor de fundo do botão
                   foregroundColor: Colors.white,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(600),
-                  ),
+                  shape: const CircleBorder(),
                 ),
-                child: const Icon(Icons.add),
+                child: const Padding(
+                  padding: EdgeInsets.all(8.0),
+                  child: Icon(Icons.add),
+                ),
               ),
             ),
           ),
