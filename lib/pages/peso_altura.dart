@@ -40,188 +40,179 @@ class _PesoAlturaState extends State<PesoAltura> {
       body: Stack(
         children: [
           const SingleChildScrollView(
-            child: Center(
-              child: Column(
-                children: [
-                  SizedBox(
-                    height: 20,
-                  ),
-                  Text(
-                    'Histórico do peso e altura',
-                    style: TextStyle(
-                      fontSize: 22,
-                      color: Color.fromARGB(220, 105, 126, 80),
-                      fontWeight: FontWeight.w900,
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(20, 10, 20, 20),
+              child: Center(
+                child: Column(
+                  children: [
+                    SizedBox(
+                      height: 20,
                     ),
-                  ),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  // Outros widgets aqui...
-                  SizedBox(
-                    height: 80,
-                    width: 450,
-                    child: DecoratedBox(
-                      decoration: const BoxDecoration(
-                        color: Color.fromRGBO(41, 114, 34, 0.529),
-                        borderRadius: BorderRadius.all(Radius.circular(17)),
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          Text(
-                            "21/05/2024",
-                            style: TextStyle(fontSize: 12),
-                          ),
-                          Text("75kg",
-                          style: TextStyle(
-                            fontSize: 18, 
-                            fontWeight: FontWeight.w900
-                          )),
-                          Text(
-                            '175cm',
-                            style: TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.w900,
-                            ),
-                          ),
-                        ],
+                    Text(
+                      'Histórico do peso e altura',
+                      style: TextStyle(
+                        fontSize: 22,
+                        color: Color.fromARGB(220, 105, 126, 80),
+                        fontWeight: FontWeight.w900,
                       ),
                     ),
-                  ),
-                  SizedBox(height: 30),
-                  SizedBox(
-                    height: 80,
-                    width: 450,
-                    child: DecoratedBox(
-                      decoration: const BoxDecoration(
-                        color: Color.fromRGBO(41, 114, 34, 0.529),
-                        borderRadius: BorderRadius.all(Radius.circular(17)),
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          Text(
-                            "20/05/2024",
-                            style: TextStyle(fontSize: 12),
-                          ),
-                          Text("74.8kg",
-                          style: TextStyle(
-                            fontSize: 18, 
-                            fontWeight: FontWeight.w900
-                          )
-                          ),
-                          Text(
-                            '175cm',
-                            style: TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.w900,
+                    SizedBox(
+                      height: 20,
+                    ),
+                    // Outros widgets aqui...
+                    SizedBox(
+                      height: 80,
+                      width: 450,
+                      child: DecoratedBox(
+                        decoration: const BoxDecoration(
+                          color: Color.fromRGBO(41, 114, 34, 0.529),
+                          borderRadius: BorderRadius.all(Radius.circular(17)),
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            Text(
+                              "21/05/2024",
+                              style: TextStyle(fontSize: 12),
                             ),
-                          ),
-                        ],
+                            Text("75kg",
+                                style: TextStyle(
+                                    fontSize: 18, fontWeight: FontWeight.w900)),
+                            Text(
+                              '175cm',
+                              style: TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.w900,
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
-                  ),
-                  SizedBox(height: 30),
-                  SizedBox(
-                    height: 80,
-                    width: 450,
-                    child: DecoratedBox(
-                      decoration: const BoxDecoration(
-                        color: Color.fromRGBO(41, 114, 34, 0.529),
-                        borderRadius: BorderRadius.all(Radius.circular(17)),
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          Text(
-                            "12/05/2024",
-                            style: TextStyle(fontSize: 12),
-                          ),
-                          Text("74.5kg",
-                          style: TextStyle(
-                            fontSize: 18, 
-                            fontWeight: FontWeight.w900
-                          )
-                          ),
-                          Text(
-                            '175cm',
-                            style: TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.w900,
+                    SizedBox(height: 30),
+                    SizedBox(
+                      height: 80,
+                      width: 450,
+                      child: DecoratedBox(
+                        decoration: const BoxDecoration(
+                          color: Color.fromRGBO(41, 114, 34, 0.529),
+                          borderRadius: BorderRadius.all(Radius.circular(17)),
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            Text(
+                              "20/05/2024",
+                              style: TextStyle(fontSize: 12),
                             ),
-                          ),
-                        ],
+                            Text("74.8kg",
+                                style: TextStyle(
+                                    fontSize: 18, fontWeight: FontWeight.w900)),
+                            Text(
+                              '175cm',
+                              style: TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.w900,
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
-                  ),
-                  SizedBox(height: 30),
-                  SizedBox(
-                    height: 80,
-                    width: 450,
-                    child: DecoratedBox(
-                      decoration: const BoxDecoration(
-                        color: Color.fromRGBO(41, 114, 34, 0.529),
-                        borderRadius: BorderRadius.all(Radius.circular(17)),
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          Text(
-                            "1/05/2024",
-                            style: TextStyle(fontSize: 12),
-                          ),
-                          Text("74kg",
-                            style: TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.w900
-                            )
-                          ),
-                          Text(
-                            '175cm',
-                            style: TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.w900,
+                    SizedBox(height: 30),
+                    SizedBox(
+                      height: 80,
+                      width: 450,
+                      child: DecoratedBox(
+                        decoration: const BoxDecoration(
+                          color: Color.fromRGBO(41, 114, 34, 0.529),
+                          borderRadius: BorderRadius.all(Radius.circular(17)),
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            Text(
+                              "12/05/2024",
+                              style: TextStyle(fontSize: 12),
                             ),
-                          ),
-                        ],
+                            Text("74.5kg",
+                                style: TextStyle(
+                                    fontSize: 18, fontWeight: FontWeight.w900)),
+                            Text(
+                              '175cm',
+                              style: TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.w900,
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
-                  ),
-                  SizedBox(height: 30),
-                  SizedBox(
-                    height: 80,
-                    width: 450,
-                    child: DecoratedBox(
-                      decoration: const BoxDecoration(
-                        color: Color.fromRGBO(41, 114, 34, 0.529),
-                        borderRadius: BorderRadius.all(Radius.circular(17)),
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          Text(
-                            "20/04/2024",
-                            style: TextStyle(fontSize: 12),
-                          ),
-                          Text("72kg",
-                            style: TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.w900
+                    SizedBox(height: 30),
+                    SizedBox(
+                      height: 80,
+                      width: 450,
+                      child: DecoratedBox(
+                        decoration: const BoxDecoration(
+                          color: Color.fromRGBO(41, 114, 34, 0.529),
+                          borderRadius: BorderRadius.all(Radius.circular(17)),
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            Text(
+                              "1/05/2024",
+                              style: TextStyle(fontSize: 12),
                             ),
-                          ),
-                          Text(
-                            '174cm',
-                            style: TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.w900,
+                            Text("74kg",
+                                style: TextStyle(
+                                    fontSize: 18, fontWeight: FontWeight.w900)),
+                            Text(
+                              '175cm',
+                              style: TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.w900,
+                              ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
                     ),
-                  ),
-                ],
+                    SizedBox(height: 30),
+                    SizedBox(
+                      height: 80,
+                      width: 450,
+                      child: DecoratedBox(
+                        decoration: const BoxDecoration(
+                          color: Color.fromRGBO(41, 114, 34, 0.529),
+                          borderRadius: BorderRadius.all(Radius.circular(17)),
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            Text(
+                              "20/04/2024",
+                              style: TextStyle(fontSize: 12),
+                            ),
+                            Text(
+                              "72kg",
+                              style: TextStyle(
+                                  fontSize: 18, fontWeight: FontWeight.w900),
+                            ),
+                            Text(
+                              '174cm',
+                              style: TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.w900,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
           ),

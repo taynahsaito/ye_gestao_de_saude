@@ -1,5 +1,8 @@
+import 'package:app_ye_gestao_de_saude/models/consultas_model.dart';
+import 'package:app_ye_gestao_de_saude/services/consultas_service.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:uuid/uuid.dart';
 
 class NovaConsulta extends StatefulWidget {
   const NovaConsulta({super.key});
@@ -10,18 +13,26 @@ class NovaConsulta extends StatefulWidget {
 
 class _NovaConsultaState extends State<NovaConsulta> {
   late DateTime? _selectedDate;
+  late DateTime? _selectedRetorno;
+  late DateTime? _selectedLembrete;
+  final TextEditingController horariocontroller = TextEditingController();
+  final TextEditingController especialidadecontroller = TextEditingController();
+  final TextEditingController resumocontroller = TextEditingController();
+
   final DateFormat _dateFormat = DateFormat('dd/MM/yyyy');
   final _formKey = GlobalKey<FormState>();
 
   @override
   void initState() {
     super.initState();
-    _selectedDate = null; // Inicializando _selectedDate com a data atual
+    _selectedDate = null;
+    _selectedLembrete = null;
+    _selectedRetorno = null; // Inicializando _selectedDate com a data atual
   }
 
   Future<void> _selectDate(BuildContext context) async {
     final ThemeData theme = Theme.of(context);
-    final DateTime? picked = await showDatePicker(
+    final DateTime? pickedData = await showDatePicker(
       context: context,
       initialDate: _selectedDate,
       firstDate: DateTime(1900),
@@ -39,11 +50,87 @@ class _NovaConsultaState extends State<NovaConsulta> {
         );
       },
     );
-    if (picked != null && picked != _selectedDate) {
+    if (pickedData != null && pickedData != _selectedDate) {
       setState(() {
-        _selectedDate = picked;
+        _selectedDate = pickedData;
       });
     }
+  }
+
+  Future<void> _selectRetorno(BuildContext context) async {
+    final ThemeData theme = Theme.of(context);
+    final DateTime? pickedRetorno = await showDatePicker(
+      context: context,
+      initialDate: _selectedRetorno,
+      firstDate: DateTime(1900),
+      lastDate: DateTime.now(),
+      builder: (BuildContext context, Widget? child) {
+        return Theme(
+          data: theme.copyWith(
+            // Personalize a cor de fundo da seleção aqui
+            colorScheme: theme.colorScheme.copyWith(
+              primary: const Color.fromARGB(
+                  220, 105, 126, 80), // Cor de fundo da seleção
+            ),
+          ),
+          child: child!,
+        );
+      },
+    );
+    if (pickedRetorno != null && pickedRetorno != _selectedRetorno) {
+      setState(() {
+        _selectedRetorno = pickedRetorno;
+      });
+    }
+  }
+
+  Future<void> _selectLembrete(BuildContext context) async {
+    final ThemeData theme = Theme.of(context);
+    final DateTime? pickedLembrete = await showDatePicker(
+      context: context,
+      initialDate: _selectedLembrete,
+      firstDate: DateTime(1900),
+      lastDate: DateTime.now(),
+      builder: (BuildContext context, Widget? child) {
+        return Theme(
+          data: theme.copyWith(
+            // Personalize a cor de fundo da seleção aqui
+            colorScheme: theme.colorScheme.copyWith(
+              primary: const Color.fromARGB(
+                  220, 105, 126, 80), // Cor de fundo da seleção
+            ),
+          ),
+          child: child!,
+        );
+      },
+    );
+    if (pickedLembrete != null && pickedLembrete != _selectedLembrete) {
+      setState(() {
+        _selectedLembrete = pickedLembrete;
+      });
+    }
+  }
+
+  final ConsultasService adicionarConsulta = ConsultasService();
+
+  consultaAdicionar() {
+    String especialidade = especialidadecontroller.text;
+    String resumo = resumocontroller.text;
+    String horario = horariocontroller.text;
+    String data = _dateFormat.format(_selectedDate!);
+    String retorno = _dateFormat.format(_selectedRetorno!);
+    String lembrete = _dateFormat.format(_selectedLembrete!);
+
+    ModeloConsultas modeloConsultas = ModeloConsultas(
+        id: const Uuid().v1(),
+        especialidade: especialidade,
+        horario: horario,
+        data: data,
+        resumo: resumo,
+        retorno: retorno,
+        lembrete: lembrete);
+
+    adicionarConsulta.adicionarConsulta(modeloConsultas);
   }
 
   @override
@@ -103,6 +190,7 @@ class _NovaConsultaState extends State<NovaConsulta> {
                     SizedBox(
                       height: 40,
                       child: TextFormField(
+                        controller: especialidadecontroller,
                         decoration: InputDecoration(
                           border: OutlineInputBorder(
                               borderSide: const BorderSide(
@@ -200,6 +288,7 @@ class _NovaConsultaState extends State<NovaConsulta> {
                     SizedBox(
                       height: 40,
                       child: TextFormField(
+                        controller: horariocontroller,
                         decoration: InputDecoration(
                           border: OutlineInputBorder(
                               borderSide: const BorderSide(
@@ -245,6 +334,7 @@ class _NovaConsultaState extends State<NovaConsulta> {
                     SizedBox(
                       height: 40,
                       child: TextFormField(
+                        controller: resumocontroller,
                         keyboardType: TextInputType.multiline,
                         maxLines: null, // Permite várias linhas
                         textAlignVertical: TextAlignVertical.top,
@@ -294,10 +384,10 @@ class _NovaConsultaState extends State<NovaConsulta> {
                       height: 40,
                       child: TextFormField(
                         readOnly: true,
-                        onTap: () => _selectDate(context),
+                        onTap: () => _selectRetorno(context),
                         controller: TextEditingController(
-                          text: _selectedDate != null
-                              ? _dateFormat.format(_selectedDate!)
+                          text: _selectedRetorno != null
+                              ? _dateFormat.format(_selectedRetorno!)
                               : '',
                         ),
                         decoration: InputDecoration(
@@ -346,10 +436,10 @@ class _NovaConsultaState extends State<NovaConsulta> {
                       height: 40,
                       child: TextFormField(
                         readOnly: true,
-                        onTap: () => _selectDate(context),
+                        onTap: () => _selectLembrete(context),
                         controller: TextEditingController(
-                          text: _selectedDate != null
-                              ? _dateFormat.format(_selectedDate!)
+                          text: _selectedLembrete != null
+                              ? _dateFormat.format(_selectedLembrete!)
                               : '',
                         ),
                         decoration: InputDecoration(
@@ -395,6 +485,8 @@ class _NovaConsultaState extends State<NovaConsulta> {
                         _formKey.currentState!.reset();
                         setState(() {
                           _selectedDate = null;
+                          _selectedLembrete = null;
+                          _selectedRetorno = null;
                         });
                         Navigator.of(context).pop();
                       },
@@ -413,7 +505,7 @@ class _NovaConsultaState extends State<NovaConsulta> {
                       ),
                     ),
                     ElevatedButton(
-                      onPressed: () {
+                      onPressed: () async {
                         // Navigator.of(context).pop();
                         // if (_formKey.currentState != null &&
                         //     _formKey.currentState!.validate()) {
@@ -435,6 +527,7 @@ class _NovaConsultaState extends State<NovaConsulta> {
                         //         duration: Duration(seconds: 2),
                         //       ),
                         //     );
+                        await consultaAdicionar();
                         Navigator.of(context).pop();
                       },
                       style: ElevatedButton.styleFrom(

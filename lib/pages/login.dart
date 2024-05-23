@@ -157,11 +157,11 @@ class _LoginState extends State<Login> {
                       onPressed: () async {
                         String email = _emailController.text;
                         String senha = _senhaController.text;
-              
+
                         // Aguarde o resultado do método de login
                         String? errorMessage = await _autenServico.login(
                             email: email, senha: senha);
-              
+
                         // Verifique se o login foi bem-sucedido (sem mensagem de erro)
                         if (errorMessage == null) {
                           Navigator.push(

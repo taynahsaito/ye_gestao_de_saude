@@ -137,6 +137,7 @@ class _CadastroState extends State<Cadastro> {
                         fontSize: 18,
                         color: Color.fromARGB(255, 152, 152, 152)),
                   ),
+                  keyboardType: TextInputType.name,
                 ),
                 const SizedBox(height: 20),
                 TextFormField(
