@@ -1,3 +1,4 @@
+import 'package:app_ye_gestao_de_saude/pages/configuracoes.dart';
 import 'package:app_ye_gestao_de_saude/pages/glicemia.dart';
 import 'package:app_ye_gestao_de_saude/pages/imc.dart';
 import 'package:app_ye_gestao_de_saude/pages/peso_altura.dart';
@@ -32,7 +33,14 @@ class _HomePageState extends State<HomePage> {
                 Icons.settings,
                 color: Color.fromARGB(220, 105, 126, 80),
               ),
-              onPressed: () {},
+              onPressed: () {
+                Navigator.push(
+                          context, 
+                          MaterialPageRoute(
+                           builder: (context) =>
+                                const Configuracoes()),
+                );
+              },
             ),
           )
         ],
