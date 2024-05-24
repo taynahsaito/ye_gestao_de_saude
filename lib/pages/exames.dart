@@ -21,26 +21,7 @@ class _ExamesState extends State<Exames> {
 
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 245, 246, 241),
-      // appBar: AppBar(
-      //   backgroundColor: const Color.fromARGB(255, 245, 246, 241),
-      //   iconTheme: const IconThemeData(
-      //     color: Color.fromARGB(220, 105, 126, 80), // Define a cor do ícone
-      //   ),
-      //   leading: Padding(
-      //     padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
-      //     child: IconButton(
-      //       icon: const Icon(Icons.arrow_back),
-      //       onPressed: () {
-      //         Navigator.push(
-      //                     context,
-      //                     MaterialPageRoute(
-      //                       builder: (context) => const NavBar(),
-      //                     ),
-      //                   );
-      //       },
-      //     ),
-      //   ),
-      // ),
+    
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.fromLTRB(20, 10, 10, 20),
@@ -244,9 +225,7 @@ class _ExamesState extends State<Exames> {
             backgroundColor:
                 const Color.fromARGB(50, 105, 126, 80), // Cor de fundo do botão
             foregroundColor: Colors.white,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(600),
-            ),
+            shape: const CircleBorder(),
           ),
           child: const Icon(Icons.add),
         ),

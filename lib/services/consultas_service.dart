@@ -12,20 +12,63 @@ class ConsultasService {
         ''; // Defina userId como uma string vazia se currentUser for nulo
   }
 
+  // final CollectionReference consultasCollection =
+  //     FirebaseFirestore.instance.collection('Consultas');
+
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  final CollectionReference consultasCollection =
+      FirebaseFirestore.instance.collection('Consultas');
+
   Future<void> adicionarConsulta(ModeloConsultas modeloConsultas) async {
+    User? user = _auth.currentUser;
+    if (user != null) {
+      DocumentReference userDoc = consultasCollection
+          .doc(user.uid)
+          .collection('Consultas do Usuário')
+          .doc();
+      await userDoc.set(modeloConsultas.toFirestore());
+    }
+  }
+  // Future<void> adicionarConsulta(ModeloConsultas modeloConsultas) async {
+  //   try {
+  //     await _firestore
+  //         .collection('Consultas') // Nome significativo para a coleção
+  //         .doc(userId)
+  //         .collection(
+  //             'Consultas do Usuário') // Nome significativo para a subcoleção
+  //         .doc(modeloConsultas.id)
+  //         .set(modeloConsultas.toMap());
+
+  //     print('Consulta adicionada com sucesso!');
+  //   } catch (error) {
+  //     print('Erro ao adicionar consulta: $error');
+  //     throw error; // Lança o erro novamente para que possa ser tratado no local de chamada, se necessário
+  //   }
+  // }
+
+  // Future<void> editarConsulta(ModeloConsultas modeloConsultas) async {
+  //   try {
+  //     await _firestore
+  //         .collection('Medicamento')
+  //         .doc(userId)
+  //         .collection('Medicamento do usuário')
+  //         .doc(modeloConsultas.id)
+  //         .update(modeloConsultas.toMap());
+  //   } catch (error) {
+  //     print("Erro ao editar medicação: $error");
+  //   }
+  // }
+
+  Future<void> deletarConsulta(String id) async {
     try {
       await _firestore
-          .collection('Consultas') // Nome significativo para a coleção
+          .collection('Medicamento')
           .doc(userId)
-          .collection(
-              'Consultas do Usuário') // Nome significativo para a subcoleção
-          .doc(modeloConsultas.id)
-          .set(modeloConsultas.toMap());
-
-      print('Consulta adicionada com sucesso!');
-    } catch (error) {
-      print('Erro ao adicionar consulta: $error');
-      throw error; // Lança o erro novamente para que possa ser tratado no local de chamada, se necessário
+          .collection('Medicamento do usuário')
+          .doc(id)
+          .delete();
+    } catch (e) {
+      print("Erro ao excluir a medicação: $e");
     }
   }
 }

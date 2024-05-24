@@ -1,15 +1,16 @@
-import 'package:app_ye_gestao_de_saude/pages/info_consultas.dart';
+import 'package:app_ye_gestao_de_saude/models/consultas_model.dart';
+import 'package:app_ye_gestao_de_saude/pages/informacoes_consultas.dart';
 import 'package:app_ye_gestao_de_saude/pages/nova_consulta.dart';
+import 'package:app_ye_gestao_de_saude/services/consultas_service.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
-class DataConsultas extends StatefulWidget {
-  const DataConsultas({super.key});
+class DataConsultas extends StatelessWidget {
+  final ModeloConsultas modeloConsultas;
 
-  @override
-  State<DataConsultas> createState() => _DataConsultasState();
-}
+  DataConsultas({required this.modeloConsultas});
+  final ConsultasService dbService = ConsultasService();
 
-class _DataConsultasState extends State<DataConsultas> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -29,179 +30,80 @@ class _DataConsultasState extends State<DataConsultas> {
           ),
         ),
       ),
-      body: Stack(children: [
-        SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.fromLTRB(20, 10, 20, 20),
-            child: Center(
-              child: Column(
-                children: [
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  const Text(
-                    "Consultas realizadas",
-                    style: TextStyle(
-                      fontSize: 22,
-                      color: Color.fromARGB(220, 105, 126, 80),
-                      fontWeight: FontWeight.w900,
-                    ),
-                  ),
-                  const Text(
-                    'nome do especialista',
-                    style: TextStyle(
-                      fontSize: 16,
-                      color: Color.fromARGB(220, 105, 126, 80),
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 30,
-                  ),
-                  GestureDetector(
+      body: Stack(
+        children: [
+          StreamBuilder(
+            stream: dbService.consultasCollection.snapshots(),
+            builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return Center(child: CircularProgressIndicator());
+              }
+
+              if (snapshot.hasError) {
+                return Center(child: Text('Erro ao carregar dados'));
+              }
+
+              var consultasdata = snapshot.data!.docs
+                  .map((doc) => ModeloConsultas.fromFirestore(doc))
+                  .toList();
+
+              return ListView.builder(
+                itemCount: consultasdata.length,
+                itemBuilder: (context, index) {
+                  var consulta = consultasdata[index];
+                  return ListTile(
                     onTap: () {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => InfoConsultas()),
+                          builder: (context) =>
+                              InformacoesConsultas(modeloConsultas: consulta),
+                        ),
                       );
                     },
-                    child: SizedBox(
-                      height: 40,
-                      width: 450,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          const Text(
-                            "17/04/2024",
-                            style: TextStyle(
-                                fontSize: 16, fontWeight: FontWeight.w600),
-                          ),
-                          IconButton(
-                            icon: const Icon(
-                              Icons.arrow_circle_right_outlined,
-                            ),
-                            onPressed: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) =>
-                                        const InfoConsultas()),
-                              );
-                            },
-                          ),
-                        ],
-                      ),
+                    title: Row(
+                      children: [
+                        Text(
+                          '${consulta.data}',
+                          style: TextStyle(
+                              fontSize: 16, fontWeight: FontWeight.w600),
+                        ),
+                        Spacer(),
+                        Icon(Icons.arrow_circle_right_outlined),
+                      ],
                     ),
-                  ),
-                  const SizedBox(
-                    height: 15,
-                  ),
-                  GestureDetector(
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => InfoConsultas()),
-                      );
-                    },
-                    child: SizedBox(
-                      height: 40,
-                      width: 450,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          const Text(
-                            "20/12/2024",
-                            style: TextStyle(
-                                fontSize: 16, fontWeight: FontWeight.w600),
-                          ),
-                          IconButton(
-                            icon: const Icon(
-                              Icons.arrow_circle_right_outlined,
-                            ),
-                            onPressed: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) =>
-                                        const InfoConsultas()),
-                              );
-                            },
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 15,
-                  ),
-                  GestureDetector(
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => InfoConsultas()),
-                      );
-                    },
-                    child: SizedBox(
-                      height: 40,
-                      width: 450,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          const Text(
-                            "28/03/2023",
-                            style: TextStyle(
-                                fontSize: 16, fontWeight: FontWeight.w600),
-                          ),
-                          IconButton(
-                            icon: const Icon(
-                              Icons.arrow_circle_right_outlined,
-                            ),
-                            onPressed: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) =>
-                                        const InfoConsultas()),
-                              );
-                            },
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ],
+                  );
+                },
+              );
+            },
+          ),
+          Align(
+            alignment: Alignment.bottomCenter,
+            child: Padding(
+              padding: const EdgeInsets.all(15.0),
+              child: ElevatedButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const NovaConsulta()),
+                  );
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color.fromARGB(
+                      50, 105, 126, 80), // Cor de fundo do botão
+                  foregroundColor: Colors.white,
+                  shape: const CircleBorder(),
+                ),
+                child: const Padding(
+                  padding: EdgeInsets.all(8.0),
+                  child: Icon(Icons.add),
+                ),
               ),
             ),
           ),
-        ),
-        Align(
-          alignment: Alignment.bottomCenter,
-          child: Padding(
-            padding: const EdgeInsets.all(15.0),
-            child: ElevatedButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const NovaConsulta()),
-                );
-              },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: const Color.fromARGB(
-                    50, 105, 126, 80), // Cor de fundo do botão
-                foregroundColor: Colors.white,
-                shape: const CircleBorder(),
-              ),
-              child: const Padding(
-                padding: EdgeInsets.all(8.0),
-                child: Icon(Icons.add),
-              ),
-            ),
-          ),
-        ),
-      ]),
+        ],
+      ),
     );
   }
 }
