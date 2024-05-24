@@ -1,6 +1,7 @@
 import 'package:app_ye_gestao_de_saude/models/consultas_model.dart';
 import 'package:app_ye_gestao_de_saude/pages/editar_consultas.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 
 class InformacoesConsultas extends StatelessWidget {
   final ModeloConsultas modeloConsultas;
@@ -29,7 +30,7 @@ class InformacoesConsultas extends StatelessWidget {
             PopupMenuButton(
               itemBuilder: (BuildContext context) {
                 return <PopupMenuEntry>[
-                  const PopupMenuItem(
+                  PopupMenuItem(
                     child: Center(
                       child: Text('Editar'),
                     ),
@@ -56,7 +57,8 @@ class InformacoesConsultas extends StatelessWidget {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => const EditarConsultas()),
+                        builder: (context) =>
+                            EditarConsultas(consultaId: modeloConsultas.id)),
                   );
                 } else if (value == 'delete') {}
               },
@@ -65,7 +67,7 @@ class InformacoesConsultas extends StatelessWidget {
         ),
         body: SingleChildScrollView(
           child: Padding(
-            padding: EdgeInsets.fromLTRB(70, 0, 70, 0),
+            padding: EdgeInsets.fromLTRB(60, 0, 60, 0),
             child: Center(
               child: Column(children: [
                 SizedBox(
@@ -90,6 +92,205 @@ class InformacoesConsultas extends StatelessWidget {
                 SizedBox(
                   height: 30,
                 ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 7),
+                  child: Column(
+                    children: [
+                      Align(
+                          alignment: Alignment.centerLeft,
+                          child: Text(
+                            'Data',
+                            style: TextStyle(
+                                fontFamily: 'Poppins',
+                                fontSize: 17,
+                                color: Color.fromRGBO(119, 138, 96, 1)),
+                          )),
+                      SizedBox(
+                        height: 5,
+                      ),
+                      Container(
+                        decoration: BoxDecoration(
+                          color: Color.fromRGBO(185, 196, 166, 1),
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        width: 380,
+                        child: Center(
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 6.0),
+                            child: Text(
+                              '${modeloConsultas.data}',
+                              style: TextStyle(
+                                fontSize: 16,
+                                color: Color.fromARGB(220, 66, 78, 50),
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 7),
+                  child: Column(
+                    children: [
+                      Align(
+                          alignment: Alignment.centerLeft,
+                          child: Text(
+                            'Horario',
+                            style: TextStyle(
+                                fontFamily: 'Poppins',
+                                fontSize: 17,
+                                color: Color.fromRGBO(119, 138, 96, 1)),
+                          )),
+                      SizedBox(
+                        height: 5,
+                      ),
+                      Container(
+                        decoration: BoxDecoration(
+                          color: Color.fromRGBO(185, 196, 166, 1),
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        width: 380,
+                        child: Center(
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 6.0),
+                            child: Text(
+                              '${modeloConsultas.horario}',
+                              style: TextStyle(
+                                fontSize: 16,
+                                color: Color.fromARGB(220, 66, 78, 50),
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 7),
+                  child: Column(
+                    children: [
+                      Align(
+                          alignment: Alignment.centerLeft,
+                          child: Text(
+                            'Resumo',
+                            style: TextStyle(
+                                fontFamily: 'Poppins',
+                                fontSize: 17,
+                                color: Color.fromRGBO(119, 138, 96, 1)),
+                          )),
+                      SizedBox(
+                        height: 5,
+                      ),
+                      Container(
+                        decoration: BoxDecoration(
+                          color: Color.fromRGBO(185, 196, 166, 1),
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        width: 380,
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(
+                              vertical: 12.0, horizontal: 12.0),
+                          child: SizedBox(
+                            child: Center(
+                              child: Text(
+                                '${modeloConsultas.resumo}',
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  color: Color.fromARGB(220, 66, 78, 50),
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 7),
+                  child: Column(
+                    children: [
+                      Align(
+                          alignment: Alignment.centerLeft,
+                          child: Text(
+                            'Retorno',
+                            style: TextStyle(
+                                fontFamily: 'Poppins',
+                                fontSize: 17,
+                                color: Color.fromRGBO(119, 138, 96, 1)),
+                          )),
+                      SizedBox(
+                        height: 5,
+                      ),
+                      Container(
+                        decoration: BoxDecoration(
+                          color: Color.fromRGBO(185, 196, 166, 1),
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        width: 380,
+                        child: Center(
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 6.0),
+                            child: Text(
+                              '${modeloConsultas.retorno}',
+                              style: TextStyle(
+                                fontSize: 16,
+                                color: Color.fromARGB(220, 66, 78, 50),
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 7),
+                  child: Column(
+                    children: [
+                      Align(
+                          alignment: Alignment.centerLeft,
+                          child: Text(
+                            'Lembrete',
+                            style: TextStyle(
+                                fontFamily: 'Poppins',
+                                fontSize: 17,
+                                color: Color.fromRGBO(119, 138, 96, 1)),
+                          )),
+                      SizedBox(
+                        height: 5,
+                      ),
+                      Container(
+                        decoration: BoxDecoration(
+                          color: Color.fromRGBO(185, 196, 166, 1),
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        width: 380,
+                        child: Center(
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 6.0),
+                            child: Text(
+                              '${modeloConsultas.lembrete}',
+                              style: TextStyle(
+                                fontSize: 16,
+                                color: Color.fromARGB(220, 66, 78, 50),
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+
                 // Column(
                 //   mainAxisAlignment: MainAxisAlignment.start,
                 //   crossAxisAlignment: CrossAxisAlignment.start,

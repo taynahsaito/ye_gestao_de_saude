@@ -17,7 +17,7 @@ class ConsultasService {
 
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final CollectionReference consultasCollection =
-      FirebaseFirestore.instance.collection('Consultas');
+      FirebaseFirestore.instance.collection('consultas');
 
   Future<void> adicionarConsulta(ModeloConsultas modeloConsultas) async {
     User? user = _auth.currentUser;
@@ -46,18 +46,18 @@ class ConsultasService {
   //   }
   // }
 
-  // Future<void> editarConsulta(ModeloConsultas modeloConsultas) async {
-  //   try {
-  //     await _firestore
-  //         .collection('Medicamento')
-  //         .doc(userId)
-  //         .collection('Medicamento do usuário')
-  //         .doc(modeloConsultas.id)
-  //         .update(modeloConsultas.toMap());
-  //   } catch (error) {
-  //     print("Erro ao editar medicação: $error");
-  //   }
-  // }
+  Future<void> editarConsulta(String consultaId, ModeloConsultas modeloConsultas) async {
+  User? user = _auth.currentUser;
+  if (user != null) {
+    DocumentReference consultaDoc = consultasCollection
+        .doc(user.uid)
+        .collection('Consultas do Usuário')
+        .doc(consultaId);
+    
+    await consultaDoc.update(modeloConsultas.toFirestore());
+  }
+}
+
 
   Future<void> deletarConsulta(String id) async {
     try {
@@ -69,6 +69,21 @@ class ConsultasService {
           .delete();
     } catch (e) {
       print("Erro ao excluir a medicação: $e");
+    }
+  }
+
+  Stream<List<ModeloConsultas>> getConsultas() {
+    User? user = _auth.currentUser;
+    if (user != null) {
+      return consultasCollection
+          .doc(user.uid)
+          .collection('Consultas do Usuário')
+          .snapshots()
+          .map((snapshot) => snapshot.docs
+              .map((doc) => ModeloConsultas.fromFirestore(doc))
+              .toList());
+    } else {
+      return Stream.empty();
     }
   }
 }

@@ -6,9 +6,13 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 class DataConsultas extends StatelessWidget {
-  final ModeloConsultas modeloConsultas;
+  final String especialidade;
+  final List<ModeloConsultas> consultas;
 
-  DataConsultas({required this.modeloConsultas});
+  DataConsultas(
+      {Key? key, required this.consultas, required this.especialidade})
+      : super(key: key);
+
   final ConsultasService dbService = ConsultasService();
 
   @override
@@ -32,48 +36,31 @@ class DataConsultas extends StatelessWidget {
       ),
       body: Stack(
         children: [
-          StreamBuilder(
-            stream: dbService.consultasCollection.snapshots(),
-            builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return Center(child: CircularProgressIndicator());
-              }
-
-              if (snapshot.hasError) {
-                return Center(child: Text('Erro ao carregar dados'));
-              }
-
-              var consultasdata = snapshot.data!.docs
-                  .map((doc) => ModeloConsultas.fromFirestore(doc))
-                  .toList();
-
-              return ListView.builder(
-                itemCount: consultasdata.length,
-                itemBuilder: (context, index) {
-                  var consulta = consultasdata[index];
-                  return ListTile(
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) =>
-                              InformacoesConsultas(modeloConsultas: consulta),
-                        ),
-                      );
-                    },
-                    title: Row(
-                      children: [
-                        Text(
-                          '${consulta.data}',
-                          style: TextStyle(
-                              fontSize: 16, fontWeight: FontWeight.w600),
-                        ),
-                        Spacer(),
-                        Icon(Icons.arrow_circle_right_outlined),
-                      ],
+          ListView.builder(
+            itemCount: consultas.length,
+            itemBuilder: (context, index) {
+              var consulta = consultas[index];
+              return ListTile(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) =>
+                          InformacoesConsultas(modeloConsultas: consulta),
                     ),
                   );
                 },
+                title: Row(
+                  children: [
+                    Text(
+                      '${consulta.data}',
+                      style:
+                          TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                    ),
+                    Spacer(),
+                    Icon(Icons.arrow_circle_right_outlined),
+                  ],
+                ),
               );
             },
           ),
