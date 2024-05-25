@@ -1,7 +1,8 @@
-import "package:app_ye_gestao_de_saude/pages/info_exames.dart";
-import "package:firebase_database/firebase_database.dart";
-import "package:flutter/material.dart";
+import 'package:app_ye_gestao_de_saude/pages/info_exames.dart';
+import 'package:firebase_database/firebase_database.dart';
+import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'comprovante_page.dart';  // Adicione a importação da ComprovantePage
 
 class Exames extends StatefulWidget {
   const Exames({super.key});
@@ -17,18 +18,24 @@ class _ExamesState extends State<Exames> {
   @override
   Widget build(BuildContext context) {
     User? user = FirebaseAuth.instance.currentUser;
-    var email = user!.email;
+
+    if (user == null) {
+      return Scaffold(
+        body: Center(
+          child: Text('Usuário não autenticado.'),
+        ),
+      );
+    }
+
+    var email = user.email;
 
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 245, 246, 241),
-    
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.fromLTRB(20, 10, 10, 20),
           child: Center(
             child: Column(
-              // crossAxisAlignment: CrossAxisAlignment.center,
-              // mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 const SizedBox(
                   height: 80,
@@ -44,136 +51,8 @@ class _ExamesState extends State<Exames> {
                     ),
                   ),
                 ),
-                Padding(
-                  padding: const EdgeInsets.only(top: 10.0),
-                  child: GestureDetector(
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) =>
-                                const InfoExames(tipo: 'Hemoglobina')),
-                      );
-                    },
-                    child: SizedBox(
-                      height: 40,
-                      width: 450,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          const Text(
-                            "Hemograma",
-                            style: TextStyle(
-                                fontSize: 16, fontWeight: FontWeight.w900),
-                          ),
-                          IconButton(
-                            icon: const Icon(Icons.info_outline),
-                            onPressed: () {
-                              ScaffoldMessenger.of(context)
-                                  .showSnackBar(SnackBar(
-                                content: DecoratedBox(
-                                  decoration: BoxDecoration(
-                                    color: const Color.fromARGB(
-                                        255, 255, 255, 255),
-                                    borderRadius: const BorderRadius.all(
-                                        Radius.circular(20)),
-                                    border: Border.all(
-                                      color: const Color.fromRGBO(
-                                          190, 186, 186, 0.815),
-                                      width: 2,
-                                    ),
-                                  ),
-                                  child: const SizedBox(
-                                      height: 100,
-                                      child: Padding(
-                                        padding: EdgeInsets.all(10.0),
-                                        child: Center(
-                                          child: Text(
-                                            "O hemograma pode ajudar a detectar doenças como anemia, alguns tipos de câncer como leucemia, infecções e inflamações, problemas no sistema imunológico, entre outras.",
-                                            style: TextStyle(
-                                              color: Colors.black,
-                                              fontSize: 14,
-                                            ),
-                                          ),
-                                        ),
-                                      )),
-                                ),
-                                behavior: SnackBarBehavior.floating,
-                                backgroundColor: Colors.transparent,
-                                elevation: 0,
-                              ));
-                            },
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(top: 10.0),
-                  child: GestureDetector(
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) =>
-                                const InfoExames(tipo: "Colesterol Total")),
-                      );
-                    },
-                    child: SizedBox(
-                      height: 40,
-                      width: 450,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          const Text(
-                            "Colesterol Total",
-                            style: TextStyle(
-                                fontSize: 16, fontWeight: FontWeight.w900),
-                          ),
-                          IconButton(
-                            icon: const Icon(Icons.info_outline),
-                            onPressed: () {
-                              ScaffoldMessenger.of(context)
-                                  .showSnackBar(SnackBar(
-                                content: DecoratedBox(
-                                  decoration: BoxDecoration(
-                                    color: const Color.fromARGB(
-                                        255, 255, 255, 255),
-                                    borderRadius: const BorderRadius.all(
-                                        Radius.circular(20)),
-                                    border: Border.all(
-                                      color: const Color.fromRGBO(
-                                          190, 186, 186, 0.815),
-                                      width: 2,
-                                    ),
-                                  ),
-                                  child: const SizedBox(
-                                      height: 100,
-                                      child: Padding(
-                                        padding: EdgeInsets.all(10.0),
-                                        child: Center(
-                                          child: Text(
-                                            "Colesterol total é um exame para mostrar os níveis de colesterol no organismo do paciente a partir de uma amostra de sangue.",
-                                            style: TextStyle(
-                                              color: Colors.black,
-                                              fontSize: 14,
-                                            ),
-                                          ),
-                                        ),
-                                      )),
-                                ),
-                                behavior: SnackBarBehavior.floating,
-                                backgroundColor: Colors.transparent,
-                                elevation: 0,
-                              ));
-                            },
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
+                _buildExamTile(context, 'Hemograma', 'Hemoglobina'),
+                _buildExamTile(context, 'Colesterol Total', 'Colesterol Total'),
               ],
             ),
           ),
@@ -187,47 +66,134 @@ class _ExamesState extends State<Exames> {
             showModalBottomSheet(
               context: context,
               builder: (BuildContext context) {
-                return SizedBox(
-                  height: 150,
-                  width: 400,
-                  child: DecoratedBox(
-                    decoration: const BoxDecoration(
-                        color: Color.fromRGBO(129, 152, 100, 53.33)),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        Center(
-                          child: ElevatedButton(
-                            child: const Text('Fazer upload de arquivo'),
-                            onPressed: () {
-                              Navigator.pop(context);
-                            },
-                          ),
-                        ),
-                        Center(
-                          child: ElevatedButton(
-                            child: const Text('Tirar foto'),
-                            onPressed: () {
-                              Navigator.pop(context);
-                            },
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                );
+                return _buildBottomSheet();
               },
             );
           },
           style: ElevatedButton.styleFrom(
             padding: const EdgeInsets.all(15),
-            backgroundColor:
-                const Color.fromARGB(50, 105, 126, 80), // Cor de fundo do botão
+            backgroundColor: const Color.fromARGB(50, 105, 126, 80),
             foregroundColor: Colors.white,
             shape: const CircleBorder(),
           ),
           child: const Icon(Icons.add),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildExamTile(BuildContext context, String title, String tipo) {
+    return Padding(
+      padding: const EdgeInsets.only(top: 10.0),
+      child: GestureDetector(
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => InfoExames(tipo: tipo),
+            ),
+          );
+        },
+        child: SizedBox(
+          height: 40,
+          width: 450,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                title,
+                style: const TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w900,
+                ),
+              ),
+              IconButton(
+                icon: const Icon(Icons.info_outline),
+                onPressed: () {
+                  _showInfoSnackbar(context, title);
+                },
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  void _showInfoSnackbar(BuildContext context, String title) {
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      content: DecoratedBox(
+        decoration: BoxDecoration(
+          color: const Color.fromARGB(255, 255, 255, 255),
+          borderRadius: const BorderRadius.all(Radius.circular(20)),
+          border: Border.all(
+            color: const Color.fromRGBO(190, 186, 186, 0.815),
+            width: 2,
+          ),
+        ),
+        child: const SizedBox(
+          height: 100,
+          child: Padding(
+            padding: EdgeInsets.all(10.0),
+            child: Center(
+              child: Text(
+                "O hemograma pode ajudar a detectar doenças como anemia, alguns tipos de câncer como leucemia, infecções e inflamações, problemas no sistema imunológico, entre outras.",
+                style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 14,
+                ),
+              ),
+            ),
+          ),
+        ),
+      ),
+      behavior: SnackBarBehavior.floating,
+      backgroundColor: Colors.transparent,
+      elevation: 0,
+    ));
+  }
+
+  Widget _buildBottomSheet() {
+    return SizedBox(
+      height: 150,
+      width: 400,
+      child: DecoratedBox(
+        decoration: const BoxDecoration(
+          color: Color.fromRGBO(129, 152, 100, 53.33),
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Center(
+              child: ElevatedButton(
+                child: const Text('Fazer upload de arquivo'),
+                onPressed: () {
+                  Navigator.pop(context);
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => ComprovantePage(), // Redireciona para a ComprovantePage
+                    ),
+                  );
+                },
+              ),
+            ),
+            Center(
+              child: ElevatedButton(
+                child: const Text('Tirar foto'),
+                onPressed: () {
+                  Navigator.pop(context);
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => ComprovantePage(), // Redireciona para a ComprovantePage
+                    ),
+                  );
+                },
+              ),
+            ),
+          ],
         ),
       ),
     );

@@ -1,8 +1,10 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class NovaGlicemia extends StatefulWidget {
-  const NovaGlicemia({super.key});
+  const NovaGlicemia({Key? key}) : super(key: key);
 
   @override
   State<NovaGlicemia> createState() => _NovaGlicemiaState();
@@ -13,6 +15,8 @@ class _NovaGlicemiaState extends State<NovaGlicemia> {
   String _glicemia = '';
   late DateTime? _selectedDate;
   final DateFormat _dateFormat = DateFormat('dd/MM/yyyy');
+  final CollectionReference _glicemiaCollection =
+      FirebaseFirestore.instance.collection('glicemia');
 
   @override
   void initState() {
@@ -24,7 +28,7 @@ class _NovaGlicemiaState extends State<NovaGlicemia> {
     final ThemeData theme = Theme.of(context);
     final DateTime? picked = await showDatePicker(
       context: context,
-      initialDate: _selectedDate,
+      initialDate: _selectedDate ?? DateTime.now(),
       firstDate: DateTime(1900),
       lastDate: DateTime.now(),
       builder: (BuildContext context, Widget? child) {
@@ -44,6 +48,33 @@ class _NovaGlicemiaState extends State<NovaGlicemia> {
       setState(() {
         _selectedDate = picked;
       });
+    }
+  }
+
+  Future<void> _saveDataToFirestore() async {
+    try {
+      await _glicemiaCollection.add({
+        'glicemia': _glicemia,
+        'data_afericao': _selectedDate,
+      });
+      // Limpar o formulário após o salvamento
+      _formKey.currentState!.reset();
+      setState(() {
+        _selectedDate = null;
+      });
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Dados de glicemia salvos com sucesso'),
+          duration: Duration(seconds: 2),
+        ),
+      );
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Erro ao salvar dados de glicemia'),
+          duration: Duration(seconds: 2),
+        ),
+      );
     }
   }
 
@@ -122,8 +153,7 @@ class _NovaGlicemiaState extends State<NovaGlicemia> {
                     }
                     return null;
                   },
-                  onSaved: (value) {
-                    if (value != null) {
+                  onSaved: (value) {                    if (value != null) {
                       _glicemia = value;
                     }
                   },
@@ -193,39 +223,29 @@ class _NovaGlicemiaState extends State<NovaGlicemia> {
                       });
                     },
                     style: ElevatedButton.styleFrom(
-                      padding: EdgeInsets
-                          .zero, // Define o padding do botão como zero para não interferir com o padding do widget interno
-                      backgroundColor: const Color.fromARGB(50, 105, 126, 80),
-                      foregroundColor: const Color.fromARGB(
-                          255, 255, 255, 255), // Cor de fundo do botão
+                      padding: EdgeInsets.zero,
+                      backgroundColor:
+                          const Color.fromARGB(50, 105, 126, 80),
+                      foregroundColor:
+                          const Color.fromARGB(255, 255, 255, 255),
                       shape: const CircleBorder(),
                     ),
                     child: const Padding(
-                      padding:
-                          EdgeInsets.all(8), // Espaçamento interno para o ícone
+                      padding: EdgeInsets.all(8),
                       child: Icon(Icons.close),
                     ),
                   ),
                   ElevatedButton(
                     onPressed: () {
-                      Navigator.of(context).pop();
                       if (_formKey.currentState != null &&
                           _formKey.currentState!.validate()) {
                         _formKey.currentState!.save();
                         if (_selectedDate != null) {
-                          // Aqui você pode salvar os dados em um banco de dados
-                          // ou enviá-los para onde desejar
-                          print('Glicemia: $_glicemia, Data: $_selectedDate');
-                          // Exemplo de como limpar o formulário depois de enviar
-                          _formKey.currentState!.reset();
-                          setState(() {
-                            _selectedDate = null;
-                          });
+                          _saveDataToFirestore();
                         } else {
                           ScaffoldMessenger.of(context).showSnackBar(
                             const SnackBar(
-                              content:
-                                  Text('Por favor, insira uma data válida'),
+                              content: Text('Por favor, insira uma data válida'),
                               duration: Duration(seconds: 2),
                             ),
                           );
@@ -233,8 +253,8 @@ class _NovaGlicemiaState extends State<NovaGlicemia> {
                       }
                     },
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color.fromARGB(
-                          50, 105, 126, 80), // Cor de fundo do botão
+                      backgroundColor:
+                          const Color.fromARGB(50, 105, 126, 80),
                       foregroundColor: Colors.white,
                       shape: const CircleBorder(),
                     ),
