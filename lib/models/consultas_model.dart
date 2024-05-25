@@ -46,30 +46,30 @@ class ModeloConsultas {
     };
   }
 
-  // Map<String, dynamic> toMap() {
-  //   final DateTime parsedDate = DateFormat('dd/MM/yyyy').parse(data);
-  //   final String formattedDate = DateFormat('yyyy/MM/dd').format(parsedDate);
-  //   return {
-  //     'id': id,
-  //     'especialidade': especialidade,
-  //     'horario': horario,
-  //     'data': formattedDate,
-  //     'resumo': resumo,
-  //     'retorno': retorno,
-  //     'lembrete': lembrete,
-  //   };
-  // }
+  Map<String, dynamic> toMap() {
+    final DateTime parsedDate = DateFormat('dd/MM/yyyy').parse(data);
+    final String formattedDate = DateFormat('yyyy/MM/dd').format(parsedDate);
+    return {
+      'id': id,
+      'especialidade': especialidade,
+      'horario': horario,
+      'data': formattedDate,
+      'resumo': resumo,
+      'retorno': retorno,
+      'lembrete': lembrete,
+    };
+  }
 
-  // factory ModeloConsultas.fromMap(Map<String, dynamic> map) {
-  //   final DateTime parsedDate = DateFormat('yyyy/MM/dd').parse(map["data"]);
-  //   final String formattedDate = DateFormat('dd/MM/yyyy').format(parsedDate);
-  //   return ModeloConsultas(
-  //       id: map['id'],
-  //       especialidade: map['especialidade'],
-  //       horario: map['horario'],
-  //       data: formattedDate,
-  //       resumo: map['resumo'],
-  //       retorno: map['retorno'],
-  //       lembrete: map['lembrete']);
-  // }
+  factory ModeloConsultas.fromMap(Map<String, dynamic> map) {
+    final DateTime parsedDate = DateFormat('yyyy/MM/dd').parse(map["data"]);
+    final String formattedDate = DateFormat('dd/MM/yyyy').format(parsedDate);
+    return ModeloConsultas(
+        id: map['id'],
+        especialidade: map['especialidade'],
+        horario: map['horario'],
+        data: formattedDate,
+        resumo: map['resumo'],
+        retorno: map['retorno'],
+        lembrete: map['lembrete']);
+  }
 }

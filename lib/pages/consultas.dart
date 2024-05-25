@@ -21,34 +21,40 @@ class _ConsultasState extends State<Consultas> {
 
       body: Stack(
         children: [
-          StreamBuilder(
-              stream: dbService.consultasCollection.snapshots(),
-              builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+          StreamBuilder<List<ModeloConsultas>>(
+              stream: dbService.getConsultas(),
+              builder: (context, snapshot) {
                 if (!snapshot.hasData) {
                   Center(
                     child: CircularProgressIndicator(),
                   );
                 }
-                var consultas = snapshot.data!.docs
-                    .map((doc) => ModeloConsultas.fromFirestore(doc))
-                    .toList();
+                var consultas = snapshot.data!;
+                var groupedConsultas =
+                    _groupConsultasPorEspecialidade(consultas);
 
                 return ListView.builder(
-                    itemCount: consultas.length,
+                    itemCount: groupedConsultas.keys.length,
                     itemBuilder: (context, index) {
-                      var consulta = consultas[index];
+                      var especialidade =
+                          groupedConsultas.keys.elementAt(index);
+
+                      var consultasPorEspecialidade =
+                          groupedConsultas[especialidade]!;
+
                       return ListTile(
                         onTap: () {
                           Navigator.push(
                               context,
                               MaterialPageRoute(
                                   builder: (context) => DataConsultas(
-                                      modeloConsultas: consulta)));
+                                    especialidade: especialidade,
+                                      consultas: consultasPorEspecialidade)));
                         },
                         title: Row(
                           children: [
                             Text(
-                              '${consulta.especialidade}',
+                              '${especialidade}',
                               style: TextStyle(
                                   fontSize: 16, fontWeight: FontWeight.w600),
                             ),
@@ -95,5 +101,17 @@ class _ConsultasState extends State<Consultas> {
       //   child: Icon(Icons.add),
       // ),
     );
+  }
+
+  Map<String, List<ModeloConsultas>> _groupConsultasPorEspecialidade(
+      List<ModeloConsultas> consultas) {
+    Map<String, List<ModeloConsultas>> groupedConsultas = {};
+    for (var consulta in consultas) {
+      if (!groupedConsultas.containsKey(consulta.especialidade)) {
+        groupedConsultas[consulta.especialidade] = [];
+      }
+      groupedConsultas[consulta.especialidade]!.add(consulta);
+    }
+    return groupedConsultas;
   }
 }
