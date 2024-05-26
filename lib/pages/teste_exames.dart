@@ -1,6 +1,9 @@
-import "package:app_ye_gestao_de_saude/pages/camera.dart";
+import "package:app_ye_gestao_de_saude/testes_py/backend_bloc.dart";
 import "package:app_ye_gestao_de_saude/pages/info_exames.dart";
+import "package:firebase_database/firebase_database.dart";
 import "package:flutter/material.dart";
+import 'package:firebase_auth/firebase_auth.dart';
+import "package:flutter_bloc/flutter_bloc.dart";
 
 class Exames extends StatefulWidget {
   const Exames({super.key});
@@ -10,13 +13,17 @@ class Exames extends StatefulWidget {
 }
 
 class _ExamesState extends State<Exames> {
-
+  // banco de dados
+  final databaseReference = FirebaseDatabase.instance.ref().child('usuarios');
 
   @override
   Widget build(BuildContext context) {
 
+    final backendBloc = BlocProvider.of<BackendBloc>(context);
+
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 245, 246, 241),
+
       body: Padding(
         padding: const EdgeInsets.fromLTRB(20, 10, 10, 20),
         child: SingleChildScrollView(
@@ -43,12 +50,8 @@ class _ExamesState extends State<Exames> {
                   padding: const EdgeInsets.only(top: 10.0),
                   child: GestureDetector(
                     onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) =>
-                                const InfoExames(tipo: 'Hemoglobina')),
-                      );
+                      print(backendBloc.fetchData());
+
                     },
                     child: SizedBox(
                       height: 40,
@@ -204,7 +207,7 @@ class _ExamesState extends State<Exames> {
                           child: ElevatedButton(
                             child: const Text('Tirar foto'),
                             onPressed: () {
-                              Navigator.push(context, MaterialPageRoute(builder: (context) => Camera(), fullscreenDialog: true));
+                              Navigator.pop(context);
                             },
                           ),
                         ),

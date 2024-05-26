@@ -3,100 +3,141 @@ import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:camera/camera.dart';
 
-class CameraScreen extends StatefulWidget {
-  const CameraScreen({super.key});
+class Camera extends StatefulWidget {
+  const Camera({super.key});
 
   @override
-  _CameraScreenState createState() => _CameraScreenState();
+  _CameraState createState() => _CameraState();
 }
 
-class _CameraScreenState extends State<CameraScreen> {
-  late CameraController _controller;
-  bool _isCameraReady = false;
-  XFile? _imageFile;
+class _CameraState extends State<Camera> {
+  List<CameraDescription> cameras = []; //temos varias cameras no smartphone e temos que armazená-las (e pegar a padrao)
+  CameraController? controller;
+  XFile? imagem;
+  Size? size;
 
   @override
   void initState() {
     super.initState();
-    _initializeCamera();
+    _loadCameras();
   }
 
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
+  _loadCameras() async{
+    try{
+      cameras = await availableCameras();
+      _startCamera();
+
+    } on CameraException catch(e){
+      print(e.description);
+    }
   }
 
-  Future<void> _initializeCamera() async {
-    final cameras = await availableCameras();
-    final firstCamera = cameras.first;
+  _startCamera() {
+    if (cameras.isEmpty){
+      print("câmera nao foi encontrada"); //relacionado com a permissao das cameras
+    }
+    else {
+      _previewCamera(cameras.first); //vai fazer a instanciacao do controle e mostrar a camera na tela
+    }
+  }
 
-    _controller = CameraController(
-      firstCamera,
-      ResolutionPreset.medium,
+  _previewCamera(CameraDescription camera) async {
+    final CameraController cameraController = CameraController(
+      camera, 
+      ResolutionPreset.max,
+      enableAudio: false,
+      imageFormatGroup: ImageFormatGroup.jpeg,
     );
+    controller = cameraController;
 
-    try {
-      await _controller.initialize();
-      if (!mounted) return;
-
-      setState(() {
-        _isCameraReady = true;
-      });
-    } catch (e) {
-      print('Error initializing camera: $e');
+    try{
+      await cameraController.initialize();
+    } on CameraException catch (e) {
+      print(e.description);
     }
-  }
 
-  Future<void> _captureImage() async {
-    try {
-      final imageFile = await _controller.takePicture();
-      setState(() {
-        _imageFile = imageFile;
+
+    if(mounted){
+      setState(() { //atualizar a tela conforme o controller for inicializao
       });
-
-      final imageBytes = await imageFile.readAsBytes();
-      await analyzeImage(imageBytes);
-    } catch (e) {
-      print('Error capturing image: $e');
-    }
-  }
-
-  Future<void> analyzeImage(Uint8List imageBytes) async {
-    try {
-      // Simular análise de imagem (resultado fixo)
-      String result = 'Exame médico detectado: Hemograma';
-      print('Resultado da análise: $result');
-    } catch (e) {
-      print('Erro ao analisar a imagem: $e');
     }
   }
 
   @override
   Widget build(BuildContext context) {
+
+    size = MediaQuery.of(context).size;
+
+
     return Scaffold(
-      appBar: AppBar(title: Text('Camera')),
-      body: Column(
-        children: [
-          if (_isCameraReady)
-            Expanded(
-              child: CameraPreview(_controller),
-            )
-          else
-            Expanded(
-              child: Center(child: CircularProgressIndicator()),
-            ),
-          if (_imageFile != null)
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Image.file(File(_imageFile!.path)),
-            ),
-        ],
+      appBar: AppBar(
+        title: const Text("camera"),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _captureImage,
-        child: Icon(Icons.camera),
+      body: Container(
+        child: Center (child: _arquivosWidget()),
       ),
+      floatingActionButton: (imagem != null) ? FloatingActionButton.extended(onPressed: () => Navigator.pop(context),label: Text("finalizar")) : null, 
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }
+
+  _arquivosWidget (){
+    return Container (
+      width: size!.width - 50,
+      height: size!.height - (size!.height - 3),
+      child: imagem == null? _cameraPreviewWidget() : Image.file(File(imagem!.path), fit: BoxFit.contain),
+    );
+  }
+
+  _cameraPreviewWidget() {
+    final CameraController? cameraController = controller;
+    if (cameraController == null || !cameraController.value.isInitialized) {
+      return Text("Widget para camera que nao esta disponivel");
+    }
+    else {
+      return Stack(
+        alignment: AlignmentDirectional.bottomCenter,
+        children: [ 
+          CameraPreview(controller!),
+          _botaoCapturaWidget(),
+        ]
+      );
+    }
+  }
+
+
+  _botaoCapturaWidget() {
+    return Padding(
+      padding: EdgeInsets.only(bottom:24),
+      child: CircleAvatar(
+        radius: 32, 
+        backgroundColor: Colors.black,
+        child: IconButton(
+          icon: Icon
+          (Icons.camera_alt,
+          color: Colors.white,
+          size: 30),
+          onPressed: tirarFoto(),
+          )
+      )
+      );
+  }
+
+  tirarFoto() async {
+    final CameraController? cameraController = controller;
+
+    if (cameraController != null && cameraController.value.isInitialized){
+      try{
+        XFile file = await cameraController.takePicture();
+        if(mounted) {
+          setState(() {
+            imagem = file;
+          });
+        }
+      } on CameraException catch (e) {
+        print(e.description);
+      }
+    } 
+  }
+
 }
