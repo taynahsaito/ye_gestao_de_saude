@@ -1,8 +1,11 @@
+import 'package:app_ye_gestao_de_saude/services/peso_altura_servico.dart';
+import 'package:app_ye_gestao_de_saude/models/peso_altura_modelo.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:app_ye_gestao_de_saude/pages/novo_peso_altura.dart';
 import 'package:flutter/material.dart';
 
 class PesoAltura extends StatefulWidget {
-  const PesoAltura({super.key});
+  const PesoAltura({Key? key});
 
   // final List<Pressao> historicoPressao = [];
   // final String pressao
@@ -13,10 +16,19 @@ class PesoAltura extends StatefulWidget {
 }
 
 class _PesoAlturaState extends State<PesoAltura> {
+  List<DocumentSnapshot> historicoPressao =
+      [];
   @override
   void initState() {
     super.initState();
+    _getHistoricoPesoAltura();
   }
+
+  Future<void> _getHistoricoPesoAltura() async {
+  
+  }
+
+  final PressaoService dbService = PressaoService();
 
   @override
   Widget build(BuildContext context) {
@@ -39,183 +51,50 @@ class _PesoAlturaState extends State<PesoAltura> {
       ),
       body: Stack(
         children: [
-          const SingleChildScrollView(
-            child: Padding(
-              padding: const EdgeInsets.fromLTRB(20, 10, 20, 20),
-              child: Center(
-                child: Column(
-                  children: [
-                    SizedBox(
-                      height: 20,
-                    ),
-                    Text(
-                      'Histórico do peso e altura',
-                      style: TextStyle(
-                        fontSize: 22,
-                        color: Color.fromARGB(220, 105, 126, 80),
-                        fontWeight: FontWeight.w900,
-                      ),
-                    ),
-                    SizedBox(
-                      height: 20,
-                    ),
-                    // Outros widgets aqui...
-                    SizedBox(
-                      height: 80,
-                      width: 450,
-                      child: DecoratedBox(
-                        decoration: const BoxDecoration(
-                          color: Color.fromRGBO(41, 114, 34, 0.529),
-                          borderRadius: BorderRadius.all(Radius.circular(17)),
-                        ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                StreamBuilder<List<ModeloPesoAltura>>(
+              stream: dbService.getPesoAltura(),
+              builder: (context, snapshot) {
+                if (!snapshot.hasData) {
+                  const Center(
+                    child: CircularProgressIndicator(),
+                  );
+                }
+                var pesos = snapshot.data!;
+
+                return ListView.builder(
+                    itemCount: pesos.length,
+                    itemBuilder: (context, index) {
+                      var pesoalturas = pesos[index];
+                      return ListTile(
+                        title: Row(
                           children: [
                             Text(
-                              "21/05/2024",
-                              style: TextStyle(fontSize: 12),
+                              '${pesoalturas.peso}',
+                              style: const TextStyle(
+                                  fontSize: 16, fontWeight: FontWeight.w600),
                             ),
-                            Text("75kg",
-                                style: TextStyle(
-                                    fontSize: 18, fontWeight: FontWeight.w900)),
+                            const Spacer(),
+                            const Icon(Icons.info_outline),
                             Text(
-                              '175cm',
-                              style: TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.w900,
-                              ),
+                              '${pesoalturas.altura}',
+                              style: const TextStyle(
+                                  fontSize: 16, fontWeight: FontWeight.w600),
                             ),
+                            const Spacer(),
+                            const Icon(Icons.info_outline),
+                            Text(
+                              '${pesoalturas.data}',
+                              style: const TextStyle(
+                                  fontSize: 16, fontWeight: FontWeight.w600),
+                            ),
+                            const Spacer(),
+                            const Icon(Icons.info_outline),
                           ],
+
                         ),
-                      ),
-                    ),
-                    SizedBox(height: 30),
-                    SizedBox(
-                      height: 80,
-                      width: 450,
-                      child: DecoratedBox(
-                        decoration: const BoxDecoration(
-                          color: Color.fromRGBO(41, 114, 34, 0.529),
-                          borderRadius: BorderRadius.all(Radius.circular(17)),
-                        ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            Text(
-                              "20/05/2024",
-                              style: TextStyle(fontSize: 12),
-                            ),
-                            Text("74.8kg",
-                                style: TextStyle(
-                                    fontSize: 18, fontWeight: FontWeight.w900)),
-                            Text(
-                              '175cm',
-                              style: TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.w900,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                    SizedBox(height: 30),
-                    SizedBox(
-                      height: 80,
-                      width: 450,
-                      child: DecoratedBox(
-                        decoration: const BoxDecoration(
-                          color: Color.fromRGBO(41, 114, 34, 0.529),
-                          borderRadius: BorderRadius.all(Radius.circular(17)),
-                        ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            Text(
-                              "12/05/2024",
-                              style: TextStyle(fontSize: 12),
-                            ),
-                            Text("74.5kg",
-                                style: TextStyle(
-                                    fontSize: 18, fontWeight: FontWeight.w900)),
-                            Text(
-                              '175cm',
-                              style: TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.w900,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                    SizedBox(height: 30),
-                    SizedBox(
-                      height: 80,
-                      width: 450,
-                      child: DecoratedBox(
-                        decoration: const BoxDecoration(
-                          color: Color.fromRGBO(41, 114, 34, 0.529),
-                          borderRadius: BorderRadius.all(Radius.circular(17)),
-                        ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            Text(
-                              "1/05/2024",
-                              style: TextStyle(fontSize: 12),
-                            ),
-                            Text("74kg",
-                                style: TextStyle(
-                                    fontSize: 18, fontWeight: FontWeight.w900)),
-                            Text(
-                              '175cm',
-                              style: TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.w900,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                    SizedBox(height: 30),
-                    SizedBox(
-                      height: 80,
-                      width: 450,
-                      child: DecoratedBox(
-                        decoration: const BoxDecoration(
-                          color: Color.fromRGBO(41, 114, 34, 0.529),
-                          borderRadius: BorderRadius.all(Radius.circular(17)),
-                        ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            Text(
-                              "20/04/2024",
-                              style: TextStyle(fontSize: 12),
-                            ),
-                            Text(
-                              "72kg",
-                              style: TextStyle(
-                                  fontSize: 18, fontWeight: FontWeight.w900),
-                            ),
-                            Text(
-                              '174cm',
-                              style: TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.w900,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ),
+                      );
+                    });
+              }),
           Align(
             alignment: Alignment.bottomCenter,
             child: Padding(
@@ -224,7 +103,7 @@ class _PesoAlturaState extends State<PesoAltura> {
                 onPressed: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => NovoPesoAltura()),
+                    MaterialPageRoute(builder: (context) => const NovoPesoAltura()),
                   );
                 },
                 style: ElevatedButton.styleFrom(

@@ -1,5 +1,8 @@
+import 'package:app_ye_gestao_de_saude/models/peso_altura_modelo.dart';
+import 'package:app_ye_gestao_de_saude/services/peso_altura_servico.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:uuid/uuid.dart';
 
 class NovoPesoAltura extends StatefulWidget {
   const NovoPesoAltura({super.key});
@@ -46,6 +49,24 @@ class _NovoPesoAlturaState extends State<NovoPesoAltura> {
         _selectedDate = picked;
       });
     }
+  }
+
+  final PressaoService adicionarPressao = PressaoService();
+
+
+  pesoAdicionar() {
+    String sistolica = _pesoController.text;
+    String diastolica =_alturaController.text;
+    String data = _dateFormat.format(_selectedDate!);
+
+    ModeloPesoAltura modeloPressao = ModeloPesoAltura(
+      id: const Uuid().v1(),
+      peso : sistolica,
+      altura : diastolica,
+      data: data,
+    );
+
+    adicionarPressao.adicionarPesoAltura(modeloPressao);
   }
 
   @override
@@ -96,87 +117,6 @@ class _NovoPesoAlturaState extends State<NovoPesoAltura> {
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   const Text(
-                    "Altura (em metros):",
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.w500,
-                      color: Color.fromARGB(220, 105, 126, 80),
-                    ),
-                  ),
-                  const SizedBox(height: 10),
-                  SizedBox(
-                    height: 40,
-                    child: TextFormField(
-                      controller: _pesoController,
-                      decoration: InputDecoration(
-                        border: OutlineInputBorder(
-                            borderSide: const BorderSide(
-                                color: Color.fromARGB(220, 105, 126,
-                                    80)), // Altere a cor da borda aqui
-
-                            borderRadius: BorderRadius.circular(20)),
-                        contentPadding: const EdgeInsets.fromLTRB(25, 0, 0, 0),
-                        labelStyle: const TextStyle(
-                            fontSize: 18,
-                            color: Color.fromARGB(255, 152, 152, 152)),
-                        //quando clica na label
-                        focusedBorder: OutlineInputBorder(
-                            borderSide: const BorderSide(
-                                color: Color.fromARGB(220, 105, 126,
-                                    80)), // Altere a cor da borda aqui
-                            borderRadius: BorderRadius.circular(20)),
-                      ),
-                      keyboardType: TextInputType.number,
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Por favor, insira o peso';
-                        }
-                        return null;
-                      },
-                    ),
-                  ),
-                  const SizedBox(height: 15),
-                  const Text(
-                    "Peso (em kg):",
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.w600,
-                      color: Color.fromARGB(220, 105, 126, 80),
-                    ),
-                  ),
-                  const SizedBox(height: 10),
-                  SizedBox(
-                    height: 40,
-                    child: TextFormField(
-                      controller: _alturaController,
-                      decoration: InputDecoration(
-                        border: OutlineInputBorder(
-                            borderSide: const BorderSide(
-                                color: Color.fromARGB(220, 105, 126, 80)),
-                            borderRadius: BorderRadius.circular(20)),
-
-                        contentPadding: const EdgeInsets.fromLTRB(25, 0, 0, 0),
-                        labelStyle: const TextStyle(
-                            fontSize: 18,
-                            color: Color.fromARGB(255, 152, 152, 152)),
-                        //quando clica na label
-                        focusedBorder: OutlineInputBorder(
-                            borderSide: const BorderSide(
-                                color: Color.fromARGB(220, 105, 126,
-                                    80)), // Altere a cor da borda aqui
-                            borderRadius: BorderRadius.circular(20)),
-                      ),
-                      keyboardType: TextInputType.number,
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Por favor, insira a altura';
-                        }
-                        return null;
-                      },
-                    ),
-                  ),
-                  const SizedBox(height: 15.0),
-                  const Text(
                     "Data da aferição:",
                     style: TextStyle(
                       fontSize: 18,
@@ -221,34 +161,92 @@ class _NovoPesoAlturaState extends State<NovoPesoAltura> {
                       },
                     ),
                   ),
+                  const SizedBox(height: 10),
+                  const Text(
+                    "Peso (em kg):",
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w500,
+                      color: Color.fromARGB(220, 105, 126, 80),
+                    ),
+                  ),
+                  const SizedBox(height: 10),
+                  SizedBox(
+                    height: 40,
+                    child: TextFormField(
+                      controller: _pesoController,
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(
+                            borderSide: const BorderSide(
+                                color: Color.fromARGB(220, 105, 126,
+                                    80)), // Altere a cor da borda aqui
+
+                            borderRadius: BorderRadius.circular(20)),
+                        contentPadding: const EdgeInsets.fromLTRB(25, 0, 0, 0),
+                        labelStyle: const TextStyle(
+                            fontSize: 18,
+                            color: Color.fromARGB(255, 152, 152, 152)),
+                        //quando clica na label
+                        focusedBorder: OutlineInputBorder(
+                            borderSide: const BorderSide(
+                                color: Color.fromARGB(220, 105, 126,
+                                    80)), // Altere a cor da borda aqui
+                            borderRadius: BorderRadius.circular(20)),
+                      ),
+                      keyboardType: TextInputType.number,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Por favor, insira o peso';
+                        }
+                        return null;
+                      },
+                    ),
+                  ),
+                  const SizedBox(height: 15),
+                  const Text(
+                    "Altura (em metros):",
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w600,
+                      color: Color.fromARGB(220, 105, 126, 80),
+                    ),
+                  ),
+                  const SizedBox(height: 10),
+                  SizedBox(
+                    height: 40,
+                    child: TextFormField(
+                      controller: _alturaController,
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(
+                            borderSide: const BorderSide(
+                                color: Color.fromARGB(220, 105, 126, 80)),
+                            borderRadius: BorderRadius.circular(20)),
+
+                        contentPadding: const EdgeInsets.fromLTRB(25, 0, 0, 0),
+                        labelStyle: const TextStyle(
+                            fontSize: 18,
+                            color: Color.fromARGB(255, 152, 152, 152)),
+                        //quando clica na label
+                        focusedBorder: OutlineInputBorder(
+                            borderSide: const BorderSide(
+                                color: Color.fromARGB(220, 105, 126,
+                                    80)), // Altere a cor da borda aqui
+                            borderRadius: BorderRadius.circular(20)),
+                      ),
+                      keyboardType: TextInputType.number,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Por favor, insira a altura';
+                        }
+                        return null;
+                      },
+                    ),
+                  ),
+                  
+                  
                 ],
               ),
             ),
-            // SizedBox(height: 40),
-            // const Text(
-            // "Altura",
-            // style: TextStyle(
-            //   fontSize: 18,
-            //   fontWeight: FontWeight.w600,
-            //   color: Color.fromARGB(220, 105, 126, 80),
-            // ),
-            //                   ),
-            //                   const SizedBox(height: 10),
-            //                   TextFormField(
-            // controller: _alturaController,
-            // decoration: InputDecoration(
-            //   border: OutlineInputBorder(
-            //     borderRadius: BorderRadius.circular(40.0),
-            //   ),
-            // ),
-            // keyboardType: TextInputType.number,
-            // validator: (value) {
-            //   if (value == null || value.isEmpty) {
-            //     return 'Por favor, insira a altura';
-            //   }
-            //   return null;
-            // },
-            //                   ),
             const SizedBox(height: 30),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -278,18 +276,11 @@ class _NovoPesoAlturaState extends State<NovoPesoAltura> {
                   onPressed: () {
                     if (_formKey.currentState!.validate()) {
                       // Aqui você pode atualizar os dados do paciente
+                      pesoAdicionar();
+                      _selectedDate = null;
                       _pesoController.clear();
                       _alturaController.clear();
                     }
-                    // if (_formKey.currentState!.validate()) {
-                    //     setState(() {
-                    //       _pressaoData.add('Data: ${_dataController.text}, Sistólica: ${_sistolicaController.text}, Diastólica: ${_diastolicaController.text}');
-                    //       _dataController.clear();
-                    //       _sistolicaController.clear();
-                    //       _diastolicaController.clear();
-                    //     });
-                    //   }
-                    Navigator.of(context).pop();
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: const Color.fromARGB(

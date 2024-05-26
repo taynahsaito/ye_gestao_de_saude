@@ -1,6 +1,8 @@
+import 'package:app_ye_gestao_de_saude/models/modelo_pressao.dart';
 import 'package:app_ye_gestao_de_saude/pages/nova_pressao.dart';
+import 'package:app_ye_gestao_de_saude/services/pressao_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_database/firebase_database.dart';
+// import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 
 class Pressao extends StatefulWidget {
@@ -11,7 +13,7 @@ class Pressao extends StatefulWidget {
 }
 
 class _PressaoState extends State<Pressao> {
-  final databaseReference = FirebaseDatabase.instance.ref().child('pressoes');
+  // final databaseReference = FirebaseDatabase.instance.ref().child('pressoes');
   List<DocumentSnapshot> historicoPressao =
       []; // List to store retrieved pressure data
   @override
@@ -21,16 +23,16 @@ class _PressaoState extends State<Pressao> {
   }
 
   Future<void> _getHistoricoPressao() async {
-    final snapshot = await databaseReference.get();
-    print(snapshot.value);
-    Object? historicoPressao = snapshot.value;
+    //final snapshot = await databaseReference.get();
+    //print(snapshot.value);
+    //Object? historicoPressao = snapshot.value;
 
-    await databaseReference.push().set({
-      'diastólica': "_diastolicaController",
-      'sistólica': "_sistolicaController",
-      'data': "_senhaController",
-      'dataNascimento': "dataNascimento",
-    });
+    // await databaseReference.push().set({
+    //   'diastólica': "_diastolicaController",
+    //   'sistólica': "_sistolicaController",
+    //   'data': "_senhaController",
+    //   'dataNascimento': "dataNascimento",
+    // });
     // Get reference to 'pressao_sanguinea' collection
     //CollectionReference pressureRef = firestore.collection('pressao_sanguinea');
 
@@ -42,6 +44,7 @@ class _PressaoState extends State<Pressao> {
     //   historicoPressao = querySnapshot.docs;
     // });
   }
+    final PressaoService dbService = PressaoService();
 
   @override
   Widget build(BuildContext context) {
@@ -64,172 +67,50 @@ class _PressaoState extends State<Pressao> {
       ),
       body: Stack(
         children: [
-          const SingleChildScrollView(
-            child: Padding(
-              padding: EdgeInsets.fromLTRB(20, 10, 20, 20),
-              child: Center(
-                child: Column(
-                  children: [
-                    SizedBox(
-                      height: 20,
-                    ),
-                    Text(
-                      'Histórico da pressão',
-                      style: TextStyle(
-                        fontSize: 22,
-                        color: Color.fromARGB(220, 105, 126, 80),
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    SizedBox(
-                      height: 30,
-                    ),
-                    // Outros widgets aqui...
-                    SizedBox(
-                      height: 80,
-                      width: 450,
-                      child: DecoratedBox(
-                        decoration: const BoxDecoration(
-                          color: Color.fromRGBO(219, 127, 88, 0.53),
-                          borderRadius: BorderRadius.all(Radius.circular(17)),
-                        ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          StreamBuilder<List<ModeloPressao>>(
+              stream: dbService.getPressao(),
+              builder: (context, snapshot) {
+                if (!snapshot.hasData) {
+                  Center(
+                    child: CircularProgressIndicator(),
+                  );
+                }
+                var pressoes = snapshot.data!;
+
+                return ListView.builder(
+                    itemCount: pressoes.length,
+                    itemBuilder: (context, index) {
+                      var pressao = pressoes[index];
+                      return ListTile(
+                        title: Row(
                           children: [
                             Text(
-                              "21/05/2024",
-                              style: TextStyle(fontSize: 12),
-                            ),
-                            Text("Alta"),
-                            Text(
-                              '150x95 mmHg',
+                              '${pressao.sistolica}',
                               style: TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.w900,
-                                color: Color.fromRGBO(150, 54, 30, 0.829),
-                              ),
+                                  fontSize: 16, fontWeight: FontWeight.w600),
                             ),
-                          ],
-                        ),
-                      ),
-                    ),
-                    SizedBox(height: 30),
-                    SizedBox(
-                      height: 80,
-                      width: 450,
-                      child: DecoratedBox(
-                        decoration: const BoxDecoration(
-                          color: Color.fromRGBO(167, 216, 119, 0.5),
-                          borderRadius: BorderRadius.all(Radius.circular(17)),
-                        ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
+                            Spacer(),
+                            Icon(Icons.info_outline),
                             Text(
-                              "20/05/2024",
-                              style: TextStyle(fontSize: 12),
-                            ),
-                            Text("Normal"),
-                            Text(
-                              '120x80 mmHg',
+                              '${pressao.diastolica}',
                               style: TextStyle(
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.w900,
-                                  color: Color.fromRGBO(62, 100, 23, 1)),
+                                  fontSize: 16, fontWeight: FontWeight.w600),
                             ),
-                          ],
-                        ),
-                      ),
-                    ),
-                    SizedBox(height: 30),
-                    SizedBox(
-                      height: 80,
-                      width: 450,
-                      child: DecoratedBox(
-                        decoration: const BoxDecoration(
-                          color: Color.fromRGBO(219, 127, 88, 0.53),
-                          borderRadius: BorderRadius.all(Radius.circular(17)),
-                        ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
+                            Spacer(),
+                            Icon(Icons.info_outline),
                             Text(
-                              "12/05/2024",
-                              style: TextStyle(fontSize: 12),
-                            ),
-                            Text("Baixa"),
-                            Text(
-                              '100x50 mmHg',
+                              '${pressao.data}',
                               style: TextStyle(
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.w900,
-                                  color: Color.fromRGBO(150, 54, 30, 0.829)),
+                                  fontSize: 16, fontWeight: FontWeight.w600),
                             ),
+                            Spacer(),
+                            Icon(Icons.info_outline),
                           ],
+
                         ),
-                      ),
-                    ),
-                    SizedBox(height: 30),
-                    SizedBox(
-                      height: 80,
-                      width: 450,
-                      child: DecoratedBox(
-                        decoration: const BoxDecoration(
-                          color: Color.fromRGBO(219, 127, 88, 0.53),
-                          borderRadius: BorderRadius.all(Radius.circular(17)),
-                        ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            Text(
-                              "1/05/2079",
-                              style: TextStyle(fontSize: 12),
-                            ),
-                            Text("Baixa"),
-                            Text(
-                              '100x50 mmHg',
-                              style: TextStyle(
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.w900,
-                                  color: Color.fromRGBO(150, 54, 30, 0.829)),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                    SizedBox(height: 30),
-                    SizedBox(
-                      height: 80,
-                      width: 450,
-                      child: DecoratedBox(
-                        decoration: const BoxDecoration(
-                          color: Color.fromRGBO(167, 216, 119, 0.5),
-                          borderRadius: BorderRadius.all(Radius.circular(17)),
-                        ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            Text(
-                              "20/04/2024",
-                              style: TextStyle(fontSize: 12),
-                            ),
-                            Text("Normal"),
-                            Text(
-                              '130x90 mmHg',
-                              style: TextStyle(
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.w900,
-                                  color: Color.fromRGBO(62, 100, 23, 1)),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ),
+                      );
+                    });
+              }),
           Align(
             alignment: Alignment.bottomCenter,
             child: Padding(
