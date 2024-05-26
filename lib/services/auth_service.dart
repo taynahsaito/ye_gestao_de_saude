@@ -93,3 +93,4 @@ class AuthService extends ChangeNotifier {
     await _firebaseAuth.signOut();
   }
 }
+
