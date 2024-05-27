@@ -1,5 +1,6 @@
 import 'package:app_ye_gestao_de_saude/models/consultas_model.dart';
 import 'package:app_ye_gestao_de_saude/pages/consultas.dart';
+import 'package:app_ye_gestao_de_saude/pages/info_consultas.dart';
 import 'package:app_ye_gestao_de_saude/pages/informacoes_consultas.dart';
 import 'package:app_ye_gestao_de_saude/services/consultas_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -8,7 +9,16 @@ import 'package:intl/intl.dart';
 
 class EditarConsultas extends StatefulWidget {
   final String consultaId;
-  const EditarConsultas({super.key, required this.consultaId});
+  final String especialidade;
+  final String horario;
+  final String resumo;
+
+  const EditarConsultas(
+      {super.key,
+      required this.consultaId,
+      required this.especialidade,
+      required this.horario,
+      required this.resumo});
 
   @override
   State<EditarConsultas> createState() => _EditarConsultasState();
@@ -37,9 +47,9 @@ class _EditarConsultasState extends State<EditarConsultas> {
     _selectedRetorno =
         DateTime.now(); // Inicializando _selectedDate com a data atual
     _lembreteController = TextEditingController();
-    especialidadecontroller = TextEditingController();
-    resumocontroller = TextEditingController();
-    horariocontroller = TextEditingController();
+    especialidadecontroller = TextEditingController(text: widget.especialidade);
+    resumocontroller = TextEditingController(text: widget.resumo);
+    horariocontroller = TextEditingController(text: widget.horario);
   }
 
   @override
@@ -137,6 +147,7 @@ class _EditarConsultasState extends State<EditarConsultas> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: const Color.fromARGB(255, 245, 246, 241),
       body: StreamBuilder(
           stream: dbService.consultasCollection.snapshots(),
           builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
@@ -151,7 +162,7 @@ class _EditarConsultasState extends State<EditarConsultas> {
 
             return SingleChildScrollView(
               child: Padding(
-                padding: const EdgeInsets.fromLTRB(70, 0, 70, 0),
+                padding: const EdgeInsets.fromLTRB(70, 20, 70, 0),
                 child: Center(
                   child: Form(
                       child: Column(
@@ -478,47 +489,17 @@ class _EditarConsultasState extends State<EditarConsultas> {
                           children: [
                             ElevatedButton(
                               onPressed: () {
-                                final especialidade =
-                                    especialidadecontroller.text;
-                                final data = _selectedDate != null
-                                    ? DateFormat('dd/MM/yyyy')
-                                        .format(_selectedDate!)
-                                    : '';
-                                final retorno = _selectedRetorno != null
-                                    ? DateFormat('dd/MM/yyyy')
-                                        .format(_selectedRetorno!)
-                                    : '';
-                                final lembrete = _selectedLembrete != null
-                                    ? DateFormat('dd/MM/yyyy')
-                                        .format(_selectedLembrete!)
-                                    : '';
-                                final resumo = resumocontroller.text;
-                                final horario = _selectedTime != null
-                                    ? _selectedTime.format(context)
-                                    : '';
-
-                                _formKey.currentState!.reset();
-                                setState(() {
-                                  _selectedDate = DateTime.now();
-                                  _selectedLembrete = DateTime.now();
-                                  _selectedRetorno = DateTime.now();
-                                });
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => Consultas(),
-                                    // InformacoesConsultas(
-                                    //   modeloConsultas: ModeloConsultas(
-                                    //       id: '',
-                                    //       especialidade: especialidade,
-                                    //       horario: horario,
-                                    //       data: data,
-                                    //       resumo: resumo,
-                                    //       retorno: retorno,
-                                    //       lembrete: lembrete),
-                                    // )
-                                  ),
-                                );
+                                Navigator.of(context).pop();
+                                // InformacoesConsultas(
+                                //   modeloConsultas: ModeloConsultas(
+                                //       id: '',
+                                //       especialidade: especialidade,
+                                //       horario: horario,
+                                //       data: data,
+                                //       resumo: resumo,
+                                //       retorno: retorno,
+                                //       lembrete: lembrete),
+                                // )
                               },
                               style: ElevatedButton.styleFrom(
                                 padding: EdgeInsets

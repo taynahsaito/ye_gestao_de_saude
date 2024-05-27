@@ -1,3 +1,4 @@
+import 'package:app_ye_gestao_de_saude/models/medicamentos_model.dart';
 import 'package:app_ye_gestao_de_saude/pages/consultas.dart';
 import 'package:app_ye_gestao_de_saude/pages/exames.dart';
 import 'package:app_ye_gestao_de_saude/pages/home_page.dart';
@@ -12,8 +13,11 @@ class NavBar extends StatefulWidget {
 }
 
 class _NavBar extends State<NavBar> {
+//   final ModeloMedicamentos medicamentos = ModeloMedicamentos(id: '', nome: '', horario: '', intervaloHoras: '', periodoTomado: ''
+
+// );
   int selectedIndex = 0;
-  static const List<Widget> pages = <Widget>[
+  static List<Widget> pages = <Widget>[
     HomePage(),
     Exames(),
     Consultas(),

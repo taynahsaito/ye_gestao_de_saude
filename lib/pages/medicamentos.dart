@@ -32,7 +32,7 @@ class _MedicamentosState extends State<Medicamentos> {
       body: SingleChildScrollView(
         child: Center(
           child: Padding(
-            padding: const EdgeInsets.fromLTRB(20, 10, 10, 20),
+            padding: const EdgeInsets.fromLTRB(20, 10, 20, 20),
             child: Column(
               children: [
                 const SizedBox(
@@ -43,7 +43,7 @@ class _MedicamentosState extends State<Medicamentos> {
                   child: Text(
                     "Medicamentos",
                     style: TextStyle(
-                      fontSize: 22,
+                      fontSize: 20,
                       color: Color.fromARGB(220, 105, 126, 80),
                       fontWeight: FontWeight.w900,
                     ),
@@ -141,12 +141,11 @@ class _MedicamentosState extends State<Medicamentos> {
             );
           },
           style: ElevatedButton.styleFrom(
-            padding: const EdgeInsets.all(15),
-            backgroundColor:
-                const Color.fromARGB(50, 105, 126, 80), // Cor de fundo do botão
-            foregroundColor: Colors.white,
-            shape: const CircleBorder()
-          ),
+              padding: const EdgeInsets.all(15),
+              backgroundColor: const Color.fromARGB(
+                  50, 105, 126, 80), // Cor de fundo do botão
+              foregroundColor: Colors.white,
+              shape: const CircleBorder()),
           child: const Icon(Icons.add),
         ),
       ),

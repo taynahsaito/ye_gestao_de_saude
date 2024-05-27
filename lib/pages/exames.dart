@@ -2,7 +2,7 @@ import 'package:app_ye_gestao_de_saude/pages/info_exames.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'comprovante_page.dart';  // Adicione a importação da ComprovantePage
+import 'comprovante_page.dart'; // Adicione a importação da ComprovantePage
 
 class Exames extends StatefulWidget {
   const Exames({super.key});
@@ -33,7 +33,7 @@ class _ExamesState extends State<Exames> {
       backgroundColor: const Color.fromARGB(255, 245, 246, 241),
       body: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.fromLTRB(20, 10, 10, 20),
+          padding: const EdgeInsets.fromLTRB(20, 10, 20, 20),
           child: Center(
             child: Column(
               children: [
@@ -45,7 +45,7 @@ class _ExamesState extends State<Exames> {
                   child: Text(
                     "Histórico de Exames",
                     style: TextStyle(
-                      fontSize: 22,
+                      fontSize: 20,
                       color: Color.fromARGB(220, 105, 126, 80),
                       fontWeight: FontWeight.w900,
                     ),
@@ -173,7 +173,8 @@ class _ExamesState extends State<Exames> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => ComprovantePage(), // Redireciona para a ComprovantePage
+                      builder: (context) =>
+                          ComprovantePage(), // Redireciona para a ComprovantePage
                     ),
                   );
                 },
@@ -187,7 +188,8 @@ class _ExamesState extends State<Exames> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => ComprovantePage(), // Redireciona para a ComprovantePage
+                      builder: (context) =>
+                          ComprovantePage(), // Redireciona para a ComprovantePage
                     ),
                   );
                 },

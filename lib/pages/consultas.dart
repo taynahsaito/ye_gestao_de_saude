@@ -6,7 +6,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 class Consultas extends StatefulWidget {
-  const Consultas({super.key});
+  const Consultas({Key? key});
 
   @override
   State<Consultas> createState() => _ConsultasState();
@@ -14,57 +14,82 @@ class Consultas extends StatefulWidget {
 
 class _ConsultasState extends State<Consultas> {
   final ConsultasService dbService = ConsultasService();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 245, 246, 241),
-
       body: Stack(
         children: [
-          StreamBuilder<List<ModeloConsultas>>(
-              stream: dbService.getConsultas(),
-              builder: (context, snapshot) {
-                if (!snapshot.hasData) {
-                  Center(
-                    child: CircularProgressIndicator(),
-                  );
-                }
-                var consultas = snapshot.data!;
-                var groupedConsultas =
-                    _groupConsultasPorEspecialidade(consultas);
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Padding(
+                padding: EdgeInsets.fromLTRB(20, 90, 20, 30),
+                child: Center(
+                  child: Text(
+                    'Consultas realizadas',
+                    style: TextStyle(
+                      fontSize: 20,
+                      color: Color.fromARGB(220, 105, 126, 80),
+                      fontWeight: FontWeight.w900,
+                    ),
+                  ),
+                ),
+              ),
+              Expanded(
+                child: StreamBuilder<List<ModeloConsultas>>(
+                  stream: dbService.getConsultas(),
+                  builder: (context, snapshot) {
+                    if (!snapshot.hasData) {
+                      return Center(
+                        child: CircularProgressIndicator(),
+                      );
+                    }
+                    var consultas = snapshot.data!;
+                    var groupedConsultas =
+                        _groupConsultasPorEspecialidade(consultas);
 
-                return ListView.builder(
-                    itemCount: groupedConsultas.keys.length,
-                    itemBuilder: (context, index) {
-                      var especialidade =
-                          groupedConsultas.keys.elementAt(index);
+                    return ListView.builder(
+                      itemCount: groupedConsultas.keys.length,
+                      itemBuilder: (context, index) {
+                        var especialidade =
+                            groupedConsultas.keys.elementAt(index);
 
-                      var consultasPorEspecialidade =
-                          groupedConsultas[especialidade]!;
+                        var consultasPorEspecialidade =
+                            groupedConsultas[especialidade]!;
 
-                      return ListTile(
-                        onTap: () {
-                          Navigator.push(
+                        return ListTile(
+                          onTap: () {
+                            Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => DataConsultas(
-                                    especialidade: especialidade,
-                                      consultas: consultasPorEspecialidade)));
-                        },
-                        title: Row(
-                          children: [
-                            Text(
-                              '${especialidade}',
-                              style: TextStyle(
-                                  fontSize: 16, fontWeight: FontWeight.w600),
-                            ),
-                            Spacer(),
-                            Icon(Icons.info_outline),
-                          ],
-                        ),
-                      );
-                    });
-              }),
+                                builder: (context) => DataConsultas(
+                                  especialidade: especialidade,
+                                  consultas: consultasPorEspecialidade,
+                                ),
+                              ),
+                            );
+                          },
+                          title: Row(
+                            children: [
+                              Text(
+                                '${especialidade}',
+                                style: TextStyle(
+                                    fontSize: 16, fontWeight: FontWeight.w600),
+                              ),
+                              Spacer(),
+                              Icon(Icons.info_outline),
+                            ],
+                          ),
+                        );
+                      },
+                    );
+                  },
+                ),
+              ),
+            ],
+          ),
           Align(
             alignment: Alignment.bottomCenter,
             child: Padding(
@@ -92,14 +117,6 @@ class _ConsultasState extends State<Consultas> {
           ),
         ],
       ),
-
-      // floatingActionButton: FloatingActionButton(
-      //   onPressed: () {
-      //     Navigator.push(
-      //         context, MaterialPageRoute(builder: (context) => NovaConsulta()));
-      //   },
-      //   child: Icon(Icons.add),
-      // ),
     );
   }
 

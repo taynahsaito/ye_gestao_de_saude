@@ -152,7 +152,7 @@ class _LoginState extends State<Login> {
                   ),
                   FractionallySizedBox(
                     widthFactor:
-                        0.5, // Define a largura do botão como metade da largura da tela (valor entre 0.0 e 1.0)
+                        0.7, // Define a largura do botão como metade da largura da tela (valor entre 0.0 e 1.0)
                     child: ElevatedButton(
                       onPressed: () async {
                         String email = _emailController.text;
@@ -180,7 +180,7 @@ class _LoginState extends State<Login> {
                         }
                       },
                       style: ElevatedButton.styleFrom(
-                        padding: const EdgeInsets.fromLTRB(0, 15, 0, 15),
+                        padding: const EdgeInsets.fromLTRB(30, 12, 30, 12),
                         backgroundColor:
                             const Color.fromARGB(80, 133, 152, 100),
                         foregroundColor:
@@ -205,7 +205,7 @@ class _LoginState extends State<Login> {
                     child: Text(
                       "Ou entre com",
                       style: TextStyle(
-                          fontSize: 18,
+                          fontSize: 17,
                           fontWeight: FontWeight.w500,
                           color: Color.fromARGB(220, 133, 152, 100)),
                     ),
@@ -258,7 +258,7 @@ class _LoginState extends State<Login> {
                           const Text(
                             "Não tem uma conta? ",
                             style: TextStyle(
-                                fontSize: 18,
+                                fontSize: 16,
                                 fontWeight: FontWeight.w500,
                                 color: Color.fromARGB(220, 133, 152, 100)),
                           ),
@@ -275,7 +275,7 @@ class _LoginState extends State<Login> {
                               child: const Text(
                                 "Cadastre-se",
                                 style: TextStyle(
-                                    fontSize: 18,
+                                    fontSize: 16,
                                     fontWeight: FontWeight.w900,
                                     color: Color.fromARGB(220, 133, 152, 100)),
                               ),

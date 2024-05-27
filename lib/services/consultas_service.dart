@@ -46,25 +46,25 @@ class ConsultasService {
   //   }
   // }
 
-  Future<void> editarConsulta(String consultaId, ModeloConsultas modeloConsultas) async {
-  User? user = _auth.currentUser;
-  if (user != null) {
-    DocumentReference consultaDoc = consultasCollection
-        .doc(user.uid)
-        .collection('Consultas do Usuário')
-        .doc(consultaId);
-    
-    await consultaDoc.update(modeloConsultas.toFirestore());
-  }
-}
+  Future<void> editarConsulta(
+      String consultaId, ModeloConsultas modeloConsultas) async {
+    User? user = _auth.currentUser;
+    if (user != null) {
+      DocumentReference consultaDoc = consultasCollection
+          .doc(user.uid)
+          .collection('Consultas do Usuário')
+          .doc(consultaId);
 
+      await consultaDoc.update(modeloConsultas.toFirestore());
+    }
+  }
 
   Future<void> deletarConsulta(String id) async {
     try {
       await _firestore
-          .collection('Medicamento')
+          .collection('consultas')
           .doc(userId)
-          .collection('Medicamento do usuário')
+          .collection('Consultas do Usuário')
           .doc(id)
           .delete();
     } catch (e) {
@@ -86,4 +86,22 @@ class ConsultasService {
       return Stream.empty();
     }
   }
+  
+
+Future<List<ModeloConsultas>> getConsultasPorEspecialidade(String especialidade) async {
+    User? user = _auth.currentUser;
+    if (user != null) {
+      QuerySnapshot querySnapshot = await consultasCollection
+          .doc(user.uid)
+          .collection('Consultas do Usuário')
+          .where('especialidade', isEqualTo: especialidade)
+          .get();
+      return querySnapshot.docs
+          .map((doc) => ModeloConsultas.fromFirestore(doc))
+          .toList();
+    } else {
+      return [];
+    }
+  }
+
 }

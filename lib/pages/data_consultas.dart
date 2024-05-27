@@ -1,19 +1,43 @@
 import 'package:app_ye_gestao_de_saude/models/consultas_model.dart';
+import 'package:app_ye_gestao_de_saude/pages/info_consultas.dart';
 import 'package:app_ye_gestao_de_saude/pages/informacoes_consultas.dart';
 import 'package:app_ye_gestao_de_saude/pages/nova_consulta.dart';
 import 'package:app_ye_gestao_de_saude/services/consultas_service.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:app_ye_gestao_de_saude/widgets/nav_bar.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 
-class DataConsultas extends StatelessWidget {
+class DataConsultas extends StatefulWidget {
   final String especialidade;
   final List<ModeloConsultas> consultas;
+  const DataConsultas({
+    Key? key,
+    required this.especialidade,
+    required this.consultas,
+  }) : super(key: key);
 
-  DataConsultas(
-      {Key? key, required this.consultas, required this.especialidade})
-      : super(key: key);
+  @override
+  _DataConsultasState createState() => _DataConsultasState();
+}
+
+class _DataConsultasState extends State<DataConsultas> {
+  late List<ModeloConsultas> consultas;
 
   final ConsultasService dbService = ConsultasService();
+
+  @override
+  void initState() {
+    super.initState();
+    consultas = widget.consultas;
+  }
+
+  Future<void> _updateConsultas() async {
+    var updatedConsultas =
+        await dbService.getConsultasPorEspecialidade(widget.especialidade);
+    setState(() {
+      consultas = updatedConsultas;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -29,40 +53,78 @@ class DataConsultas extends StatelessWidget {
           child: IconButton(
             icon: const Icon(Icons.arrow_back),
             onPressed: () {
-              Navigator.of(context).pop();
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const NavBar(),
+                ),
+              );
             },
           ),
         ),
       ),
       body: Stack(
         children: [
-          ListView.builder(
-            itemCount: consultas.length,
-            itemBuilder: (context, index) {
-              var consulta = consultas[index];
-              return ListTile(
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) =>
-                          InformacoesConsultas(modeloConsultas: consulta),
+          Column(
+            children: [
+              const Padding(
+                padding: EdgeInsets.fromLTRB(20, 20, 20, 0),
+                child: Center(
+                  child: Text(
+                    'Consultas realizadas',
+                    style: TextStyle(
+                      fontSize: 20,
+                      color: Color.fromARGB(220, 105, 126, 80),
+                      fontWeight: FontWeight.w900,
                     ),
-                  );
-                },
-                title: Row(
-                  children: [
-                    Text(
-                      '${consulta.data}',
-                      style:
-                          TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
-                    ),
-                    Spacer(),
-                    Icon(Icons.arrow_circle_right_outlined),
-                  ],
+                  ),
                 ),
-              );
-            },
+              ),
+              Text(
+                '${widget.especialidade}',
+                style: const TextStyle(
+                  fontSize: 16,
+                  color: Color.fromARGB(220, 105, 126, 80),
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+              const SizedBox(
+                height: 20,
+              ),
+              Expanded(
+                child: ListView.builder(
+                  itemCount: consultas.length,
+                  itemBuilder: (context, index) {
+                    var consulta = consultas[index];
+                    return ListTile(
+                      onTap: () async {
+                        bool? result = await Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) =>
+                                InformacoesConsultas(modeloConsultas: consulta),
+                          ),
+                        );
+                        if (result == true) {
+                          _updateConsultas();
+                        }
+                      },
+                      title: Row(
+                        children: [
+                          Text(
+                            '${consulta.data}',
+                            style: TextStyle(
+                                fontSize: 16, fontWeight: FontWeight.w600),
+                          ),
+                          Spacer(),
+                          Icon(Icons.arrow_circle_right_outlined),
+                        ],
+                      ),
+                    );
+                  },
+                ),
+              ),
+            ],
           ),
           Align(
             alignment: Alignment.bottomCenter,

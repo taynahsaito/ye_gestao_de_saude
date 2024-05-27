@@ -166,28 +166,31 @@ class _NovaConsultaState extends State<NovaConsulta> {
           ),
         ),
         body: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.fromLTRB(70, 0, 70, 0),
-            child: Center(
-              child: Form(
-                  child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                    const SizedBox(height: 20),
-                    const Wrap(children: [
+          child: Center(
+            child: Form(
+                child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                  const SizedBox(height: 20),
+                  const Padding(
+                    padding: EdgeInsets.fromLTRB(20, 0, 20, 0),
+                    child: Wrap(children: [
                       Text(
                         'Registre uma nova consulta',
                         style: TextStyle(
-                          fontSize: 22,
+                          fontSize: 20,
                           color: Color.fromARGB(220, 105, 126, 80),
                           fontWeight: FontWeight.w900,
                         ),
                       ),
                     ]),
-                    const SizedBox(
-                      height: 40,
-                    ),
-                    Column(
+                  ),
+                  const SizedBox(
+                    height: 30,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(70, 0, 70, 0),
+                    child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
@@ -480,76 +483,76 @@ class _NovaConsultaState extends State<NovaConsulta> {
                         ),
                       ],
                     ),
-                    const SizedBox(height: 30.0),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        ElevatedButton(
-                          onPressed: () {
-                            _formKey.currentState!.reset();
-                            setState(() {
-                              _selectedDate = null;
-                              _selectedLembrete = null;
-                              _selectedRetorno = null;
-                            });
-                            Navigator.of(context).pop();
-                          },
-                          style: ElevatedButton.styleFrom(
-                            padding: EdgeInsets
-                                .zero, // Define o padding do botão como zero para não interferir com o padding do widget interno
-                            backgroundColor:
-                                const Color.fromARGB(50, 105, 126, 80),
-                            foregroundColor: const Color.fromARGB(
-                                255, 255, 255, 255), // Cor de fundo do botão
-                            shape: const CircleBorder(),
-                          ),
-                          child: const Padding(
-                            padding: EdgeInsets.all(
-                                8), // Espaçamento interno para o ícone
-                            child: Icon(Icons.close),
-                          ),
+                  ),
+                  const SizedBox(height: 30.0),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      ElevatedButton(
+                        onPressed: () {
+                          _formKey.currentState!.reset();
+                          setState(() {
+                            _selectedDate = null;
+                            _selectedLembrete = null;
+                            _selectedRetorno = null;
+                          });
+                          Navigator.of(context).pop();
+                        },
+                        style: ElevatedButton.styleFrom(
+                          padding: EdgeInsets
+                              .zero, // Define o padding do botão como zero para não interferir com o padding do widget interno
+                          backgroundColor:
+                              const Color.fromARGB(50, 105, 126, 80),
+                          foregroundColor: const Color.fromARGB(
+                              255, 255, 255, 255), // Cor de fundo do botão
+                          shape: const CircleBorder(),
                         ),
-                        ElevatedButton(
-                          onPressed: () async {
-                            // Navigator.of(context).pop();
-                            // if (_formKey.currentState != null &&
-                            //     _formKey.currentState!.validate()) {
-                            //   _formKey.currentState!.save();
-                            //   if (_selectedDate != null) {
-                            //     // Aqui você pode salvar os dados em um banco de dados
-                            //     // ou enviá-los para onde desejar
-                            //     print('Glicemia: $_glicemia, Data: $_selectedDate');
-                            //     // Exemplo de como limpar o formulário depois de enviar
-                            //     _formKey.currentState!.reset();
-                            //     setState(() {
-                            //       _selectedDate = null;
-                            //     });
-                            //   } else {
-                            //     ScaffoldMessenger.of(context).showSnackBar(
-                            //       const SnackBar(
-                            //         content:
-                            //             Text('Por favor, insira uma data válida'),
-                            //         duration: Duration(seconds: 2),
-                            //       ),
-                            //     );
-                            await consultaAdicionar();
-                            Navigator.of(context).pop();
-                          },
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: const Color.fromARGB(
-                                50, 105, 126, 80), // Cor de fundo do botão
-                            foregroundColor: Colors.white,
-                            shape: const CircleBorder(),
-                          ),
-                          child: const Padding(
-                            padding: EdgeInsets.all(8),
-                            child: Icon(Icons.check),
-                          ),
+                        child: const Padding(
+                          padding: EdgeInsets.all(
+                              8), // Espaçamento interno para o ícone
+                          child: Icon(Icons.close),
                         ),
-                      ],
-                    ),
-                  ])),
-            ),
+                      ),
+                      ElevatedButton(
+                        onPressed: () async {
+                          // Navigator.of(context).pop();
+                          // if (_formKey.currentState != null &&
+                          //     _formKey.currentState!.validate()) {
+                          //   _formKey.currentState!.save();
+                          //   if (_selectedDate != null) {
+                          //     // Aqui você pode salvar os dados em um banco de dados
+                          //     // ou enviá-los para onde desejar
+                          //     print('Glicemia: $_glicemia, Data: $_selectedDate');
+                          //     // Exemplo de como limpar o formulário depois de enviar
+                          //     _formKey.currentState!.reset();
+                          //     setState(() {
+                          //       _selectedDate = null;
+                          //     });
+                          //   } else {
+                          //     ScaffoldMessenger.of(context).showSnackBar(
+                          //       const SnackBar(
+                          //         content:
+                          //             Text('Por favor, insira uma data válida'),
+                          //         duration: Duration(seconds: 2),
+                          //       ),
+                          //     );
+                          await consultaAdicionar();
+                          Navigator.of(context).pop();
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: const Color.fromARGB(
+                              50, 105, 126, 80), // Cor de fundo do botão
+                          foregroundColor: Colors.white,
+                          shape: const CircleBorder(),
+                        ),
+                        child: const Padding(
+                          padding: EdgeInsets.all(8),
+                          child: Icon(Icons.check),
+                        ),
+                      ),
+                    ],
+                  ),
+                ])),
           ),
         ));
   }
