@@ -1,3 +1,4 @@
+
 import 'package:app_ye_gestao_de_saude/models/consultas_model.dart';
 import 'package:app_ye_gestao_de_saude/pages/info_consultas.dart';
 import 'package:app_ye_gestao_de_saude/pages/informacoes_consultas.dart';
@@ -32,8 +33,7 @@ class _DataConsultasState extends State<DataConsultas> {
   }
 
   Future<void> _updateConsultas() async {
-    var updatedConsultas =
-        await dbService.getConsultasPorEspecialidade(widget.especialidade);
+    var updatedConsultas = await dbService.getConsultasPorEspecialidade(widget.especialidade);
     setState(() {
       consultas = updatedConsultas;
     });

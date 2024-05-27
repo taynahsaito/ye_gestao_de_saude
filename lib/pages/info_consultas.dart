@@ -133,9 +133,12 @@ class _InformacoesConsultasState extends State<InformacoesConsultas> {
         ),
         body: SingleChildScrollView(
           child: Padding(
-            padding: EdgeInsets.fromLTRB(60, 20, 60, 100),
+            padding: EdgeInsets.fromLTRB(60, 0, 60, 0),
             child: Center(
               child: Column(children: [
+                const SizedBox(
+                  height: 20,
+                ),
                 const Text(
                   "Consultas realizadas",
                   style: TextStyle(
