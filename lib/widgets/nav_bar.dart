@@ -6,7 +6,8 @@ import 'package:app_ye_gestao_de_saude/pages/medicamentos.dart';
 import 'package:flutter/material.dart';
 
 class NavBar extends StatefulWidget {
-  const NavBar({Key? key});
+  final int selectedIndex;
+  const NavBar({Key? key, required this.selectedIndex});
 
   @override
   State<NavBar> createState() => _NavBar();
@@ -16,12 +17,19 @@ class _NavBar extends State<NavBar> {
 //   final ModeloMedicamentos medicamentos = ModeloMedicamentos(id: '', nome: '', horario: '', intervaloHoras: '', periodoTomado: ''
 
 // );
-  int selectedIndex = 0;
+  late int selectedIndex;
+
+  @override
+  void initState() {
+    super.initState();
+    selectedIndex = widget.selectedIndex;
+  }
+
   static List<Widget> pages = <Widget>[
     HomePage(),
     Exames(),
     Consultas(),
-    Medicamentos(),
+    // Medicamentos(medicamentos: ,),
   ];
 
   @override
@@ -79,7 +87,7 @@ class _NavBar extends State<NavBar> {
         const HomePage(),
         const Exames(),
         const Consultas(),
-        const Medicamentos()
+        // const Medicamentos()
       ][selectedIndex],
     );
 

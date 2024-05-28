@@ -6,17 +6,25 @@ import 'package:flutter/material.dart';
 
 class InformacoesConsultas extends StatefulWidget {
   final ModeloConsultas modeloConsultas;
-  const InformacoesConsultas({super.key, required this.modeloConsultas});
+
+  InformacoesConsultas({Key? key, required this.modeloConsultas})
+      : super(key: key);
 
   @override
-  State<InformacoesConsultas> createState() => _InformacoesConsultasState();
+  _InformacoesConsultasState createState() => _InformacoesConsultasState();
 }
 
 class _InformacoesConsultasState extends State<InformacoesConsultas> {
-  //  late ModeloConsultas modeloConsultas;
+  final ConsultasService consultasService = ConsultasService();
+  late ModeloConsultas consultaAtual;
 
-  ConsultasService consultasService = ConsultasService();
-  Future<void> exibirPopUpConfirmacao(
+  @override
+  void initState() {
+    super.initState();
+    consultaAtual = widget.modeloConsultas;
+  }
+
+  Future<void> _exibirPopUpConfirmacao(
       BuildContext context, String idConsulta) async {
     return showDialog<void>(
       context: context,
@@ -29,7 +37,7 @@ class _InformacoesConsultasState extends State<InformacoesConsultas> {
               onPressed: () {
                 Navigator.of(context).pop();
               },
-              child: Text('Cancelar'),
+              child: Text('Cancelar', style: TextStyle(color: Color.fromARGB(220, 105, 126, 80),),),
             ),
             TextButton(
               onPressed: () async {
@@ -38,7 +46,7 @@ class _InformacoesConsultasState extends State<InformacoesConsultas> {
                 Navigator.pop(
                     context, true); // Indica que uma consulta foi deletada
               },
-              child: Text('Confirmar'),
+              child: Text('Confirmar', style: TextStyle(color: Color.fromARGB(220, 105, 126, 80),),),
             ),
           ],
         );
@@ -46,321 +54,154 @@ class _InformacoesConsultasState extends State<InformacoesConsultas> {
     );
   }
 
+  Future<void> _editarConsulta(BuildContext context) async {
+    final result = await Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => EditarConsultas(
+          modeloConsultas: consultaAtual,
+        ),
+      ),
+    );
+
+    if (result != null && result is ModeloConsultas) {
+      setState(() {
+        consultaAtual = result;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: const Color.fromARGB(255, 245, 246, 241),
+      appBar: AppBar(
         backgroundColor: const Color.fromARGB(255, 245, 246, 241),
-        appBar: AppBar(
-          backgroundColor: const Color.fromARGB(255, 245, 246, 241),
-          automaticallyImplyLeading: false,
-          iconTheme: const IconThemeData(
-            color: Color.fromARGB(220, 105, 126, 80), // Define a cor do ícone
-          ),
-          leading: Padding(
-            padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
-            child: IconButton(
-              icon: const Icon(Icons.arrow_back),
-              onPressed: () async {
-                var consultas = [widget.modeloConsultas];
-                var groupedConsultas =
-                    _groupConsultasPorEspecialidade(consultas);
-                var especialidade = groupedConsultas.keys.elementAt(0);
-                var consultasPorEspecialidade =
-                    groupedConsultas[especialidade]!;
-                bool? result = await Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => DataConsultas(
-                      especialidade: especialidade,
-                      consultas: consultasPorEspecialidade,
-                    ),
-                  ),
-                );
-                if (result == true) {
-                  setState(() {
-                    // Atualizar o estado para refletir a mudança na lista de consultas
-                  });
-                }
-              },
-            ),
-          ),
-          actions: [
-            PopupMenuButton(
-              itemBuilder: (BuildContext context) {
-                return <PopupMenuEntry>[
-                  const PopupMenuItem(
-                    child: Center(
-                      child: Text('Editar'),
-                    ),
-                    value: 'edit',
-                  ),
-                  const PopupMenuItem(
-                    child: Center(
-                      child: Text('Deletar'),
-                    ),
-                    value: 'delete',
-                  )
-                ];
-              },
-              icon: const Icon(Icons.more_vert,
-                  color: Color.fromARGB(220, 105, 126, 80)), // Ícone e cor
-              // offset: Offset(0, 100), // Posição do menu
-              elevation: 8, // Elevação da sombra
-              color: const Color.fromARGB(255, 245, 246, 241), // Cor do botão
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(8.0), // Borda arredondada
-              ),
-              onSelected: (value) async {
-                if (value == 'edit') {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => EditarConsultas(
-                              consultaId: widget.modeloConsultas.id,
-                              especialidade:
-                                  widget.modeloConsultas.especialidade,
-                              horario: widget.modeloConsultas.horario,
-                              resumo: widget.modeloConsultas.resumo,
-                            )),
-                  );
-                } else if (value == 'delete') {
-                  await exibirPopUpConfirmacao(
-                      context, widget.modeloConsultas.id);
-                }
-              },
-            )
-          ],
+        automaticallyImplyLeading: false,
+        iconTheme: const IconThemeData(
+          color: Color.fromARGB(220, 105, 126, 80), // Define a cor do ícone
         ),
-        body: SingleChildScrollView(
-          child: Padding(
-            padding: EdgeInsets.fromLTRB(60, 0, 60, 0),
-            child: Center(
-              child: Column(children: [
-                const SizedBox(
-                  height: 20,
+        leading: Padding(
+          padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
+          child: IconButton(
+            icon: const Icon(Icons.arrow_back),
+            onPressed: () async {
+              Navigator.pop(context);
+            },
+          ),
+        ),
+        actions: [
+          PopupMenuButton(
+            itemBuilder: (BuildContext context) {
+              return <PopupMenuEntry>[
+                const PopupMenuItem(
+                  child: Center(
+                    child: Text('Editar'),
+                  ),
+                  value: 'edit',
                 ),
+                const PopupMenuItem(
+                  child: Center(
+                    child: Text('Deletar'),
+                  ),
+                  value: 'delete',
+                )
+              ];
+            },
+            icon: const Icon(Icons.more_vert,
+                color: Color.fromARGB(220, 105, 126, 80)), // Ícone e cor
+            elevation: 8, // Elevação da sombra
+            color: const Color.fromARGB(255, 245, 246, 241), // Cor do botão
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(8.0), // Borda arredondada
+            ),
+            onSelected: (value) async {
+              if (value == 'edit') {
+                await _editarConsulta(context);
+              } else if (value == 'delete') {
+                await _exibirPopUpConfirmacao(context, consultaAtual.id);
+              }
+            },
+          )
+        ],
+      ),
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: EdgeInsets.fromLTRB(60, 0, 60, 0),
+          child: Center(
+            child: Column(
+              children: [
+                const SizedBox(height: 20),
                 const Text(
                   "Consultas realizadas",
                   style: TextStyle(
                     fontSize: 22,
-                    // fontFamily: GoogleFonts.poppinsTextTheme,
                     color: Color.fromARGB(220, 105, 126, 80),
                     fontWeight: FontWeight.w900,
                   ),
                 ),
                 Text(
-                  '${widget.modeloConsultas.especialidade}',
+                  consultaAtual.especialidade,
                   style: const TextStyle(
                     fontSize: 16,
                     color: Color.fromARGB(220, 105, 126, 80),
                     fontWeight: FontWeight.w600,
                   ),
                 ),
-                const SizedBox(
-                  height: 30,
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 7),
-                  child: Column(
-                    children: [
-                      const Align(
-                          alignment: Alignment.centerLeft,
-                          child: Text(
-                            'Data',
-                            style: TextStyle(
-                                fontFamily: 'Poppins',
-                                fontSize: 17,
-                                color: Color.fromRGBO(119, 138, 96, 1)),
-                          )),
-                      const SizedBox(
-                        height: 5,
-                      ),
-                      Container(
-                        decoration: BoxDecoration(
-                          color: Color.fromRGBO(185, 196, 166, 1),
-                          borderRadius: BorderRadius.circular(20),
-                        ),
-                        width: 380,
-                        child: Center(
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 6.0),
-                            child: Text(
-                              '${widget.modeloConsultas.data}',
-                              style: TextStyle(
-                                fontSize: 16,
-                                color: Color.fromARGB(220, 66, 78, 50),
-                                fontWeight: FontWeight.w600,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 7),
-                  child: Column(
-                    children: [
-                      const Align(
-                          alignment: Alignment.centerLeft,
-                          child: Text(
-                            'Horario',
-                            style: TextStyle(
-                                fontFamily: 'Poppins',
-                                fontSize: 17,
-                                color: Color.fromRGBO(119, 138, 96, 1)),
-                          )),
-                      const SizedBox(
-                        height: 5,
-                      ),
-                      Container(
-                        decoration: BoxDecoration(
-                          color: Color.fromRGBO(185, 196, 166, 1),
-                          borderRadius: BorderRadius.circular(20),
-                        ),
-                        width: 380,
-                        child: Center(
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 6.0),
-                            child: Text(
-                              '${widget.modeloConsultas.horario}',
-                              style: const TextStyle(
-                                fontSize: 16,
-                                color: Color.fromARGB(220, 66, 78, 50),
-                                fontWeight: FontWeight.w600,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 7),
-                  child: Column(
-                    children: [
-                      const Align(
-                          alignment: Alignment.centerLeft,
-                          child: Text(
-                            'Resumo',
-                            style: TextStyle(
-                                fontFamily: 'Poppins',
-                                fontSize: 17,
-                                color: Color.fromRGBO(119, 138, 96, 1)),
-                          )),
-                      const SizedBox(
-                        height: 5,
-                      ),
-                      Container(
-                        decoration: BoxDecoration(
-                          color: Color.fromRGBO(185, 196, 166, 1),
-                          borderRadius: BorderRadius.circular(20),
-                        ),
-                        width: 380,
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(
-                              vertical: 12.0, horizontal: 12.0),
-                          child: SizedBox(
-                            child: Center(
-                              child: Text(
-                                '${widget.modeloConsultas.resumo}',
-                                style: const TextStyle(
-                                  fontSize: 16,
-                                  color: Color.fromARGB(220, 66, 78, 50),
-                                  fontWeight: FontWeight.w600,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 7),
-                  child: Column(
-                    children: [
-                      const Align(
-                          alignment: Alignment.centerLeft,
-                          child: Text(
-                            'Retorno',
-                            style: TextStyle(
-                                fontFamily: 'Poppins',
-                                fontSize: 17,
-                                color: Color.fromRGBO(119, 138, 96, 1)),
-                          )),
-                      const SizedBox(
-                        height: 5,
-                      ),
-                      Container(
-                        decoration: BoxDecoration(
-                          color: const Color.fromRGBO(185, 196, 166, 1),
-                          borderRadius: BorderRadius.circular(20),
-                        ),
-                        width: 380,
-                        child: Center(
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 6.0),
-                            child: Text(
-                              '${widget.modeloConsultas.retorno}',
-                              style: const TextStyle(
-                                fontSize: 16,
-                                color: Color.fromARGB(220, 66, 78, 50),
-                                fontWeight: FontWeight.w600,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 7),
-                  child: Column(
-                    children: [
-                      const Align(
-                          alignment: Alignment.centerLeft,
-                          child: Text(
-                            'Lembrete',
-                            style: TextStyle(
-                                fontFamily: 'Poppins',
-                                fontSize: 17,
-                                color: Color.fromRGBO(119, 138, 96, 1)),
-                          )),
-                      const SizedBox(
-                        height: 5,
-                      ),
-                      Container(
-                        decoration: BoxDecoration(
-                          color: Color.fromRGBO(185, 196, 166, 1),
-                          borderRadius: BorderRadius.circular(20),
-                        ),
-                        width: 380,
-                        child: Center(
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 6.0),
-                            child: Text(
-                              '${widget.modeloConsultas.lembrete}',
-                              style: const TextStyle(
-                                fontSize: 16,
-                                color: Color.fromARGB(220, 66, 78, 50),
-                                fontWeight: FontWeight.w600,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ]),
+                const SizedBox(height: 30),
+                _buildInfoField('Data', consultaAtual.data),
+                _buildInfoField('Horario', consultaAtual.horario),
+                _buildInfoField('Resumo', consultaAtual.resumo),
+                _buildInfoField('Retorno', consultaAtual.retorno),
+                _buildInfoField('Lembrete', consultaAtual.lembrete),
+              ],
             ),
           ),
-        ));
+        ),
+      ),
+    );
+  }
+
+  Widget _buildInfoField(String title, String info) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 7),
+      child: Column(
+        children: [
+          Align(
+            alignment: Alignment.centerLeft,
+            child: Text(
+              title,
+              style: TextStyle(
+                fontFamily: 'Poppins',
+                fontSize: 17,
+                color: Color.fromRGBO(119, 138, 96, 1),
+              ),
+            ),
+          ),
+          const SizedBox(height: 5),
+          Container(
+            decoration: BoxDecoration(
+              color: Color.fromRGBO(185, 196, 166, 1),
+              borderRadius: BorderRadius.circular(20),
+            ),
+            width: 380,
+            child: Center(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(vertical: 6.0),
+                child: Text(
+                  info,
+                  style: TextStyle(
+                    fontSize: 16,
+                    color: Color.fromARGB(220, 66, 78, 50),
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
   }
 
   Map<String, List<ModeloConsultas>> _groupConsultasPorEspecialidade(

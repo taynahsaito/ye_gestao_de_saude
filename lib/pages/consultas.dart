@@ -99,7 +99,10 @@ class _ConsultasState extends State<Consultas> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => const NovaConsulta()),
+                        builder: (context) => NovaConsulta(
+                              especialidade:
+                                  TextEditingController(text: ''),
+                            )),
                   );
                 },
                 style: ElevatedButton.styleFrom(

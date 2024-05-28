@@ -1,6 +1,7 @@
 import 'package:app_ye_gestao_de_saude/models/consultas_model.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
 
 class ConsultasService {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
@@ -11,9 +12,6 @@ class ConsultasService {
     userId = currentUser?.uid ??
         ''; // Defina userId como uma string vazia se currentUser for nulo
   }
-
-  // final CollectionReference consultasCollection =
-  //     FirebaseFirestore.instance.collection('Consultas');
 
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final CollectionReference consultasCollection =
@@ -29,25 +27,16 @@ class ConsultasService {
       await userDoc.set(modeloConsultas.toFirestore());
     }
   }
-  // Future<void> adicionarConsulta(ModeloConsultas modeloConsultas) async {
-  //   try {
-  //     await _firestore
-  //         .collection('Consultas') // Nome significativo para a coleção
-  //         .doc(userId)
-  //         .collection(
-  //             'Consultas do Usuário') // Nome significativo para a subcoleção
-  //         .doc(modeloConsultas.id)
-  //         .set(modeloConsultas.toMap());
-
-  //     print('Consulta adicionada com sucesso!');
-  //   } catch (error) {
-  //     print('Erro ao adicionar consulta: $error');
-  //     throw error; // Lança o erro novamente para que possa ser tratado no local de chamada, se necessário
-  //   }
-  // }
 
   Future<void> editarConsulta(
-      String consultaId, ModeloConsultas modeloConsultas) async {
+    String consultaId,
+    String especialidade,
+    String data,
+    String horario,
+    String resumo,
+    String retorno,
+    String lembrete,
+  ) async {
     User? user = _auth.currentUser;
     if (user != null) {
       DocumentReference consultaDoc = consultasCollection
@@ -55,7 +44,14 @@ class ConsultasService {
           .collection('Consultas do Usuário')
           .doc(consultaId);
 
-      await consultaDoc.update(modeloConsultas.toFirestore());
+      await consultaDoc.update({
+        'especialidade': especialidade,
+        'data': data,
+        'horario': horario,
+        'resumo': resumo,
+        'retorno': retorno,
+        'lembrete': lembrete,
+      });
     }
   }
 
@@ -86,9 +82,9 @@ class ConsultasService {
       return Stream.empty();
     }
   }
-  
 
-Future<List<ModeloConsultas>> getConsultasPorEspecialidade(String especialidade) async {
+  Future<List<ModeloConsultas>> getConsultasPorEspecialidade(
+      String especialidade) async {
     User? user = _auth.currentUser;
     if (user != null) {
       QuerySnapshot querySnapshot = await consultasCollection
@@ -103,5 +99,4 @@ Future<List<ModeloConsultas>> getConsultasPorEspecialidade(String especialidade)
       return [];
     }
   }
-
 }

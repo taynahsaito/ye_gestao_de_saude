@@ -4,25 +4,26 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:uuid/uuid.dart';
 
-// import 'package:flutter/src/material/date_picker_theme.dart';
-
-// hide DatePickerTheme;
-
 class NovaConsulta extends StatefulWidget {
-  const NovaConsulta({super.key});
+  final TextEditingController especialidade;
+  final Function? onUpdateConsulta;
+  const NovaConsulta(
+      {Key? key, required this.especialidade, this.onUpdateConsulta})
+      : super(key: key);
 
   @override
   State<NovaConsulta> createState() => _NovaConsultaState();
 }
 
 class _NovaConsultaState extends State<NovaConsulta> {
+  late DateFormat timeFormatter;
   late DateTime? _selectedDate;
+  late DateTime? _selectedTime;
   late DateTime? _selectedRetorno;
   late DateTime? _selectedLembrete;
-  final TextEditingController horariocontroller = TextEditingController();
-  final TextEditingController especialidadecontroller = TextEditingController();
+  late TextEditingController horarioController;
+  late TextEditingController especialidadeController = TextEditingController();
   final TextEditingController resumocontroller = TextEditingController();
-  late TextEditingController _lembreteController;
 
   final DateFormat _dateFormat = DateFormat('dd/MM/yyyy');
   final _formKey = GlobalKey<FormState>();
@@ -31,31 +32,33 @@ class _NovaConsultaState extends State<NovaConsulta> {
   void initState() {
     super.initState();
     _selectedDate = null;
+    _selectedTime = null;
     _selectedLembrete = null;
-    _selectedRetorno = null; // Inicializando _selectedDate com a data atual
-    _lembreteController = TextEditingController();
+    _selectedRetorno = null;
+    especialidadeController.text = widget.especialidade.text;
+    horarioController = TextEditingController();
+    timeFormatter = DateFormat('HH:mm');
   }
 
   @override
   void dispose() {
-    _lembreteController.dispose();
+    horarioController.dispose();
+    especialidadeController.dispose();
     super.dispose();
   }
 
   Future<void> _selectDate(BuildContext context) async {
-    final ThemeData theme = Theme.of(context);
     final DateTime? pickedData = await showDatePicker(
       context: context,
-      initialDate: _selectedDate,
+      initialDate: _selectedDate ?? DateTime.now(),
       firstDate: DateTime(1900),
       lastDate: DateTime.now(),
-      builder: (BuildContext context, Widget? child) {
+      builder: (context, child) {
         return Theme(
-          data: theme.copyWith(
-            // Personalize a cor de fundo da seleção aqui
-            colorScheme: theme.colorScheme.copyWith(
-              primary: const Color.fromARGB(
-                  220, 105, 126, 80), // Cor de fundo da seleção
+          data: ThemeData.light().copyWith(
+            colorScheme: ColorScheme.light(
+              primary: Color.fromARGB(220, 105, 126, 80),
+              secondary: Color.fromARGB(220, 105, 126, 80),
             ),
           ),
           child: child!,
@@ -65,6 +68,38 @@ class _NovaConsultaState extends State<NovaConsulta> {
     if (pickedData != null && pickedData != _selectedDate) {
       setState(() {
         _selectedDate = pickedData;
+      });
+    }
+  }
+
+  Future<void> _selectTime(BuildContext context) async {
+    final TimeOfDay? pickedTime = await showTimePicker(
+      context: context,
+      initialTime: TimeOfDay.now(),
+      builder: (context, child) {
+        return Theme(
+          data: ThemeData.light().copyWith(
+            colorScheme: ColorScheme.light(
+              primary: Color.fromARGB(220, 105, 126, 80),
+              secondary: Color.fromARGB(220, 105, 126, 80),
+            ),
+          ),
+          child: child!,
+        );
+      },
+    );
+    if (pickedTime != null) {
+      setState(() {
+        // Convertendo o TimeOfDay selecionado para DateTime
+        _selectedTime = DateTime(
+          _selectedDate!.year,
+          _selectedDate!.month,
+          _selectedDate!.day,
+          pickedTime.hour,
+          pickedTime.minute,
+        );
+        horarioController.text = pickedTime.format(
+            context); // Atualiza o texto do campo de texto com a hora selecionada
       });
     }
   }
@@ -127,9 +162,9 @@ class _NovaConsultaState extends State<NovaConsulta> {
   final ConsultasService adicionarConsulta = ConsultasService();
 
   consultaAdicionar() {
-    String especialidade = especialidadecontroller.text;
+    String especialidade = especialidadeController.text;
     String resumo = resumocontroller.text;
-    String horario = horariocontroller.text;
+    String horario = horarioController.text;
     String data = _dateFormat.format(_selectedDate!);
     String retorno = _dateFormat.format(_selectedRetorno!);
     String lembrete = _dateFormat.format(_selectedLembrete!);
@@ -206,7 +241,7 @@ class _NovaConsultaState extends State<NovaConsulta> {
                         SizedBox(
                           height: 40,
                           child: TextFormField(
-                            controller: especialidadecontroller,
+                            controller: widget.especialidade,
                             decoration: InputDecoration(
                               border: OutlineInputBorder(
                                   borderSide: const BorderSide(
@@ -304,7 +339,9 @@ class _NovaConsultaState extends State<NovaConsulta> {
                         SizedBox(
                           height: 40,
                           child: TextFormField(
-                            controller: horariocontroller,
+                            controller: horarioController,
+                            readOnly: true,
+                            onTap: () => _selectTime(context),
                             decoration: InputDecoration(
                               border: OutlineInputBorder(
                                   borderSide: const BorderSide(
@@ -537,7 +574,12 @@ class _NovaConsultaState extends State<NovaConsulta> {
                           //       ),
                           //     );
                           await consultaAdicionar();
+                          if (widget.onUpdateConsulta != null) {
+                            widget
+                                .onUpdateConsulta!(); // Chamando a função de retorno
+                          }
                           Navigator.of(context).pop();
+                          especialidadeController.clear();
                         },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: const Color.fromARGB(

@@ -1,10 +1,11 @@
-
 import 'package:app_ye_gestao_de_saude/models/consultas_model.dart';
+import 'package:app_ye_gestao_de_saude/pages/consultas.dart';
 import 'package:app_ye_gestao_de_saude/pages/info_consultas.dart';
 import 'package:app_ye_gestao_de_saude/pages/informacoes_consultas.dart';
 import 'package:app_ye_gestao_de_saude/pages/nova_consulta.dart';
 import 'package:app_ye_gestao_de_saude/services/consultas_service.dart';
 import 'package:app_ye_gestao_de_saude/widgets/nav_bar.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
@@ -33,9 +34,17 @@ class _DataConsultasState extends State<DataConsultas> {
   }
 
   Future<void> _updateConsultas() async {
-    var updatedConsultas = await dbService.getConsultasPorEspecialidade(widget.especialidade);
+    var updatedConsultas =
+        await dbService.getConsultasPorEspecialidade(widget.especialidade);
     setState(() {
       consultas = updatedConsultas;
+    });
+  }
+
+  void _atualizarConsulta() {
+    // Função que será chamada após adicionar uma nova consulta
+    setState(() {
+      // Atualize os dados ou recarregue a tela conforme necessário
     });
   }
 
@@ -56,7 +65,7 @@ class _DataConsultasState extends State<DataConsultas> {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => const NavBar(),
+                  builder: (context) => const NavBar(selectedIndex: 2),
                 ),
               );
             },
@@ -135,7 +144,11 @@ class _DataConsultasState extends State<DataConsultas> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => const NovaConsulta()),
+                        builder: (context) => NovaConsulta(
+                              especialidade: TextEditingController(
+                                  text: widget.especialidade),
+                              onUpdateConsulta: _atualizarConsulta,
+                            )),
                   );
                 },
                 style: ElevatedButton.styleFrom(

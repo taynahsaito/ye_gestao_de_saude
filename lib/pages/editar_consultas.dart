@@ -1,600 +1,499 @@
 import 'package:app_ye_gestao_de_saude/models/consultas_model.dart';
 import 'package:app_ye_gestao_de_saude/pages/consultas.dart';
-import 'package:app_ye_gestao_de_saude/pages/info_consultas.dart';
-import 'package:app_ye_gestao_de_saude/pages/informacoes_consultas.dart';
 import 'package:app_ye_gestao_de_saude/services/consultas_service.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 class EditarConsultas extends StatefulWidget {
-  final String consultaId;
-  final String especialidade;
-  final String horario;
-  final String resumo;
+  final ModeloConsultas modeloConsultas;
 
-  const EditarConsultas(
-      {super.key,
-      required this.consultaId,
-      required this.especialidade,
-      required this.horario,
-      required this.resumo});
+  EditarConsultas({Key? key, required this.modeloConsultas}) : super(key: key);
 
   @override
-  State<EditarConsultas> createState() => _EditarConsultasState();
+  _EditarConsultasState createState() => _EditarConsultasState();
 }
 
 class _EditarConsultasState extends State<EditarConsultas> {
-  final TimeOfDay _selectedTime = TimeOfDay.now();
-  //  DateTime _selectedDate = DateTime.now();
-  late DateTime _selectedDate;
-  late DateTime _selectedRetorno;
-  late DateTime _selectedLembrete;
-  late TextEditingController horariocontroller = TextEditingController();
-  late TextEditingController especialidadecontroller = TextEditingController();
-  late TextEditingController resumocontroller = TextEditingController();
-  late TextEditingController _lembreteController;
+  late TextEditingController especialidadeController;
+  late TextEditingController dataController;
+  late TextEditingController horarioController;
+  late TextEditingController resumoController;
+  late TextEditingController retornoController;
+  late TextEditingController lembreteController;
 
-  final DateFormat _dateFormat = DateFormat('dd/MM/yyyy');
-  final _formKey = GlobalKey<FormState>();
-  final ConsultasService _consultationService = ConsultasService();
+  late DateFormat dateFormatter;
+  late DateFormat timeFormatter;
 
   @override
   void initState() {
     super.initState();
-    _selectedDate = DateTime.now();
-    _selectedLembrete = DateTime.now();
-    _selectedRetorno =
-        DateTime.now(); // Inicializando _selectedDate com a data atual
-    _lembreteController = TextEditingController();
-    especialidadecontroller = TextEditingController(text: widget.especialidade);
-    resumocontroller = TextEditingController(text: widget.resumo);
-    horariocontroller = TextEditingController(text: widget.horario);
+    especialidadeController =
+        TextEditingController(text: widget.modeloConsultas.especialidade);
+    dataController = TextEditingController(text: widget.modeloConsultas.data);
+    horarioController =
+        TextEditingController(text: widget.modeloConsultas.horario);
+    resumoController =
+        TextEditingController(text: widget.modeloConsultas.resumo);
+    retornoController = TextEditingController();
+    lembreteController = TextEditingController();
+
+    if (widget.modeloConsultas.retorno != null &&
+        widget.modeloConsultas.retorno!.isNotEmpty) {
+      retornoController.text = widget.modeloConsultas.retorno!;
+    } else {
+      retornoController.text = 'Escolha uma data';
+    }
+
+    if (widget.modeloConsultas.lembrete != null &&
+        widget.modeloConsultas.lembrete!.isNotEmpty) {
+      lembreteController.text = widget.modeloConsultas.lembrete!;
+    } else {
+      lembreteController.text = 'Escolha uma data';
+    }
+
+    dateFormatter = DateFormat('dd/MM/yyyy');
+    timeFormatter = DateFormat('HH:mm');
   }
 
   @override
-  void dispose() {
-    _lembreteController.dispose();
-    super.dispose();
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        elevation: 0,
+        iconTheme: const IconThemeData(
+          color: Color.fromARGB(220, 105, 126, 80), // Define a cor do ícone
+        ),
+        leading: Padding(
+          padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
+          child: IconButton(
+            icon: const Icon(Icons.arrow_back),
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+          ),
+        ),
+      ),
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(70, 0, 70, 0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const SizedBox(height: 20),
+              const Wrap(children: [
+                Text(
+                  'Edite sua consulta',
+                  style: TextStyle(
+                    fontSize: 22,
+                    color: Color.fromARGB(220, 105, 126, 80),
+                    fontWeight: FontWeight.w900,
+                  ),
+                ),
+              ]),
+              const SizedBox(
+                height: 40,
+              ),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const SizedBox(height: 15),
+                  const Text(
+                    "Especialidade:",
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w500,
+                      color: Color.fromARGB(220, 105, 126, 80),
+                    ),
+                  ),
+                  const SizedBox(height: 10),
+                  TextField(
+                    controller: especialidadeController,
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(
+                          borderSide: const BorderSide(
+                              color: Color.fromARGB(220, 105, 126,
+                                  80)), // Altere a cor da borda aqui
+
+                          borderRadius: BorderRadius.circular(18)),
+                      contentPadding: const EdgeInsets.fromLTRB(25, 0, 0, 0),
+                      labelStyle: const TextStyle(
+                          fontSize: 18,
+                          color: Color.fromARGB(255, 152, 152, 152)),
+                      //quando clica na label
+                      focusedBorder: OutlineInputBorder(
+                          borderSide: const BorderSide(
+                              color: Color.fromARGB(220, 105, 126,
+                                  80)), // Altere a cor da borda aqui
+                          borderRadius: BorderRadius.circular(18)),
+                    ),
+                  ),
+                  const SizedBox(height: 15),
+                  const Text(
+                    "Data:",
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w500,
+                      color: Color.fromARGB(220, 105, 126, 80),
+                    ),
+                  ),
+                  const SizedBox(height: 10),
+                  TextField(
+                    controller: dataController,
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(
+                          borderSide: const BorderSide(
+                              color: Color.fromARGB(220, 105, 126,
+                                  80)), // Altere a cor da borda aqui
+
+                          borderRadius: BorderRadius.circular(18)),
+                      contentPadding: const EdgeInsets.fromLTRB(25, 0, 0, 0),
+                      labelStyle: const TextStyle(
+                          fontSize: 18,
+                          color: Color.fromARGB(255, 152, 152, 152)),
+                      //quando clica na label
+                      focusedBorder: OutlineInputBorder(
+                          borderSide: const BorderSide(
+                              color: Color.fromARGB(220, 105, 126,
+                                  80)), // Altere a cor da borda aqui
+                          borderRadius: BorderRadius.circular(18)),
+                    ),
+                    readOnly: true,
+                    onTap: () => _selectData(context),
+                  ),
+                  const SizedBox(height: 15),
+                  const Text(
+                    "Horário:",
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w500,
+                      color: Color.fromARGB(220, 105, 126, 80),
+                    ),
+                  ),
+                  const SizedBox(height: 10),
+                  TextField(
+                    controller: horarioController,
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(
+                          borderSide: const BorderSide(
+                              color: Color.fromARGB(220, 105, 126,
+                                  80)), // Altere a cor da borda aqui
+
+                          borderRadius: BorderRadius.circular(18)),
+                      contentPadding: const EdgeInsets.fromLTRB(25, 0, 0, 0),
+                      labelStyle: const TextStyle(
+                          fontSize: 18,
+                          color: Color.fromARGB(255, 152, 152, 152)),
+                      //quando clica na label
+                      focusedBorder: OutlineInputBorder(
+                          borderSide: const BorderSide(
+                              color: Color.fromARGB(220, 105, 126,
+                                  80)), // Altere a cor da borda aqui
+                          borderRadius: BorderRadius.circular(18)),
+                    ),
+                    readOnly: true,
+                    onTap: () => _selectTime(context),
+                  ),
+                  const SizedBox(height: 15),
+                  const Text(
+                    "Resumo:",
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w500,
+                      color: Color.fromARGB(220, 105, 126, 80),
+                    ),
+                  ),
+                  const SizedBox(height: 10),
+                  TextField(
+                    controller: resumoController,
+                    keyboardType: TextInputType.multiline,
+                    maxLines: null, // Permite várias linhas
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(
+                          borderSide: const BorderSide(
+                              color: Color.fromARGB(220, 105, 126,
+                                  80)), // Altere a cor da borda aqui
+
+                          borderRadius: BorderRadius.circular(18)),
+                      contentPadding: const EdgeInsets.fromLTRB(25, 0, 0, 0),
+                      labelStyle: const TextStyle(
+                          fontSize: 18,
+                          color: Color.fromARGB(255, 152, 152, 152)),
+                      //quando clica na label
+                      focusedBorder: OutlineInputBorder(
+                          borderSide: const BorderSide(
+                              color: Color.fromARGB(220, 105, 126,
+                                  80)), // Altere a cor da borda aqui
+                          borderRadius: BorderRadius.circular(18)),
+                    ),
+                  ),
+                  const SizedBox(height: 15),
+                  const Text(
+                    "Retorno:",
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w500,
+                      color: Color.fromARGB(220, 105, 126, 80),
+                    ),
+                  ),
+                  const SizedBox(height: 10),
+                  TextField(
+                    controller: retornoController,
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(
+                          borderSide: const BorderSide(
+                              color: Color.fromARGB(220, 105, 126,
+                                  80)), // Altere a cor da borda aqui
+
+                          borderRadius: BorderRadius.circular(18)),
+                      contentPadding: const EdgeInsets.fromLTRB(25, 0, 0, 0),
+                      labelStyle: const TextStyle(
+                          fontSize: 18,
+                          color: Color.fromARGB(255, 152, 152, 152)),
+                      //quando clica na label
+                      focusedBorder: OutlineInputBorder(
+                          borderSide: const BorderSide(
+                              color: Color.fromARGB(220, 105, 126,
+                                  80)), // Altere a cor da borda aqui
+                          borderRadius: BorderRadius.circular(18)),
+                    ),
+                    onTap: () => _selectRetorno(context),
+                    readOnly: true,
+                  ),
+                  const SizedBox(height: 15),
+                  const Text(
+                    "Lembrete:",
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w500,
+                      color: Color.fromARGB(220, 105, 126, 80),
+                    ),
+                  ),
+                  const SizedBox(height: 10),
+                  TextField(
+                    controller: lembreteController,
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(
+                          borderSide: const BorderSide(
+                              color: Color.fromARGB(220, 105, 126,
+                                  80)), // Altere a cor da borda aqui
+
+                          borderRadius: BorderRadius.circular(18)),
+                      contentPadding: const EdgeInsets.fromLTRB(25, 0, 0, 0),
+                      labelStyle: const TextStyle(
+                          fontSize: 18,
+                          color: Color.fromARGB(255, 152, 152, 152)),
+                      //quando clica na label
+                      focusedBorder: OutlineInputBorder(
+                          borderSide: const BorderSide(
+                              color: Color.fromARGB(220, 105, 126,
+                                  80)), // Altere a cor da borda aqui
+                          borderRadius: BorderRadius.circular(18)),
+                    ),
+                    onTap: () => _selectLembrete(context),
+                    readOnly: true,
+                  ),
+                  SizedBox(height: 20),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      ElevatedButton(
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => Consultas(),
+                            ),
+                          );
+                        },
+                        style: ElevatedButton.styleFrom(
+                          padding: EdgeInsets
+                              .zero, // Define o padding do botão como zero para não interferir com o padding do widget interno
+                          backgroundColor:
+                              const Color.fromARGB(50, 105, 126, 80),
+                          foregroundColor: const Color.fromARGB(
+                              255, 255, 255, 255), // Cor de fundo do botão
+                          shape: const CircleBorder(),
+                        ),
+                        child: const Padding(
+                          padding: EdgeInsets.all(
+                              8), // Espaçamento interno para o ícone
+                          child: Icon(Icons.close),
+                        ),
+                      ),
+                      SizedBox(
+                        width: 5,
+                      ),
+                      ElevatedButton(
+                        onPressed: () async {
+                          ModeloConsultas consultaAtualizada = ModeloConsultas(
+                            id: widget.modeloConsultas.id,
+                            especialidade: especialidadeController.text,
+                            data: dataController.text,
+                            horario: horarioController.text,
+                            resumo: resumoController.text,
+                            retorno: retornoController.text,
+                            lembrete: lembreteController.text,
+                          );
+
+                          await ConsultasService().editarConsulta(
+                            consultaAtualizada.id,
+                            consultaAtualizada.especialidade,
+                            consultaAtualizada.data,
+                            consultaAtualizada.horario,
+                            consultaAtualizada.resumo,
+                            consultaAtualizada.retorno,
+                            consultaAtualizada.lembrete,
+                          );
+
+                          Navigator.pop(context, consultaAtualizada);
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor:
+                              const Color.fromARGB(50, 105, 126, 80),
+                          foregroundColor: Colors.white,
+                          shape: const CircleBorder(),
+                        ),
+                        child: const Padding(
+                          padding: EdgeInsets.all(8),
+                          child: Icon(Icons.check),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
   }
 
-  Future<void> _selectDate(BuildContext context) async {
-    final ThemeData theme = Theme.of(context);
-    final DateTime? pickedData = await showDatePicker(
+  Future<void> _selectData(BuildContext context) async {
+    final DateTime? pickedDate = await showDatePicker(
       context: context,
-      initialDate: _selectedDate,
-      firstDate: DateTime(1900),
+      initialDate: null,
+      firstDate: DateTime(2000),
       lastDate: DateTime.now(),
-      builder: (BuildContext context, Widget? child) {
+      helpText: 'Selecione a data',
+      cancelText: 'Cancelar',
+      confirmText: 'Confirmar',
+      fieldLabelText: 'Informe a data',
+      errorFormatText: 'Formato de data inválido',
+      errorInvalidText: 'Data inválida',
+      builder: (context, child) {
         return Theme(
-          data: theme.copyWith(
-            // Personalize a cor de fundo da seleção aqui
-            colorScheme: theme.colorScheme.copyWith(
-              primary: const Color.fromARGB(
-                  220, 105, 126, 80), // Cor de fundo da seleção
+          data: ThemeData.light().copyWith(
+            colorScheme: ColorScheme.light(
+              primary: Color.fromARGB(220, 105, 126, 80), // Cor primária
             ),
           ),
           child: child!,
         );
       },
     );
-    if (pickedData != null && pickedData != _selectedDate) {
+    if (pickedDate != null) {
       setState(() {
-        _selectedDate = pickedData;
+        dataController.text = dateFormatter.format(pickedDate);
       });
     }
   }
 
-  ConsultasService consultasService = ConsultasService();
-
   Future<void> _selectRetorno(BuildContext context) async {
-    final ThemeData theme = Theme.of(context);
     final DateTime? pickedRetorno = await showDatePicker(
       context: context,
-      initialDate: _selectedRetorno,
-      firstDate: DateTime.now(), // Restringindo a data inicial para hoje
-      lastDate: DateTime(2100),
-      builder: (BuildContext context, Widget? child) {
+      initialDate: null,
+      firstDate: DateTime.now(),
+      lastDate: DateTime(2101),
+      helpText: 'Selecione a data',
+      cancelText: 'Cancelar',
+      confirmText: 'Confirmar',
+      fieldLabelText: 'Informe a data',
+      errorFormatText: 'Formato de data inválido',
+      errorInvalidText: 'Data inválida',
+      builder: (context, child) {
         return Theme(
-          data: theme.copyWith(
-            // Personalize a cor de fundo da seleção aqui
-            colorScheme: theme.colorScheme.copyWith(
-              primary: const Color.fromARGB(
-                  220, 105, 126, 80), // Cor de fundo da seleção
+          data: ThemeData.light().copyWith(
+            colorScheme: ColorScheme.light(
+              primary: Color.fromARGB(220, 105, 126, 80), // Cor primária
             ),
           ),
           child: child!,
         );
       },
     );
-    if (pickedRetorno != null && pickedRetorno != _selectedRetorno) {
+    if (pickedRetorno != null) {
       setState(() {
-        _selectedRetorno = pickedRetorno;
+        retornoController.text = dateFormatter.format(pickedRetorno);
       });
     }
   }
 
   Future<void> _selectLembrete(BuildContext context) async {
-    final ThemeData theme = Theme.of(context);
-
     final DateTime? pickedLembrete = await showDatePicker(
       context: context,
-      initialDate: _selectedLembrete,
-      firstDate: DateTime.now(), // Restringindo a data inicial para hoje
-      lastDate: DateTime(2100),
-      builder: (BuildContext context, Widget? child) {
+      initialDate: null,
+      firstDate: DateTime.now(),
+      lastDate: DateTime(2101),
+      helpText: 'Selecione a data',
+      cancelText: 'Cancelar',
+      confirmText: 'Confirmar',
+      fieldLabelText: 'Informe a data',
+      errorFormatText: 'Formato de data inválido',
+      errorInvalidText: 'Data inválida',
+      builder: (context, child) {
         return Theme(
-          data: theme.copyWith(
-            // Personalize a cor de fundo da seleção aqui
-            colorScheme: theme.colorScheme.copyWith(
-              primary: const Color.fromARGB(
-                  220, 105, 126, 80), // Cor de fundo da seleção
+          data: ThemeData.light().copyWith(
+            colorScheme: ColorScheme.light(
+              primary: Color.fromARGB(220, 105, 126, 80), // Cor primária
             ),
           ),
           child: child!,
         );
       },
     );
-    if (pickedLembrete != null && pickedLembrete != _selectedLembrete) {
+    if (pickedLembrete != null) {
       setState(() {
-        _selectedLembrete = pickedLembrete;
+        lembreteController.text = dateFormatter.format(pickedLembrete);
       });
     }
   }
 
-  ConsultasService dbService = ConsultasService();
+  Future<void> _selectTime(BuildContext context) async {
+    final TimeOfDay? pickedTime = await showTimePicker(
+      context: context,
+      initialTime: TimeOfDay.now(),
+      builder: (context, child) {
+        return Theme(
+          data: ThemeData.light().copyWith(
+            colorScheme: ColorScheme.light(
+              primary: Color.fromARGB(220, 105, 126, 80), // Cor primária
+              secondary: Color.fromARGB(220, 105, 126, 80),
+            ),
+          ),
+          child: child!,
+        );
+      },
+    );
+    if (pickedTime != null) {
+      setState(() {
+        // Convertendo TimeOfDay para DateTime para formatar corretamente
+        final selectedDateTime =
+            DateTime(0, 1, 1, pickedTime.hour, pickedTime.minute);
+        // Formatação com AM/PM
+        horarioController.text = DateFormat('hh:mm a').format(selectedDateTime);
+      });
+    }
+  }
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: const Color.fromARGB(255, 245, 246, 241),
-      body: StreamBuilder(
-          stream: dbService.consultasCollection.snapshots(),
-          builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
-            if (!snapshot.hasData) {
-              Center(
-                child: CircularProgressIndicator(),
-              );
-            }
-            var consultas = snapshot.data!.docs
-                .map((doc) => ModeloConsultas.fromFirestore(doc))
-                .toList();
-
-            return SingleChildScrollView(
-              child: Padding(
-                padding: const EdgeInsets.fromLTRB(70, 20, 70, 0),
-                child: Center(
-                  child: Form(
-                      child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                        const SizedBox(height: 20),
-                        const Wrap(children: [
-                          Text(
-                            'Edite sua consulta',
-                            style: TextStyle(
-                              fontSize: 22,
-                              color: Color.fromARGB(220, 105, 126, 80),
-                              fontWeight: FontWeight.w900,
-                            ),
-                          ),
-                        ]),
-                        const SizedBox(
-                          height: 40,
-                        ),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            const Text(
-                              "Especialidade:",
-                              style: TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.w500,
-                                color: Color.fromARGB(220, 105, 126, 80),
-                              ),
-                            ),
-                            const SizedBox(height: 10),
-                            SizedBox(
-                              height: 40,
-                              child: TextFormField(
-                                controller: especialidadecontroller,
-                                decoration: InputDecoration(
-                                  border: OutlineInputBorder(
-                                      borderSide: const BorderSide(
-                                          color: Color.fromARGB(220, 105, 126,
-                                              80)), // Altere a cor da borda aqui
-
-                                      borderRadius: BorderRadius.circular(18)),
-                                  contentPadding:
-                                      const EdgeInsets.fromLTRB(25, 0, 0, 0),
-                                  labelStyle: const TextStyle(
-                                      fontSize: 18,
-                                      color:
-                                          Color.fromARGB(255, 152, 152, 152)),
-                                  //quando clica na label
-                                  focusedBorder: OutlineInputBorder(
-                                      borderSide: const BorderSide(
-                                          color: Color.fromARGB(220, 105, 126,
-                                              80)), // Altere a cor da borda aqui
-                                      borderRadius: BorderRadius.circular(18)),
-                                ),
-                                // validator: (value) {
-                                //   if (value == null || value.isEmpty) {
-                                //     return 'Por favor, insira sua glicemia';
-                                //   }
-                                //   return null;
-                                // },
-                                // onSaved: (value) {
-                                //   if (value != null) {
-                                //     _glicemia = value;
-                                //   }
-                                // },
-                              ),
-                            ),
-                            const SizedBox(height: 15),
-                            const Text(
-                              "Data:",
-                              style: TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.w500,
-                                color: Color.fromARGB(220, 105, 126, 80),
-                              ),
-                            ),
-                            const SizedBox(height: 10),
-                            SizedBox(
-                              height: 40,
-                              child: TextFormField(
-                                readOnly: true,
-                                onTap: () => _selectDate(context),
-                                controller: TextEditingController(
-                                  text: _selectedDate != null
-                                      ? _dateFormat.format(_selectedDate!)
-                                      : '',
-                                ),
-                                decoration: InputDecoration(
-                                  border: OutlineInputBorder(
-                                      borderSide: const BorderSide(
-                                          color: Color.fromARGB(
-                                              220, 105, 126, 80)),
-                                      borderRadius: BorderRadius.circular(18)),
-
-                                  contentPadding:
-                                      const EdgeInsets.fromLTRB(25, 0, 0, 0),
-                                  labelStyle: const TextStyle(
-                                      fontSize: 18,
-                                      color:
-                                          Color.fromARGB(255, 152, 152, 152)),
-                                  //quando clica na label
-                                  focusedBorder: OutlineInputBorder(
-                                      borderSide: const BorderSide(
-                                          color: Color.fromARGB(220, 105, 126,
-                                              80)), // Altere a cor da borda aqui
-                                      borderRadius: BorderRadius.circular(18)),
-                                ),
-                                validator: (value) {
-                                  if (value == null || value.isEmpty) {
-                                    return 'Por favor, insira uma data';
-                                  }
-                                  return null;
-                                },
-                                keyboardType: TextInputType.datetime,
-                                onChanged: (value) {
-                                  setState(() {
-                                    _selectedDate = DateTime.tryParse(value)!;
-                                  });
-                                },
-                              ),
-                            ),
-                            const SizedBox(height: 15),
-                            const Text(
-                              "Horário:",
-                              style: TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.w500,
-                                color: Color.fromARGB(220, 105, 126, 80),
-                              ),
-                            ),
-                            const SizedBox(height: 10),
-                            SizedBox(
-                              height: 40,
-                              child: TextFormField(
-                                controller: horariocontroller,
-                                decoration: InputDecoration(
-                                  border: OutlineInputBorder(
-                                      borderSide: const BorderSide(
-                                          color: Color.fromARGB(220, 105, 126,
-                                              80)), // Altere a cor da borda aqui
-
-                                      borderRadius: BorderRadius.circular(18)),
-                                  contentPadding:
-                                      const EdgeInsets.fromLTRB(25, 0, 0, 0),
-                                  labelStyle: const TextStyle(
-                                      fontSize: 18,
-                                      color:
-                                          Color.fromARGB(255, 152, 152, 152)),
-                                  //quando clica na label
-                                  focusedBorder: OutlineInputBorder(
-                                      borderSide: const BorderSide(
-                                          color: Color.fromARGB(220, 105, 126,
-                                              80)), // Altere a cor da borda aqui
-                                      borderRadius: BorderRadius.circular(18)),
-                                ),
-                                // validator: (value) {
-                                //   if (value == null || value.isEmpty) {
-                                //     return 'Por favor, insira sua glicemia';
-                                //   }
-                                //   return null;
-                                // },
-                                // onSaved: (value) {
-                                //   if (value != null) {
-                                //     _glicemia = value;
-                                //   }
-                                // },
-                              ),
-                            ),
-                            const SizedBox(height: 15),
-                            const Text(
-                              "Resumo da consulta:",
-                              style: TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.w500,
-                                color: Color.fromARGB(220, 105, 126, 80),
-                              ),
-                            ),
-                            const SizedBox(height: 10),
-                            SizedBox(
-                              height: 40,
-                              child: TextFormField(
-                                controller: resumocontroller,
-                                keyboardType: TextInputType.multiline,
-                                maxLines: null, // Permite várias linhas
-                                textAlignVertical: TextAlignVertical.top,
-                                decoration: InputDecoration(
-                                  border: OutlineInputBorder(
-                                      borderSide: const BorderSide(
-                                          color: Color.fromARGB(220, 105, 126,
-                                              80)), // Altere a cor da borda aqui
-
-                                      borderRadius: BorderRadius.circular(18)),
-                                  contentPadding:
-                                      const EdgeInsets.fromLTRB(25, 0, 0, 0),
-                                  labelStyle: const TextStyle(
-                                      fontSize: 18,
-                                      color:
-                                          Color.fromARGB(255, 152, 152, 152)),
-                                  //quando clica na label
-                                  focusedBorder: OutlineInputBorder(
-                                      borderSide: const BorderSide(
-                                          color: Color.fromARGB(220, 105, 126,
-                                              80)), // Altere a cor da borda aqui
-                                      borderRadius: BorderRadius.circular(18)),
-                                ),
-                                // validator: (value) {
-                                //   if (value == null || value.isEmpty) {
-                                //     return 'Por favor, insira sua glicemia';
-                                //   }
-                                //   return null;
-                                // },
-                                // onSaved: (value) {
-                                //   if (value != null) {
-                                //     _glicemia = value;
-                                //   }
-                                // },
-                              ),
-                            ),
-                            const SizedBox(height: 15),
-                            const Text(
-                              "Retorno em:",
-                              style: TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.w500,
-                                color: Color.fromARGB(220, 105, 126, 80),
-                              ),
-                            ),
-                            const SizedBox(height: 10),
-                            SizedBox(
-                              height: 40,
-                              child: TextFormField(
-                                readOnly: true,
-                                onTap: () => _selectRetorno(context),
-                                controller: TextEditingController(
-                                  text: _selectedRetorno != null
-                                      ? _dateFormat.format(_selectedRetorno!)
-                                      : '',
-                                ),
-                                decoration: InputDecoration(
-                                  border: OutlineInputBorder(
-                                      borderSide: const BorderSide(
-                                          color: Color.fromARGB(220, 105, 126,
-                                              80)), // Altere a cor da borda aqui
-
-                                      borderRadius: BorderRadius.circular(18)),
-                                  contentPadding:
-                                      const EdgeInsets.fromLTRB(25, 0, 0, 0),
-                                  labelStyle: const TextStyle(
-                                      fontSize: 18,
-                                      color:
-                                          Color.fromARGB(255, 152, 152, 152)),
-                                  //quando clica na label
-                                  focusedBorder: OutlineInputBorder(
-                                      borderSide: const BorderSide(
-                                          color: Color.fromARGB(220, 105, 126,
-                                              80)), // Altere a cor da borda aqui
-                                      borderRadius: BorderRadius.circular(18)),
-                                ),
-                                // validator: (value) {
-                                //   if (value == null || value.isEmpty) {
-                                //     return 'Por favor, insira sua glicemia';
-                                //   }
-                                //   return null;
-                                // },
-                                // onSaved: (value) {
-                                //   if (value != null) {
-                                //     _glicemia = value;
-                                //   }
-                                // },
-                              ),
-                            ),
-                            const SizedBox(height: 15),
-                            const Text(
-                              "Lembrete para agendamento:",
-                              style: TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.w500,
-                                color: Color.fromARGB(220, 105, 126, 80),
-                              ),
-                            ),
-                            const SizedBox(height: 10),
-                            SizedBox(
-                              height: 40,
-                              child: TextFormField(
-                                // controller: _lembreteController,
-                                readOnly:
-                                    true, // Impede a edição direta do campo
-                                onTap: () => _selectLembrete(context),
-                                controller: TextEditingController(
-                                  text: _selectedLembrete != null
-                                      ? _dateFormat.format(_selectedLembrete!)
-                                      : '', // Ao clicar, abrirá o seletor de data
-                                ),
-                                keyboardType: TextInputType.datetime,
-                                decoration: InputDecoration(
-                                  border: OutlineInputBorder(
-                                      borderSide: const BorderSide(
-                                          color: Color.fromARGB(220, 105, 126,
-                                              80)), // Altere a cor da borda aqui
-
-                                      borderRadius: BorderRadius.circular(18)),
-                                  contentPadding:
-                                      const EdgeInsets.fromLTRB(25, 0, 0, 0),
-                                  labelStyle: const TextStyle(
-                                      fontSize: 18,
-                                      color:
-                                          Color.fromARGB(255, 152, 152, 152)),
-                                  //quando clica na label
-                                  focusedBorder: OutlineInputBorder(
-                                      borderSide: const BorderSide(
-                                          color: Color.fromARGB(220, 105, 126,
-                                              80)), // Altere a cor da borda aqui
-                                      borderRadius: BorderRadius.circular(18)),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(height: 30.0),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            ElevatedButton(
-                              onPressed: () {
-                                Navigator.of(context).pop();
-                                // InformacoesConsultas(
-                                //   modeloConsultas: ModeloConsultas(
-                                //       id: '',
-                                //       especialidade: especialidade,
-                                //       horario: horario,
-                                //       data: data,
-                                //       resumo: resumo,
-                                //       retorno: retorno,
-                                //       lembrete: lembrete),
-                                // )
-                              },
-                              style: ElevatedButton.styleFrom(
-                                padding: EdgeInsets
-                                    .zero, // Define o padding do botão como zero para não interferir com o padding do widget interno
-                                backgroundColor:
-                                    const Color.fromARGB(50, 105, 126, 80),
-                                foregroundColor: const Color.fromARGB(255, 255,
-                                    255, 255), // Cor de fundo do botão
-                                shape: const CircleBorder(),
-                              ),
-                              child: const Padding(
-                                padding: EdgeInsets.all(
-                                    8), // Espaçamento interno para o ícone
-                                child: Icon(Icons.close),
-                              ),
-                            ),
-                            ElevatedButton(
-                              onPressed: () async {
-                                final especialidade =
-                                    especialidadecontroller.text;
-                                final data = _selectedDate != null
-                                    ? DateFormat('dd/MM/yyyy')
-                                        .format(_selectedDate!)
-                                    : '';
-                                final retorno = _selectedRetorno != null
-                                    ? DateFormat('dd/MM/yyyy')
-                                        .format(_selectedRetorno!)
-                                    : '';
-                                final lembrete = _selectedLembrete != null
-                                    ? DateFormat('dd/MM/yyyy')
-                                        .format(_selectedLembrete!)
-                                    : '';
-                                final resumo = resumocontroller.text;
-                                final horario = _selectedTime != null
-                                    ? _selectedTime.format(context)
-                                    : '';
-
-                                if (especialidade.isNotEmpty &&
-                                    horario.isNotEmpty &&
-                                    data.isNotEmpty &&
-                                    resumo.isNotEmpty &&
-                                    retorno.isNotEmpty &&
-                                    lembrete.isNotEmpty) {
-                                  final consulta = ModeloConsultas(
-                                    id: '',
-                                    especialidade: especialidade,
-                                    horario: horario,
-                                    data: data,
-                                    resumo: resumo,
-                                    retorno: retorno,
-                                    lembrete: lembrete,
-                                  );
-
-                                  // Chamada para a função que realiza a edição da consulta
-                                  await consultasService.editarConsulta(
-                                      widget.consultaId, consulta);
-
-                                  // Navegação para a página de informações da consulta
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) =>
-                                          InformacoesConsultas(
-                                        modeloConsultas: consulta,
-                                      ),
-                                    ),
-                                  );
-                                } else {
-                                  // Se algum campo estiver vazio, exiba uma mensagem ou realize outra ação adequada
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    SnackBar(
-                                      content: Text(
-                                          'Todos os campos são obrigatórios'),
-                                    ),
-                                  );
-                                }
-                              },
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor:
-                                    const Color.fromARGB(50, 105, 126, 80),
-                                foregroundColor: Colors.white,
-                                shape: const CircleBorder(),
-                              ),
-                              child: const Padding(
-                                padding: EdgeInsets.all(8),
-                                child: Icon(Icons.check),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ])),
-                ),
-              ),
-            );
-          }),
-    );
+  void dispose() {
+    especialidadeController.dispose();
+    dataController.dispose();
+    horarioController.dispose();
+    resumoController.dispose();
+    retornoController.dispose();
+    lembreteController.dispose();
+    super.dispose();
   }
 }
