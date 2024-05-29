@@ -2,11 +2,11 @@ import 'package:app_ye_gestao_de_saude/models/peso_altura_modelo.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-class PressaoService {
+class PesoAlturaService {
 final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   late String userId;
   
-PressaoService() {
+PesoAlturaService() {
     final currentUser = FirebaseAuth.instance.currentUser;
     userId = currentUser?.uid ??
         ''; // Defina userId como uma string vazia se currentUser for nulo

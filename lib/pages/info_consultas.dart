@@ -7,8 +7,7 @@ import 'package:flutter/material.dart';
 class InformacoesConsultas extends StatefulWidget {
   final ModeloConsultas modeloConsultas;
 
-  InformacoesConsultas({Key? key, required this.modeloConsultas})
-      : super(key: key);
+  const InformacoesConsultas({super.key, required this.modeloConsultas});
 
   @override
   _InformacoesConsultasState createState() => _InformacoesConsultasState();
@@ -30,14 +29,14 @@ class _InformacoesConsultasState extends State<InformacoesConsultas> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Deletar consulta'),
-          content: Text('Tem certeza de que deseja excluir esta consulta?'),
+          title: const Text('Deletar consulta'),
+          content: const  Text('Tem certeza de que deseja excluir esta consulta?'),
           actions: <Widget>[
             TextButton(
               onPressed: () {
                 Navigator.of(context).pop();
               },
-              child: Text('Cancelar', style: TextStyle(color: Color.fromARGB(220, 105, 126, 80),),),
+              child: const Text('Cancelar', style: TextStyle(color: Color.fromARGB(220, 105, 126, 80),),),
             ),
             TextButton(
               onPressed: () async {
@@ -46,7 +45,7 @@ class _InformacoesConsultasState extends State<InformacoesConsultas> {
                 Navigator.pop(
                     context, true); // Indica que uma consulta foi deletada
               },
-              child: Text('Confirmar', style: TextStyle(color: Color.fromARGB(220, 105, 126, 80),),),
+              child: const Text('Confirmar', style: TextStyle(color: Color.fromARGB(220, 105, 126, 80),),),
             ),
           ],
         );
@@ -127,7 +126,7 @@ class _InformacoesConsultasState extends State<InformacoesConsultas> {
       ),
       body: SingleChildScrollView(
         child: Padding(
-          padding: EdgeInsets.fromLTRB(60, 0, 60, 0),
+          padding: const EdgeInsets.fromLTRB(60, 0, 60, 0),
           child: Center(
             child: Column(
               children: [
@@ -171,7 +170,7 @@ class _InformacoesConsultasState extends State<InformacoesConsultas> {
             alignment: Alignment.centerLeft,
             child: Text(
               title,
-              style: TextStyle(
+              style: const TextStyle(
                 fontFamily: 'Poppins',
                 fontSize: 17,
                 color: Color.fromRGBO(119, 138, 96, 1),
@@ -181,7 +180,7 @@ class _InformacoesConsultasState extends State<InformacoesConsultas> {
           const SizedBox(height: 5),
           Container(
             decoration: BoxDecoration(
-              color: Color.fromRGBO(185, 196, 166, 1),
+              color: const Color.fromRGBO(185, 196, 166, 1),
               borderRadius: BorderRadius.circular(20),
             ),
             width: 380,
@@ -190,7 +189,7 @@ class _InformacoesConsultasState extends State<InformacoesConsultas> {
                 padding: const EdgeInsets.symmetric(vertical: 6.0),
                 child: Text(
                   info,
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontSize: 16,
                     color: Color.fromARGB(220, 66, 78, 50),
                     fontWeight: FontWeight.w600,

@@ -1,4 +1,5 @@
 import 'package:app_ye_gestao_de_saude/components/snackbar.dart';
+import 'package:app_ye_gestao_de_saude/pages/medicamentos.dart';
 import 'package:app_ye_gestao_de_saude/services/auth_service.dart';
 import 'package:app_ye_gestao_de_saude/widgets/nav_bar.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -40,7 +41,10 @@ class _LoginState extends State<Login> {
       if (authResult.user != null) {
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (context) => const NavBar(selectedIndex: 0,)),
+          MaterialPageRoute(
+              builder: (context) => const NavBar(
+                    selectedIndex: 0,
+                  )),
         );
       }
     } catch (error) {
@@ -66,7 +70,10 @@ class _LoginState extends State<Login> {
       if (authResult.user != null) {
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (context) => const NavBar(selectedIndex: 0,)),
+          MaterialPageRoute(
+              builder: (context) => const NavBar(
+                    selectedIndex: 0,
+                  )),
         );
       }
     } catch (e) {
@@ -167,7 +174,9 @@ class _LoginState extends State<Login> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => const NavBar(selectedIndex: 0,),
+                              builder: (context) => const NavBar(
+                                selectedIndex: 0,
+                              ),
                             ),
                           );
                         } else {
@@ -290,11 +299,24 @@ class _LoginState extends State<Login> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => const NavBar(selectedIndex: 0,),
+                            builder: (context) => const NavBar(
+                              selectedIndex: 0,
+                            ),
                           ),
                         );
                       },
                       child: const Text("homepage")),
+                  // ElevatedButton(
+                  //     onPressed: () {
+                  //       Navigator.push(
+                  //         context,
+                  //         MaterialPageRoute(
+                  //           builder: (context) =>
+                  //               const Medicamentos(medicamentos: medicamento),
+                  //         ),
+                  //       );
+                  //     },
+                  //     child: const Text("medicamentos")),
                 ],
               ),
             ),

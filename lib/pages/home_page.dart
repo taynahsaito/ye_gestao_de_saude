@@ -127,7 +127,7 @@ class _HomePageState extends State<HomePage> {
                       padding: const EdgeInsets.fromLTRB(
                           30, 15, 15, 15), // Adiciona espaço à direita
                       backgroundColor: const Color.fromARGB(255, 223, 223, 223),
-                      foregroundColor: Color.fromARGB(255, 113, 113, 113),
+                      foregroundColor: const Color.fromARGB(255, 113, 113, 113),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(40),
                       ),
@@ -172,14 +172,14 @@ class _HomePageState extends State<HomePage> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => const Glicemia()),
+                            builder: (context) => Glicemia()),
                       );
                     },
                     style: ElevatedButton.styleFrom(
                       padding: const EdgeInsets.fromLTRB(
                           30, 15, 15, 15), // Adiciona espaço à direita
                       backgroundColor: const Color.fromARGB(255, 223, 223, 223),
-                      foregroundColor: Color.fromARGB(255, 113, 113, 113),
+                      foregroundColor: const Color.fromARGB(255, 113, 113, 113),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(40),
                       ),
@@ -223,14 +223,14 @@ class _HomePageState extends State<HomePage> {
                     onPressed: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => PesoAltura()),
+                        MaterialPageRoute(builder: (context) => const PesoAltura()),
                       );
                     },
                     style: ElevatedButton.styleFrom(
                       padding: const EdgeInsets.fromLTRB(
                           30, 15, 15, 15), // Adiciona espaço à direita
                       backgroundColor: const Color.fromARGB(255, 223, 223, 223),
-                      foregroundColor: Color.fromARGB(255, 113, 113, 113),
+                      foregroundColor: const Color.fromARGB(255, 113, 113, 113),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(40),
                       ),
@@ -282,7 +282,7 @@ class _HomePageState extends State<HomePage> {
                       padding: const EdgeInsets.fromLTRB(
                           30, 15, 15, 15), // Adiciona espaço à direita
                       backgroundColor: const Color.fromARGB(255, 223, 223, 223),
-                      foregroundColor: Color.fromARGB(255, 113, 113, 113),
+                      foregroundColor: const Color.fromARGB(255, 113, 113, 113),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(40),
                       ),

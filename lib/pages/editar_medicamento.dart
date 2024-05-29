@@ -1,8 +1,10 @@
+import 'package:app_ye_gestao_de_saude/models/medicamentos_model.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 class EditarMedicamento extends StatefulWidget {
-  const EditarMedicamento({super.key});
+    final ModeloMedicamentos modeloMedicamentos;
+  const EditarMedicamento({super.key, required this.modeloMedicamentos});
 
   @override
   State<EditarMedicamento> createState() => _EditarMedicamentoState();

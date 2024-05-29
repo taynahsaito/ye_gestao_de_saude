@@ -26,9 +26,9 @@ class _NavBar extends State<NavBar> {
   }
 
   static List<Widget> pages = <Widget>[
-    HomePage(),
-    Exames(),
-    Consultas(),
+    const HomePage(),
+    const Exames(),
+    const Consultas(),
     // Medicamentos(medicamentos: ,),
   ];
 

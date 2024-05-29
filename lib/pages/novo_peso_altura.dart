@@ -1,5 +1,5 @@
 import 'package:app_ye_gestao_de_saude/models/peso_altura_modelo.dart';
-import 'package:app_ye_gestao_de_saude/services/peso_altura_servico.dart';
+import 'package:app_ye_gestao_de_saude/services/peso_altura_service.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:uuid/uuid.dart';
@@ -51,7 +51,7 @@ class _NovoPesoAlturaState extends State<NovoPesoAltura> {
     }
   }
 
-  final PressaoService adicionarPressao = PressaoService();
+  final PesoAlturaService adicionarPressao = PesoAlturaService();
 
 
   pesoAdicionar() {

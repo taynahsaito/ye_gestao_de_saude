@@ -8,8 +8,7 @@ class NovaConsulta extends StatefulWidget {
   final TextEditingController especialidade;
   final Function? onUpdateConsulta;
   const NovaConsulta(
-      {Key? key, required this.especialidade, this.onUpdateConsulta})
-      : super(key: key);
+      {super.key, required this.especialidade, this.onUpdateConsulta});
 
   @override
   State<NovaConsulta> createState() => _NovaConsultaState();
@@ -56,7 +55,7 @@ class _NovaConsultaState extends State<NovaConsulta> {
       builder: (context, child) {
         return Theme(
           data: ThemeData.light().copyWith(
-            colorScheme: ColorScheme.light(
+            colorScheme: const ColorScheme.light(
               primary: Color.fromARGB(220, 105, 126, 80),
               secondary: Color.fromARGB(220, 105, 126, 80),
             ),
@@ -79,7 +78,7 @@ class _NovaConsultaState extends State<NovaConsulta> {
       builder: (context, child) {
         return Theme(
           data: ThemeData.light().copyWith(
-            colorScheme: ColorScheme.light(
+            colorScheme: const ColorScheme.light(
               primary: Color.fromARGB(220, 105, 126, 80),
               secondary: Color.fromARGB(220, 105, 126, 80),
             ),
@@ -208,7 +207,7 @@ class _NovaConsultaState extends State<NovaConsulta> {
                     children: [
                   const SizedBox(height: 20),
                   const Padding(
-                    padding: EdgeInsets.fromLTRB(20, 0, 20, 0),
+                    padding: EdgeInsets.fromLTRB(70, 0, 70, 0),
                     child: Wrap(children: [
                       Text(
                         'Registre uma nova consulta',

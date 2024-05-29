@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:app_ye_gestao_de_saude/services/peso_altura_servico.dart';
+import 'package:app_ye_gestao_de_saude/services/peso_altura_service.dart';
 
 class ModeloPesoAltura{
   final String id;

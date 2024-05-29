@@ -1,5 +1,6 @@
 import 'package:app_ye_gestao_de_saude/models/consultas_model.dart';
 import 'package:app_ye_gestao_de_saude/pages/consultas.dart';
+import 'package:app_ye_gestao_de_saude/pages/info_consultas.dart';
 import 'package:app_ye_gestao_de_saude/services/consultas_service.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -7,7 +8,7 @@ import 'package:intl/intl.dart';
 class EditarConsultas extends StatefulWidget {
   final ModeloConsultas modeloConsultas;
 
-  EditarConsultas({Key? key, required this.modeloConsultas}) : super(key: key);
+  const EditarConsultas({super.key, required this.modeloConsultas});
 
   @override
   _EditarConsultasState createState() => _EditarConsultasState();
@@ -292,18 +293,19 @@ class _EditarConsultasState extends State<EditarConsultas> {
                     onTap: () => _selectLembrete(context),
                     readOnly: true,
                   ),
-                  SizedBox(height: 20),
+                  const SizedBox(height: 20),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       ElevatedButton(
                         onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => Consultas(),
-                            ),
-                          );
+                          // Navigator.push(
+                          //   context,
+                          //   MaterialPageRoute(
+                          //     builder: (context) => InformacoesConsultas(modeloConsultas: modeloConsultas),
+                          //   ),
+                          // );
+                          Navigator.pop(context);
                         },
                         style: ElevatedButton.styleFrom(
                           padding: EdgeInsets
@@ -320,7 +322,7 @@ class _EditarConsultasState extends State<EditarConsultas> {
                           child: Icon(Icons.close),
                         ),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         width: 5,
                       ),
                       ElevatedButton(
@@ -384,7 +386,7 @@ class _EditarConsultasState extends State<EditarConsultas> {
       builder: (context, child) {
         return Theme(
           data: ThemeData.light().copyWith(
-            colorScheme: ColorScheme.light(
+            colorScheme: const ColorScheme.light(
               primary: Color.fromARGB(220, 105, 126, 80), // Cor primária
             ),
           ),
@@ -414,7 +416,7 @@ class _EditarConsultasState extends State<EditarConsultas> {
       builder: (context, child) {
         return Theme(
           data: ThemeData.light().copyWith(
-            colorScheme: ColorScheme.light(
+            colorScheme: const ColorScheme.light(
               primary: Color.fromARGB(220, 105, 126, 80), // Cor primária
             ),
           ),
@@ -444,7 +446,7 @@ class _EditarConsultasState extends State<EditarConsultas> {
       builder: (context, child) {
         return Theme(
           data: ThemeData.light().copyWith(
-            colorScheme: ColorScheme.light(
+            colorScheme: const ColorScheme.light(
               primary: Color.fromARGB(220, 105, 126, 80), // Cor primária
             ),
           ),
@@ -466,7 +468,7 @@ class _EditarConsultasState extends State<EditarConsultas> {
       builder: (context, child) {
         return Theme(
           data: ThemeData.light().copyWith(
-            colorScheme: ColorScheme.light(
+            colorScheme: const ColorScheme.light(
               primary: Color.fromARGB(220, 105, 126, 80), // Cor primária
               secondary: Color.fromARGB(220, 105, 126, 80),
             ),

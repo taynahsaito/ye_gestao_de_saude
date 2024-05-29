@@ -2,7 +2,6 @@ import 'package:app_ye_gestao_de_saude/models/consultas_model.dart';
 import 'package:app_ye_gestao_de_saude/pages/data_consultas.dart';
 import 'package:app_ye_gestao_de_saude/pages/nova_consulta.dart';
 import 'package:app_ye_gestao_de_saude/services/consultas_service.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 class Consultas extends StatefulWidget {
@@ -42,7 +41,7 @@ class _ConsultasState extends State<Consultas> {
                   stream: dbService.getConsultas(),
                   builder: (context, snapshot) {
                     if (!snapshot.hasData) {
-                      return Center(
+                      return const Center(
                         child: CircularProgressIndicator(),
                       );
                     }
@@ -75,11 +74,11 @@ class _ConsultasState extends State<Consultas> {
                             children: [
                               Text(
                                 '${especialidade}',
-                                style: TextStyle(
+                                style: const TextStyle(
                                     fontSize: 16, fontWeight: FontWeight.w600),
                               ),
-                              Spacer(),
-                              Icon(Icons.info_outline),
+                              const Spacer(),
+                              const Icon(Icons.info_outline),
                             ],
                           ),
                         );

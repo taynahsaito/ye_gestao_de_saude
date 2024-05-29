@@ -1,13 +1,9 @@
 import 'package:app_ye_gestao_de_saude/models/consultas_model.dart';
-import 'package:app_ye_gestao_de_saude/pages/consultas.dart';
 import 'package:app_ye_gestao_de_saude/pages/info_consultas.dart';
-import 'package:app_ye_gestao_de_saude/pages/informacoes_consultas.dart';
 import 'package:app_ye_gestao_de_saude/pages/nova_consulta.dart';
 import 'package:app_ye_gestao_de_saude/services/consultas_service.dart';
 import 'package:app_ye_gestao_de_saude/widgets/nav_bar.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 
 class DataConsultas extends StatefulWidget {
   final String especialidade;
@@ -122,7 +118,7 @@ class _DataConsultasState extends State<DataConsultas> {
                         children: [
                           Text(
                             '${consulta.data}',
-                            style: TextStyle(
+                            style: const TextStyle(
                                 fontSize: 16, fontWeight: FontWeight.w600),
                           ),
                           Spacer(),

@@ -1,4 +1,4 @@
-import 'package:app_ye_gestao_de_saude/services/peso_altura_servico.dart';
+import 'package:app_ye_gestao_de_saude/services/peso_altura_service.dart';
 import 'package:app_ye_gestao_de_saude/models/peso_altura_modelo.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:app_ye_gestao_de_saude/pages/novo_peso_altura.dart';
@@ -28,7 +28,7 @@ class _PesoAlturaState extends State<PesoAltura> {
   
   }
 
-  final PressaoService dbService = PressaoService();
+  final PesoAlturaService dbService = PesoAlturaService();
 
   @override
   Widget build(BuildContext context) {

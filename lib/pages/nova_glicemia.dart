@@ -1,7 +1,9 @@
-import 'dart:io';
+import 'package:app_ye_gestao_de_saude/models/glicemia_model.dart';
+import 'package:app_ye_gestao_de_saude/pages/glicemia.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:app_ye_gestao_de_saude/services/glicemia_service.dart';
 
 class NovaGlicemia extends StatefulWidget {
   const NovaGlicemia({Key? key}) : super(key: key);
@@ -13,15 +15,14 @@ class NovaGlicemia extends StatefulWidget {
 class _NovaGlicemiaState extends State<NovaGlicemia> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   String _glicemia = '';
-  late DateTime? _selectedDate;
+  DateTime? _selectedDate;
   final DateFormat _dateFormat = DateFormat('dd/MM/yyyy');
-  final CollectionReference _glicemiaCollection =
-      FirebaseFirestore.instance.collection('glicemia');
+  final GlicemiaService _glicemiaService = GlicemiaService();
 
   @override
   void initState() {
     super.initState();
-    _selectedDate = null; // Inicializando _selectedDate com a data atual
+    _selectedDate = null;
   }
 
   Future<void> _selectDate(BuildContext context) async {
@@ -34,10 +35,8 @@ class _NovaGlicemiaState extends State<NovaGlicemia> {
       builder: (BuildContext context, Widget? child) {
         return Theme(
           data: theme.copyWith(
-            // Personalize a cor de fundo da seleção aqui
             colorScheme: theme.colorScheme.copyWith(
-              primary: const Color.fromARGB(
-                  220, 105, 126, 80), // Cor de fundo da seleção
+              primary: const Color.fromARGB(220, 105, 126, 80),
             ),
           ),
           child: child!,
@@ -52,29 +51,32 @@ class _NovaGlicemiaState extends State<NovaGlicemia> {
   }
 
   Future<void> _saveDataToFirestore() async {
-    try {
-      await _glicemiaCollection.add({
-        'glicemia': _glicemia,
-        'data_afericao': _selectedDate,
-      });
-      // Limpar o formulário após o salvamento
-      _formKey.currentState!.reset();
-      setState(() {
-        _selectedDate = null;
-      });
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Dados de glicemia salvos com sucesso'),
-          duration: Duration(seconds: 2),
-        ),
-      );
-    } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Erro ao salvar dados de glicemia'),
-          duration: Duration(seconds: 2),
-        ),
-      );
+    if (_formKey.currentState != null && _formKey.currentState!.validate()) {
+      _formKey.currentState!.save();
+      if (_selectedDate != null) {
+        ModeloGlicemia novaGlicemia = ModeloGlicemia(
+          glicemia: _glicemia,
+          dataAfericao: _selectedDate!,
+        );
+        await _glicemiaService.adicionarGlicemia(novaGlicemia);
+        _formKey.currentState!.reset();
+        setState(() {
+          _selectedDate = null;
+        });
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Dados de glicemia salvos com sucesso'),
+            duration: Duration(seconds: 2),
+          ),
+        );
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Por favor, insira uma data válida'),
+            duration: Duration(seconds: 2),
+          ),
+        );
+      }
     }
   }
 
@@ -85,7 +87,7 @@ class _NovaGlicemiaState extends State<NovaGlicemia> {
       appBar: AppBar(
         backgroundColor: const Color.fromARGB(255, 245, 246, 241),
         iconTheme: const IconThemeData(
-          color: Color.fromARGB(220, 105, 126, 80), // Define a cor do ícone
+          color: Color.fromARGB(220, 105, 126, 80),
         ),
         leading: Padding(
           padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
@@ -131,21 +133,18 @@ class _NovaGlicemiaState extends State<NovaGlicemia> {
                 child: TextFormField(
                   decoration: InputDecoration(
                     border: OutlineInputBorder(
-                        borderSide: const BorderSide(
-                            color: Color.fromARGB(220, 105, 126,
-                                80)), // Altere a cor da borda aqui
-
-                        borderRadius: BorderRadius.circular(20)),
+                      borderSide: const BorderSide(color: Color.fromARGB(220, 105, 126, 80)),
+                      borderRadius: BorderRadius.circular(20),
+                    ),
                     contentPadding: const EdgeInsets.fromLTRB(25, 0, 0, 0),
                     labelStyle: const TextStyle(
-                        fontSize: 18,
-                        color: Color.fromARGB(255, 152, 152, 152)),
-                    //quando clica na label
+                      fontSize: 18,
+                      color: Color.fromARGB(255, 152, 152, 152),
+                    ),
                     focusedBorder: OutlineInputBorder(
-                        borderSide: const BorderSide(
-                            color: Color.fromARGB(220, 105, 126,
-                                80)), // Altere a cor da borda aqui
-                        borderRadius: BorderRadius.circular(20)),
+                      borderSide: const BorderSide(color: Color.fromARGB(220, 105, 126, 80)),
+                      borderRadius: BorderRadius.circular(20),
+                    ),
                   ),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
@@ -153,7 +152,8 @@ class _NovaGlicemiaState extends State<NovaGlicemia> {
                     }
                     return null;
                   },
-                  onSaved: (value) {                    if (value != null) {
+                  onSaved: (value) {
+                    if (value != null) {
                       _glicemia = value;
                     }
                   },
@@ -175,26 +175,22 @@ class _NovaGlicemiaState extends State<NovaGlicemia> {
                   readOnly: true,
                   onTap: () => _selectDate(context),
                   controller: TextEditingController(
-                    text: _selectedDate != null
-                        ? _dateFormat.format(_selectedDate!)
-                        : '',
+                    text: _selectedDate != null ? _dateFormat.format(_selectedDate!) : '',
                   ),
                   decoration: InputDecoration(
                     border: OutlineInputBorder(
-                        borderSide: const BorderSide(
-                            color: Color.fromARGB(220, 105, 126, 80)),
-                        borderRadius: BorderRadius.circular(20)),
-
+                      borderSide: const BorderSide(color: Color.fromARGB(220, 105, 126, 80)),
+                      borderRadius: BorderRadius.circular(20),
+                    ),
                     contentPadding: const EdgeInsets.fromLTRB(25, 0, 0, 0),
                     labelStyle: const TextStyle(
-                        fontSize: 18,
-                        color: Color.fromARGB(255, 152, 152, 152)),
-                    //quando clica na label
+                      fontSize: 18,
+                      color: Color.fromARGB(255, 152, 152, 152),
+                    ),
                     focusedBorder: OutlineInputBorder(
-                        borderSide: const BorderSide(
-                            color: Color.fromARGB(220, 105, 126,
-                                80)), // Altere a cor da borda aqui
-                        borderRadius: BorderRadius.circular(20)),
+                      borderSide: const BorderSide(color: Color.fromARGB(220, 105, 126, 80)),
+                      borderRadius: BorderRadius.circular(20),
+                    ),
                   ),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
@@ -224,10 +220,8 @@ class _NovaGlicemiaState extends State<NovaGlicemia> {
                     },
                     style: ElevatedButton.styleFrom(
                       padding: EdgeInsets.zero,
-                      backgroundColor:
-                          const Color.fromARGB(50, 105, 126, 80),
-                      foregroundColor:
-                          const Color.fromARGB(255, 255, 255, 255),
+                      backgroundColor: const Color.fromARGB(50, 105, 126, 80),
+                      foregroundColor: const Color.fromARGB(255, 255, 255, 255),
                       shape: const CircleBorder(),
                     ),
                     child: const Padding(
@@ -237,8 +231,7 @@ class _NovaGlicemiaState extends State<NovaGlicemia> {
                   ),
                   ElevatedButton(
                     onPressed: () {
-                      if (_formKey.currentState != null &&
-                          _formKey.currentState!.validate()) {
+                      if (_formKey.currentState != null && _formKey.currentState!.validate()) {
                         _formKey.currentState!.save();
                         if (_selectedDate != null) {
                           _saveDataToFirestore();
@@ -253,14 +246,27 @@ class _NovaGlicemiaState extends State<NovaGlicemia> {
                       }
                     },
                     style: ElevatedButton.styleFrom(
-                      backgroundColor:
-                          const Color.fromARGB(50, 105, 126, 80),
+                      backgroundColor: const Color.fromARGB(50, 105, 126, 80),
                       foregroundColor: Colors.white,
                       shape: const CircleBorder(),
                     ),
                     child: const Padding(
                       padding: EdgeInsets.all(8),
                       child: Icon(Icons.check),
+                    ),
+                  ),
+                  ElevatedButton(
+                    onPressed: () {
+                      Navigator.of(context).push(MaterialPageRoute(builder: (context) => Glicemia()));
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color.fromARGB(50, 105, 126, 80),
+                      foregroundColor: Colors.white,
+                      shape: const CircleBorder(),
+                    ),
+                    child: const Padding(
+                      padding: EdgeInsets.all(8),
+                      child: Icon(Icons.list),
                     ),
                   ),
                 ],

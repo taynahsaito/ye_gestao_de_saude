@@ -1,5 +1,8 @@
+import 'package:app_ye_gestao_de_saude/models/medicamentos_model.dart';
+import 'package:app_ye_gestao_de_saude/services/medicamentos_service.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:uuid/uuid.dart';
 
 class NovoMedicamento extends StatefulWidget {
   const NovoMedicamento({super.key});
@@ -10,24 +13,26 @@ class NovoMedicamento extends StatefulWidget {
 
 class _NovoMedicamentoState extends State<NovoMedicamento> {
   final _formKey = GlobalKey<FormState>();
-  final _nomeController = TextEditingController();
-  final _horarioController = TextEditingController();
-  final _intervaloController = TextEditingController();
+  final nomeController = TextEditingController();
+  final horarioController = TextEditingController();
+  final intervaloController = TextEditingController();
   // final _periodoController = TextEditingController();
-  late DateTime? _selectedDate;
+    late DateTime? _selectedTime;
+
+  late DateTime? _selectedPeriodo;
   final DateFormat _dateFormat = DateFormat('dd/MM/yyyy');
 
   @override
   void initState() {
     super.initState();
-    _selectedDate = null; // Inicializando _selectedDate com a data atual
+    _selectedPeriodo = null; // Inicializando _selectedDate com a data atual
   }
 
-  Future<void> _selectDate(BuildContext context) async {
+  Future<void> _selectPeriodo(BuildContext context) async {
     final ThemeData theme = Theme.of(context);
     final DateTime? picked = await showDatePicker(
       context: context,
-      initialDate: _selectedDate,
+      initialDate: _selectedPeriodo,
       firstDate: DateTime(1900),
       lastDate: DateTime.now(),
       builder: (BuildContext context, Widget? child) {
@@ -43,22 +48,71 @@ class _NovoMedicamentoState extends State<NovoMedicamento> {
         );
       },
     );
-    if (picked != null && picked != _selectedDate) {
+    if (picked != null && picked != _selectedPeriodo) {
       setState(() {
-        _selectedDate = picked;
+        _selectedPeriodo = picked;
       });
     }
   }
 
   @override
   void dispose() {
-    _nomeController.dispose();
-    _horarioController.dispose();
-    _intervaloController.dispose();
+    nomeController.dispose();
+    horarioController.dispose();
+    intervaloController.dispose();
     // _periodoController.dispose();
     super.dispose();
   }
 
+  final MedicamentosService adicionarMedicamento = MedicamentosService();
+
+  medicamentoAdicionar() {
+    String nome = nomeController.text;
+    String horario = horarioController.text;
+    String intervalo = intervaloController.text;
+    String periodo = _dateFormat.format(_selectedPeriodo!);
+
+    ModeloMedicamentos modeloMedicamentos = ModeloMedicamentos(
+        id: const Uuid().v1(),
+        nome: nome,
+        horario: horario,
+        intervaloHoras: intervalo,
+        periodoTomado: periodo);
+
+    adicionarMedicamento.adicionarMedicamento(modeloMedicamentos);
+  }
+
+  Future<void> _selectTime(BuildContext context) async {
+    final TimeOfDay? pickedTime = await showTimePicker(
+      context: context,
+      initialTime: TimeOfDay.now(),
+      builder: (context, child) {
+        return Theme(
+          data: ThemeData.light().copyWith(
+            colorScheme: const ColorScheme.light(
+              primary: Color.fromARGB(220, 105, 126, 80),
+              secondary: Color.fromARGB(220, 105, 126, 80),
+            ),
+          ),
+          child: child!,
+        );
+      },
+    );
+    if (pickedTime != null) {
+      setState(() {
+        // Convertendo o TimeOfDay selecionado para DateTime
+        _selectedTime = DateTime(
+          _selectedPeriodo!.year,
+          _selectedPeriodo!.month,
+          _selectedPeriodo!.day,
+          pickedTime.hour,
+          pickedTime.minute,
+        );
+        horarioController.text = pickedTime.format(
+            context); // Atualiza o texto do campo de texto com a hora selecionada
+      });
+    }
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -78,251 +132,258 @@ class _NovoMedicamentoState extends State<NovoMedicamento> {
           ),
         ),
       ),
-      body: Form(
-        key: _formKey,
-        child: Column(
-          children: [
-            const SizedBox(height: 20),
-            const Padding(
-              padding: const EdgeInsets.fromLTRB(70, 0, 70, 0),
-              child: const Text(
-                'Cadastre um novo medicamento',
-                style: TextStyle(
-                  fontSize: 22,
-                  color: Color.fromARGB(220, 105, 126, 80),
-                  fontWeight: FontWeight.w900,
+      body: SingleChildScrollView(
+        child: Center(
+          child: Form(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const SizedBox(height: 20),
+                const Padding(
+                  padding: EdgeInsets.fromLTRB(70, 0, 70, 0),
+                  child: Text(
+                    'Registre um novo medicamento',
+                    style: TextStyle(
+                      fontSize: 22,
+                      color: Color.fromARGB(220, 105, 126, 80),
+                      fontWeight: FontWeight.w900,
+                    ),
+                  ),
                 ),
-              ),
-            ),
-            const SizedBox(height: 40),
-            SizedBox(
-              child: Padding(
-                padding: const EdgeInsets.fromLTRB(70, 0, 70, 0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.start,
+                const SizedBox(height: 30),
+                SizedBox(
+                  child: Padding(
+                    padding: const EdgeInsets.fromLTRB(70, 0, 70, 0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        const Text(
+                          "Nome do medicamento:",
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.w500,
+                            color: Color.fromARGB(220, 105, 126, 80),
+                          ),
+                        ),
+                        const SizedBox(height: 10),
+                        SizedBox(
+                          height: 40,
+                          child: TextFormField(
+                            controller: nomeController,
+                            decoration: InputDecoration(
+                              border: OutlineInputBorder(
+                                  borderSide: const BorderSide(
+                                      color: Color.fromARGB(220, 105, 126, 80)),
+                                  borderRadius: BorderRadius.circular(20)),
+                              contentPadding:
+                                  const EdgeInsets.fromLTRB(25, 0, 0, 0),
+                              labelStyle: const TextStyle(
+                                  fontSize: 18,
+                                  color: Color.fromARGB(255, 152, 152, 152)),
+                              //quando clica na label
+                              focusedBorder: OutlineInputBorder(
+                                  borderSide: const BorderSide(
+                                      color: Color.fromARGB(220, 105, 126, 80)),
+                                  borderRadius: BorderRadius.circular(20)),
+                            ),
+                            keyboardType: TextInputType.text,
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return 'Por favor, insira o nome do medicamento';
+                              }
+                              return null;
+                            },
+                          ),
+                        ),
+                        const SizedBox(height: 15),
+                        const Text(
+                          "Horário:",
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.w500,
+                            color: Color.fromARGB(220, 105, 126, 80),
+                          ),
+                        ),
+                        const SizedBox(height: 10),
+                        SizedBox(
+                          height: 40,
+                          child: TextFormField(
+                            controller: horarioController,
+                            readOnly: true,
+                            onTap: () => _selectTime(context),
+                            decoration: InputDecoration(
+                              border: OutlineInputBorder(
+                                  borderSide: const BorderSide(
+                                      color: Color.fromARGB(220, 105, 126, 80)),
+                                  borderRadius: BorderRadius.circular(20)),
+
+                              contentPadding:
+                                  const EdgeInsets.fromLTRB(25, 0, 0, 0),
+                              labelStyle: const TextStyle(
+                                  fontSize: 18,
+                                  color: Color.fromARGB(255, 152, 152, 152)),
+                              //quando clica na label
+                              focusedBorder: OutlineInputBorder(
+                                  borderSide: const BorderSide(
+                                      color: Color.fromARGB(220, 105, 126,
+                                          80)), // Altere a cor da borda aqui
+                                  borderRadius: BorderRadius.circular(20)),
+                            ),
+                            keyboardType: TextInputType.number,
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return 'Por favor, insira o horário';
+                              }
+                              return null;
+                            },
+                          ),
+                        ),
+                        const SizedBox(height: 15),
+                        const Text(
+                          "Intervalo de horas",
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.w500,
+                            color: Color.fromARGB(220, 105, 126, 80),
+                          ),
+                        ),
+                        const SizedBox(height: 10),
+                        SizedBox(
+                          height: 40,
+                          child: TextFormField(
+                            controller: intervaloController,
+                            decoration: InputDecoration(
+                              border: OutlineInputBorder(
+                                  borderSide: const BorderSide(
+                                      color: Color.fromARGB(220, 105, 126, 80)),
+                                  borderRadius: BorderRadius.circular(20)),
+
+                              contentPadding:
+                                  const EdgeInsets.fromLTRB(25, 0, 0, 0),
+                              labelStyle: const TextStyle(
+                                  fontSize: 18,
+                                  color: Color.fromARGB(255, 152, 152, 152)),
+                              //quando clica na label
+                              focusedBorder: OutlineInputBorder(
+                                  borderSide: const BorderSide(
+                                      color: Color.fromARGB(220, 105, 126,
+                                          80)), // Altere a cor da borda aqui
+                                  borderRadius: BorderRadius.circular(20)),
+                            ),
+                            keyboardType: TextInputType.number,
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return 'Por favor, insira o intervalo de horas';
+                              }
+                              return null;
+                            },
+                          ),
+                        ),
+                        const SizedBox(height: 15.0),
+                        const Text(
+                          "Período de dias em que o medicamento será tomado:",
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.w500,
+                            color: Color.fromARGB(220, 105, 126, 80),
+                          ),
+                        ),
+                        const SizedBox(height: 10),
+                        SizedBox(
+                          height: 40,
+                          child: TextFormField(
+                            readOnly: true,
+                            onTap: () => _selectPeriodo(context),
+                            controller: TextEditingController(
+                              text: _selectedPeriodo != null
+                                  ? _dateFormat.format(_selectedPeriodo!)
+                                  : '',
+                            ),
+                            decoration: InputDecoration(
+                              border: OutlineInputBorder(
+                                  borderSide: const BorderSide(
+                                      color: Color.fromARGB(220, 105, 126, 80)),
+                                  borderRadius: BorderRadius.circular(20)),
+
+                              contentPadding:
+                                  const EdgeInsets.fromLTRB(25, 0, 0, 0),
+                              labelStyle: const TextStyle(
+                                  fontSize: 18,
+                                  color: Color.fromARGB(255, 152, 152, 152)),
+                              //quando clica na label
+                              focusedBorder: OutlineInputBorder(
+                                  borderSide: const BorderSide(
+                                      color: Color.fromARGB(220, 105, 126,
+                                          80)), // Altere a cor da borda aqui
+                                  borderRadius: BorderRadius.circular(20)),
+                            ),
+                            keyboardType: TextInputType.number,
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return 'Por favor, digite o período de dias que o medicamento será tomado';
+                              }
+                              return null;
+                            },
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 30),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    const Text(
-                      "Nome do medicamento:",
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w500,
-                        color: Color.fromARGB(220, 105, 126, 80),
+                    ElevatedButton(
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                      // const Icon(
+                      //   Icons.send,
+                      //   size: 30.0,),
+                      style: ElevatedButton.styleFrom(
+                        padding: EdgeInsets
+                            .zero, // Define o padding do botão como zero para não interferir com o padding do widget interno
+                        backgroundColor: const Color.fromARGB(50, 105, 126, 80),
+                        foregroundColor: const Color.fromARGB(
+                            255, 255, 255, 255), // Cor de fundo do botão
+                        shape: const CircleBorder(),
+                      ),
+                      child: const Padding(
+                        padding: EdgeInsets.all(
+                            8), // Espaçamento interno para o ícone
+                        child: Icon(Icons.close),
                       ),
                     ),
-                    const SizedBox(height: 10),
-                    SizedBox(
-                      height: 40,
-                      child: TextFormField(
-                        controller: _nomeController,
-                        decoration: InputDecoration(
-                          border: OutlineInputBorder(
-                              borderSide: const BorderSide(
-                                  color: Color.fromARGB(220, 105, 126, 80)),
-                              borderRadius: BorderRadius.circular(20)),
-                          contentPadding:
-                              const EdgeInsets.fromLTRB(25, 0, 0, 0),
-                          labelStyle: const TextStyle(
-                              fontSize: 18,
-                              color: Color.fromARGB(255, 152, 152, 152)),
-                          //quando clica na label
-                          focusedBorder: OutlineInputBorder(
-                              borderSide: const BorderSide(
-                                  color: Color.fromARGB(220, 105, 126, 80)),
-                              borderRadius: BorderRadius.circular(20)),
-                        ),
-                        keyboardType: TextInputType.text,
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Por favor, insira o nome do medicamento';
-                          }
-                          return null;
-                        },
+                    ElevatedButton(
+                      onPressed: () async {
+                        // if (_formKey.currentState!.validate()) {
+                        //   // Aqui você pode atualizar os dados do paciente
+                        //   nomeController.clear();
+                        //   horarioController.clear();
+                        //   intervaloController.clear();
+                        //   .clear();
+                        // }
+                        await medicamentoAdicionar();
+                        Navigator.of(context).pop();
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color.fromARGB(
+                            50, 105, 126, 80), // Cor de fundo do botão
+                        foregroundColor: Colors.white,
+                        shape: const CircleBorder(),
                       ),
-                    ),
-                    const SizedBox(height: 15),
-                    const Text(
-                      "Horário:",
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w500,
-                        color: Color.fromARGB(220, 105, 126, 80),
-                      ),
-                    ),
-                    const SizedBox(height: 10),
-                    SizedBox(
-                      height: 40,
-                      child: TextFormField(
-                        controller: _horarioController,
-                        decoration: InputDecoration(
-                          border: OutlineInputBorder(
-                              borderSide: const BorderSide(
-                                  color: Color.fromARGB(220, 105, 126, 80)),
-                              borderRadius: BorderRadius.circular(20)),
-
-                          contentPadding:
-                              const EdgeInsets.fromLTRB(25, 0, 0, 0),
-                          labelStyle: const TextStyle(
-                              fontSize: 18,
-                              color: Color.fromARGB(255, 152, 152, 152)),
-                          //quando clica na label
-                          focusedBorder: OutlineInputBorder(
-                              borderSide: const BorderSide(
-                                  color: Color.fromARGB(220, 105, 126,
-                                      80)), // Altere a cor da borda aqui
-                              borderRadius: BorderRadius.circular(20)),
-                        ),
-                        keyboardType: TextInputType.number,
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Por favor, insira o horário';
-                          }
-                          return null;
-                        },
-                      ),
-                    ),
-                    const SizedBox(height: 15),
-                    const Text(
-                      "Intervalo de horas",
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w500,
-                        color: Color.fromARGB(220, 105, 126, 80),
-                      ),
-                    ),
-                    const SizedBox(height: 10),
-                    SizedBox(
-                      height: 40,
-                      child: TextFormField(
-                        controller: _intervaloController,
-                        decoration: InputDecoration(
-                          border: OutlineInputBorder(
-                              borderSide: const BorderSide(
-                                  color: Color.fromARGB(220, 105, 126, 80)),
-                              borderRadius: BorderRadius.circular(20)),
-
-                          contentPadding:
-                              const EdgeInsets.fromLTRB(25, 0, 0, 0),
-                          labelStyle: const TextStyle(
-                              fontSize: 18,
-                              color: Color.fromARGB(255, 152, 152, 152)),
-                          //quando clica na label
-                          focusedBorder: OutlineInputBorder(
-                              borderSide: const BorderSide(
-                                  color: Color.fromARGB(220, 105, 126,
-                                      80)), // Altere a cor da borda aqui
-                              borderRadius: BorderRadius.circular(20)),
-                        ),
-                        keyboardType: TextInputType.number,
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Por favor, insira o intervalo de horas';
-                          }
-                          return null;
-                        },
-                      ),
-                    ),
-                    const SizedBox(height: 15.0),
-                    const Text(
-                      "Período de dias em que o medicamento será tomado:",
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w500,
-                        color: Color.fromARGB(220, 105, 126, 80),
-                      ),
-                    ),
-                    const SizedBox(height: 10),
-                    SizedBox(
-                      height: 40,
-                      child: TextFormField(
-                        // readOnly: true,
-                        // onTap: () => _selectDate(context),
-                        // controller: TextEditingController(
-                        //   text: _selectedDate != null
-                        //       ? _dateFormat.format(_selectedDate!)
-                        //       : '',
-                        // ),
-                        decoration: InputDecoration(
-                          border: OutlineInputBorder(
-                              borderSide: const BorderSide(
-                                  color: Color.fromARGB(220, 105, 126, 80)),
-                              borderRadius: BorderRadius.circular(20)),
-
-                          contentPadding:
-                              const EdgeInsets.fromLTRB(25, 0, 0, 0),
-                          labelStyle: const TextStyle(
-                              fontSize: 18,
-                              color: Color.fromARGB(255, 152, 152, 152)),
-                          //quando clica na label
-                          focusedBorder: OutlineInputBorder(
-                              borderSide: const BorderSide(
-                                  color: Color.fromARGB(220, 105, 126,
-                                      80)), // Altere a cor da borda aqui
-                              borderRadius: BorderRadius.circular(20)),
-                        ),
-                        keyboardType: TextInputType.number,
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Por favor, digite o período de dias que o medicamento será tomado';
-                          }
-                          return null;
-                        },
+                      child: const Padding(
+                        padding: EdgeInsets.all(8),
+                        child: Icon(Icons.check),
                       ),
                     ),
                   ],
                 ),
-              ),
-            ),
-            const SizedBox(height: 30),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                ElevatedButton(
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                  // const Icon(
-                  //   Icons.send,
-                  //   size: 30.0,),
-                  style: ElevatedButton.styleFrom(
-                    padding: EdgeInsets
-                        .zero, // Define o padding do botão como zero para não interferir com o padding do widget interno
-                    backgroundColor: const Color.fromARGB(50, 105, 126, 80),
-                    foregroundColor: const Color.fromARGB(
-                        255, 255, 255, 255), // Cor de fundo do botão
-                    shape: const CircleBorder(),
-                  ),
-                  child: const Padding(
-                    padding:
-                        EdgeInsets.all(8), // Espaçamento interno para o ícone
-                    child: Icon(Icons.close),
-                  ),
-                ),
-                ElevatedButton(
-                  onPressed: () {
-                    if (_formKey.currentState!.validate()) {
-                      // Aqui você pode atualizar os dados do paciente
-                      _nomeController.clear();
-                      _horarioController.clear();
-                      _intervaloController.clear();
-                      // _periodoController.clear();
-                    }
-                    Navigator.of(context).pop();
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color.fromARGB(
-                        50, 105, 126, 80), // Cor de fundo do botão
-                    foregroundColor: Colors.white,
-                    shape: const CircleBorder(),
-                  ),
-                  child: const Padding(
-                    padding: EdgeInsets.all(8),
-                    child: Icon(Icons.check),
-                  ),
-                ),
               ],
             ),
-          ],
+          ),
         ),
       ),
     );
