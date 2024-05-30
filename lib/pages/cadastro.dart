@@ -295,13 +295,15 @@ class _CadastroState extends State<Cadastro> {
                         senha: _senhaController.text,
                       );
 
+                      String? idUsuario = _autenServico.getCurrentUser();
+
                       if (mensagemErro == null) {
                         // Cadastro de usuário bem-sucedido, agora salve os dados no banco de dados
-                        String dataNascimento = _selectedDate != null
+                        String? dataNascimento = _selectedDate != null
                             ? _dateFormat.format(_selectedDate!)
                             : '';
                         try {
-                          await databaseReference.push().set({
+                          await databaseReference.child(idUsuario!).set({
                             'nome': _nomeController.text,
                             'email': _emailController.text,
                             'senha': _senhaController.text,
@@ -311,7 +313,7 @@ class _CadastroState extends State<Cadastro> {
                           showSnackBar(
                             context: context,
                             texto:
-                                "Cadastro feito com sucesso! Verifique seu email!",
+                                "Cadastro feito com sucesso! Verifique seu email para realizar login!",
                             isErro: false,
                           );
                           Navigator.push(

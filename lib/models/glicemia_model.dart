@@ -9,14 +9,16 @@ class ModeloGlicemia {
   Map<String, dynamic> toFirestore() {
     return {
       'glicemia': glicemia,
-      'data_afericao': Timestamp.fromDate(dataAfericao),
+      'data_afericao': dataAfericao,
     };
   }
 
-  static ModeloGlicemia fromFirestore(Map<String, dynamic> data) {
+  static ModeloGlicemia fromFirestore(DocumentSnapshot doc) {
+    Map data = doc.data() as Map<String, dynamic>;
+
     return ModeloGlicemia(
-      glicemia: data['glicemia'],
-      dataAfericao: (data['data_afericao'] as Timestamp).toDate(),
+      glicemia: data['glicemia'] ?? '',
+      dataAfericao: data['data de afericao'] ?? '',
     );
   }
 }

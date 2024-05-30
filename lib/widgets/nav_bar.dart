@@ -29,7 +29,7 @@ class _NavBar extends State<NavBar> {
     const HomePage(),
     const Exames(),
     const Consultas(),
-    // Medicamentos(medicamentos: ,),
+    const Medicamentos(),
   ];
 
   @override
@@ -87,7 +87,7 @@ class _NavBar extends State<NavBar> {
         const HomePage(),
         const Exames(),
         const Consultas(),
-        // const Medicamentos()
+        const Medicamentos()
       ][selectedIndex],
     );
 

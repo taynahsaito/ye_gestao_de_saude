@@ -38,9 +38,9 @@ class Glicemia extends StatelessWidget {
               padding: EdgeInsets.fromLTRB(20, 90, 20, 30),
               child: Center(
                 child: Text(
-                  'Glicemia',
+                  'Histórico de glicemia',
                   style: TextStyle(
-                    fontSize: 20,
+                    fontSize: 22,
                     color: Color.fromARGB(220, 105, 126, 80),
                     fontWeight: FontWeight.w900,
                   ),
@@ -49,7 +49,7 @@ class Glicemia extends StatelessWidget {
             ),
             Expanded(
               child: StreamBuilder<List<ModeloGlicemia>>(
-                stream: _glicemiaService.getGlicemias(),
+                stream: _glicemiaService.getGlicemia(),
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return const Center(child: CircularProgressIndicator());
@@ -64,12 +64,34 @@ class Glicemia extends StatelessWidget {
                   return ListView.builder(
                     itemCount: glicemias.length,
                     itemBuilder: (context, index) {
-                      final glicemia = glicemias[index];
+                      var glicemia = glicemias[index];
                       return ListTile(
-                        title: Text('Glicemia: ${glicemia.glicemia} mg/dL'),
-                        subtitle: Text(
-                            'Data: ${DateFormat('dd/MM/yyyy').format(glicemia.dataAfericao)}'),
-                      );
+                          title: Container(
+                        padding: const EdgeInsets.fromLTRB(25, 20, 25, 20),
+                        decoration: BoxDecoration(
+                            color: const Color.fromARGB(150, 203, 230, 176),
+                            borderRadius: BorderRadius.circular(15)),
+                        child: Row(
+                          children: [
+                            Text(
+                              '${glicemia.dataAfericao}',
+                              style: const TextStyle(
+                                fontSize: 15,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                            const Spacer(), // Este Spacer vai empurrar o próximo widget para a direita
+                            Text(
+                              '${glicemia.glicemia}',
+                              style: const TextStyle(
+                                color: Color.fromARGB(255, 78, 101, 61),
+                                fontSize: 20,
+                                fontWeight: FontWeight.w800,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ));
                     },
                   );
                 },

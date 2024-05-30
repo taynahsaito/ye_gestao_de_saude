@@ -1,7 +1,6 @@
 import 'package:app_ye_gestao_de_saude/models/consultas_model.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/material.dart';
 
 class ConsultasService {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;

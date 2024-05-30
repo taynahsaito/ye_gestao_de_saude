@@ -99,8 +99,7 @@ class _ConsultasState extends State<Consultas> {
                     context,
                     MaterialPageRoute(
                         builder: (context) => NovaConsulta(
-                              especialidade:
-                                  TextEditingController(text: ''),
+                              especialidade: TextEditingController(text: ''),
                             )),
                   );
                 },

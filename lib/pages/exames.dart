@@ -20,7 +20,7 @@ class _ExamesState extends State<Exames> {
     User? user = FirebaseAuth.instance.currentUser;
 
     if (user == null) {
-      return Scaffold(
+      return const Scaffold(
         body: Center(
           child: Text('Usuário não autenticado.'),
         ),
@@ -31,53 +31,63 @@ class _ExamesState extends State<Exames> {
 
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 245, 246, 241),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.fromLTRB(20, 10, 20, 20),
-          child: Center(
-            child: Column(
-              children: [
-                const SizedBox(
-                  height: 80,
-                ),
-                const Padding(
-                  padding: EdgeInsets.only(bottom: 30.0),
-                  child: Text(
-                    "Histórico de Exames",
-                    style: TextStyle(
-                      fontSize: 20,
-                      color: Color.fromARGB(220, 105, 126, 80),
-                      fontWeight: FontWeight.w900,
+      body: Stack(
+        children: [
+          SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(20, 10, 20, 20),
+              child: Center(
+                child: Column(
+                  children: [
+                    const SizedBox(
+                      height: 80,
                     ),
-                  ),
+                    const Padding(
+                      padding: EdgeInsets.only(bottom: 30.0),
+                      child: Text(
+                        "Histórico de Exames",
+                        style: TextStyle(
+                          fontSize: 20,
+                          color: Color.fromARGB(220, 105, 126, 80),
+                          fontWeight: FontWeight.w900,
+                        ),
+                      ),
+                    ),
+                    _buildExamTile(context, 'Hemograma', 'Hemoglobina'),
+                    _buildExamTile(
+                        context, 'Colesterol Total', 'Colesterol Total'),
+                  ],
                 ),
-                _buildExamTile(context, 'Hemograma', 'Hemoglobina'),
-                _buildExamTile(context, 'Colesterol Total', 'Colesterol Total'),
-              ],
+              ),
             ),
           ),
-        ),
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-      floatingActionButton: Padding(
-        padding: const EdgeInsets.all(15.0),
-        child: ElevatedButton(
-          onPressed: () {
-            showModalBottomSheet(
-              context: context,
-              builder: (BuildContext context) {
-                return _buildBottomSheet();
-              },
-            );
-          },
-          style: ElevatedButton.styleFrom(
-            padding: const EdgeInsets.all(15),
-            backgroundColor: const Color.fromARGB(50, 105, 126, 80),
-            foregroundColor: Colors.white,
-            shape: const CircleBorder(),
+          Align(
+            alignment: Alignment.bottomCenter,
+            child: Padding(
+              padding: const EdgeInsets.all(15.0),
+              child: ElevatedButton(
+                onPressed: () {
+                  showModalBottomSheet(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return _buildBottomSheet();
+                    },
+                  );
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color.fromARGB(
+                      50, 105, 126, 80), // Cor de fundo do botão
+                  foregroundColor: Colors.white,
+                  shape: const CircleBorder(),
+                ),
+                child: const Padding(
+                  padding: EdgeInsets.all(8.0),
+                  child: Icon(Icons.add),
+                ),
+              ),
+            ),
           ),
-          child: const Icon(Icons.add),
-        ),
+        ],
       ),
     );
   }

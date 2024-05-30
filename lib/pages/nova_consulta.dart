@@ -23,7 +23,7 @@ class _NovaConsultaState extends State<NovaConsulta> {
   late TextEditingController horarioController;
   late TextEditingController especialidadeController = TextEditingController();
   final TextEditingController resumocontroller = TextEditingController();
-
+  late bool verificadorEspecialidade;
   final DateFormat _dateFormat = DateFormat('dd/MM/yyyy');
   final _formKey = GlobalKey<FormState>();
 
@@ -37,6 +37,8 @@ class _NovaConsultaState extends State<NovaConsulta> {
     especialidadeController.text = widget.especialidade.text;
     horarioController = TextEditingController();
     timeFormatter = DateFormat('HH:mm');
+    verificadorEspecialidade = false;
+    verificarCampoEspecialidade();
   }
 
   @override
@@ -46,7 +48,17 @@ class _NovaConsultaState extends State<NovaConsulta> {
     super.dispose();
   }
 
+  void verificarCampoEspecialidade() {
+    if (widget.especialidade.text == '') {
+      verificadorEspecialidade = false;
+    } else {
+      verificadorEspecialidade = true;
+    }
+  }
+
   Future<void> _selectDate(BuildContext context) async {
+    final ThemeData theme = Theme.of(context);
+
     final DateTime? pickedData = await showDatePicker(
       context: context,
       initialDate: _selectedDate ?? DateTime.now(),
@@ -54,10 +66,11 @@ class _NovaConsultaState extends State<NovaConsulta> {
       lastDate: DateTime.now(),
       builder: (context, child) {
         return Theme(
-          data: ThemeData.light().copyWith(
-            colorScheme: const ColorScheme.light(
-              primary: Color.fromARGB(220, 105, 126, 80),
-              secondary: Color.fromARGB(220, 105, 126, 80),
+          data: theme.copyWith(
+            // Personalize a cor de fundo da seleção aqui
+            colorScheme: theme.colorScheme.copyWith(
+              primary: const Color.fromARGB(
+                  220, 105, 126, 80), // Cor de fundo da seleção
             ),
           ),
           child: child!,
@@ -161,7 +174,7 @@ class _NovaConsultaState extends State<NovaConsulta> {
   final ConsultasService adicionarConsulta = ConsultasService();
 
   consultaAdicionar() {
-    String especialidade = especialidadeController.text;
+    String especialidade = widget.especialidade.text;
     String resumo = resumocontroller.text;
     String horario = horarioController.text;
     String data = _dateFormat.format(_selectedDate!);
@@ -212,7 +225,7 @@ class _NovaConsultaState extends State<NovaConsulta> {
                       Text(
                         'Registre uma nova consulta',
                         style: TextStyle(
-                          fontSize: 20,
+                          fontSize: 22,
                           color: Color.fromARGB(220, 105, 126, 80),
                           fontWeight: FontWeight.w900,
                         ),
@@ -241,6 +254,7 @@ class _NovaConsultaState extends State<NovaConsulta> {
                           height: 40,
                           child: TextFormField(
                             controller: widget.especialidade,
+                            readOnly: verificadorEspecialidade,
                             decoration: InputDecoration(
                               border: OutlineInputBorder(
                                   borderSide: const BorderSide(

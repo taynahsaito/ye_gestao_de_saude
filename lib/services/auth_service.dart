@@ -85,12 +85,12 @@ class AuthService extends ChangeNotifier {
     }
   }
 
-  User? getCurrentUser() {
-    return _firebaseAuth.currentUser;
+  String? getCurrentUser() {
+    User? user = _firebaseAuth.currentUser;
+    return user?.uid;
   }
 
   Future<void> signOut() async {
     await _firebaseAuth.signOut();
   }
 }
-

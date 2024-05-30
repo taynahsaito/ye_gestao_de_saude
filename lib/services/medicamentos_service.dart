@@ -7,7 +7,7 @@ class MedicamentosService {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   late String userId;
 
-    MedicamentosService() {
+  MedicamentosService() {
     final currentUser = FirebaseAuth.instance.currentUser;
     userId = currentUser?.uid ??
         ''; // Defina userId como uma string vazia se currentUser for nulo
@@ -16,7 +16,8 @@ class MedicamentosService {
   final CollectionReference medicamentosCollection =
       FirebaseFirestore.instance.collection('medicamentos');
 
-   Future<void> adicionarMedicamento(ModeloMedicamentos modeloMedicamentos) async {
+  Future<void> adicionarMedicamento(
+      ModeloMedicamentos modeloMedicamentos) async {
     User? user = _auth.currentUser;
     if (user != null) {
       DocumentReference userDoc = medicamentosCollection
@@ -53,12 +54,12 @@ class MedicamentosService {
     }
   }
 
-  Stream<List<ModeloMedicamentos>> getConsultas() {
+  Stream<List<ModeloMedicamentos>> getMedicamentos() {
     User? user = _auth.currentUser;
     if (user != null) {
       return medicamentosCollection
           .doc(user.uid)
-          .collection('')
+          .collection('medicamentos')
           .snapshots()
           .map((snapshot) => snapshot.docs
               .map((doc) => ModeloMedicamentos.fromFirestore(doc))
