@@ -30,13 +30,19 @@ class _InformacoesConsultasState extends State<InformacoesConsultas> {
       builder: (BuildContext context) {
         return AlertDialog(
           title: const Text('Deletar consulta'),
-          content: const  Text('Tem certeza de que deseja excluir esta consulta?'),
+          content:
+              const Text('Tem certeza de que deseja excluir esta consulta?'),
           actions: <Widget>[
             TextButton(
               onPressed: () {
                 Navigator.of(context).pop();
               },
-              child: const Text('Cancelar', style: TextStyle(color: Color.fromARGB(220, 105, 126, 80),),),
+              child: const Text(
+                'Cancelar',
+                style: TextStyle(
+                  color: Color.fromARGB(220, 105, 126, 80),
+                ),
+              ),
             ),
             TextButton(
               onPressed: () async {
@@ -45,7 +51,12 @@ class _InformacoesConsultasState extends State<InformacoesConsultas> {
                 Navigator.pop(
                     context, true); // Indica que uma consulta foi deletada
               },
-              child: const Text('Confirmar', style: TextStyle(color: Color.fromARGB(220, 105, 126, 80),),),
+              child: const Text(
+                'Confirmar',
+                style: TextStyle(
+                  color: Color.fromARGB(220, 105, 126, 80),
+                ),
+              ),
             ),
           ],
         );
@@ -125,37 +136,48 @@ class _InformacoesConsultasState extends State<InformacoesConsultas> {
         ],
       ),
       body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.fromLTRB(60, 0, 60, 0),
-          child: Center(
-            child: Column(
-              children: [
-                const SizedBox(height: 20),
-                const Text(
-                  "Consultas realizadas",
-                  style: TextStyle(
-                    fontSize: 22,
-                    color: Color.fromARGB(220, 105, 126, 80),
-                    fontWeight: FontWeight.w900,
+        child: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Column(
+                children: [
+                  const SizedBox(height: 20),
+                  const Text(
+                    "Consultas realizadas",
+                    style: TextStyle(
+                      fontSize: 20,
+                      color: Color.fromARGB(220, 105, 126, 80),
+                      fontWeight: FontWeight.w900,
+                    ),
                   ),
-                ),
-                Text(
-                  consultaAtual.especialidade,
-                  style: const TextStyle(
-                    fontSize: 16,
-                    color: Color.fromARGB(220, 105, 126, 80),
-                    fontWeight: FontWeight.w600,
+                  Text(
+                    consultaAtual.especialidade,
+                    style: const TextStyle(
+                      fontSize: 16,
+                      color: Color.fromARGB(220, 105, 126, 80),
+                      fontWeight: FontWeight.w600,
+                    ),
                   ),
-                ),
-                const SizedBox(height: 30),
-                _buildInfoField('Data', consultaAtual.data),
-                _buildInfoField('Horario', consultaAtual.horario),
-                _buildInfoField('Resumo', consultaAtual.resumo),
-                _buildInfoField('Retorno', consultaAtual.retorno),
-                _buildInfoField('Lembrete', consultaAtual.lembrete),
-              ],
+                ],
+              ),
             ),
-          ),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(60, 0, 60, 0),
+              child: Center(
+                child: Column(
+                  children: [
+                    const SizedBox(height: 30),
+                    _buildInfoField('Data', consultaAtual.data),
+                    _buildInfoField('Horario', consultaAtual.horario),
+                    _buildInfoField('Resumo', consultaAtual.resumo),
+                    _buildInfoField('Retorno', consultaAtual.retorno),
+                    _buildInfoField('Lembrete', consultaAtual.lembrete),
+                  ],
+                ),
+              ),
+            ),
+          ],
         ),
       ),
     );
