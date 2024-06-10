@@ -1,4 +1,4 @@
-import 'package:app_ye_gestao_de_saude/models/peso_altura_modelo.dart';
+import 'package:app_ye_gestao_de_saude/models/peso_altura_model.dart';
 import 'package:app_ye_gestao_de_saude/services/peso_altura_service.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -28,9 +28,10 @@ class _NovoPesoAlturaState extends State<NovoPesoAltura> {
     final ThemeData theme = Theme.of(context);
     final DateTime? picked = await showDatePicker(
       context: context,
-      initialDate: _selectedDate,
+      initialDate: _selectedDate ?? DateTime.now(),
       firstDate: DateTime(1900),
       lastDate: DateTime.now(),
+      
       builder: (BuildContext context, Widget? child) {
         return Theme(
           data: theme.copyWith(
@@ -250,6 +251,10 @@ class _NovoPesoAlturaState extends State<NovoPesoAltura> {
                 ElevatedButton(
                   onPressed: () {
                     Navigator.of(context).pop();
+                    _formKey.currentState!.reset();
+                    setState(() {
+                      _selectedDate = null;
+                    });
                   },
                   // const Icon(
                   //   Icons.send,
@@ -271,11 +276,17 @@ class _NovoPesoAlturaState extends State<NovoPesoAltura> {
                 ElevatedButton(
                   onPressed: () {
                     if (_formKey.currentState!.validate()) {
-                      // Aqui você pode atualizar os dados do paciente
-                      pesoAlturaAdicionar();
-                      _selectedDate = null;
-                      _pesoController.clear();
-                      _alturaController.clear();
+                      setState(() {
+                        pesoAlturaAdicionar();
+                        _selectedDate = null;
+                        _pesoController.clear();
+                        _alturaController.clear();
+                      });
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                            content:
+                                Text('Peso e altura cadastrados com sucesso!')),
+                      );
                     }
                   },
                   style: ElevatedButton.styleFrom(

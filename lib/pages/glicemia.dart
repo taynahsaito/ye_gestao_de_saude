@@ -76,74 +76,113 @@ class GlicemiaState extends State<Glicemia> {
                       return const Center(child: CircularProgressIndicator());
                     }
 
-                    if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                      return const Center(
-                          child: Text('Nenhuma glicemia registrada.'));
-                    }
+                    // if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                    //   return const Center(
+                    //       child: Text('Nenhuma glicemia registrada.'));
+                    // }
 
                     final glicemias = snapshot.data!;
                     return ListView.builder(
                       itemCount: glicemias.length,
+
+                      //  if(glicemias.glicemia >=100){
+                      //   corBox = const Color.fromRGBO(219, 127, 88, 0.53);
+                      // }
+                      // else {
+                      //   corBox = Color.fromRGBO(167, 216, 119, 0.5);
+                      // }
                       itemBuilder: (context, index) {
                         var glicemia = glicemias[index];
+                        var valor = int.parse(glicemia.glicemia);
+
+                        Color corbox;
+                        Color corTexto;
+                        SizedBox caixaAlteracao;
+
+                        if (valor >= 100) {
+                          corbox = const Color.fromRGBO(219, 127, 88, 0.53);
+                          corTexto = const Color.fromRGBO(150, 54, 30, 0.829);
+                          caixaAlteracao = const SizedBox(
+                            width: 450,
+                            child: Padding(
+                              padding: EdgeInsets.fromLTRB(6, 8, 6, 0),
+                              child: Text(
+                                'Esse resultado está fora dos limites de referência. Consulte seu médico para mais informações.',
+                                style: TextStyle(
+                                    fontSize: 12,
+                                    color: Color.fromRGBO(150, 54, 30, 0.829)),
+                              ),
+                            ),
+                          );
+                        } else {
+                          corbox = const Color.fromRGBO(167, 216, 119, 0.5);
+                          corTexto = const Color.fromARGB(255, 78, 101, 61);
+                          caixaAlteracao = const SizedBox(width: 0);
+                        }
+
                         return ListTile(
-                            title: Container(
-                          padding: const EdgeInsets.fromLTRB(25, 20, 25, 20),
-                          decoration: BoxDecoration(
-                              color: const Color.fromARGB(150, 203, 230, 176),
-                              borderRadius: BorderRadius.circular(15)),
-                          child: Row(
-                            children: [
-                              Text(
-                                '${glicemia.dataAfericao}',
-                                style: const TextStyle(
-                                  fontSize: 15,
-                                  fontWeight: FontWeight.w600,
-                                ),
+                            title: Column(
+                          children: [
+                            Container(
+                              padding:
+                                  const EdgeInsets.fromLTRB(25, 20, 25, 20),
+                              decoration: BoxDecoration(
+                                  color: corbox,
+                                  borderRadius: BorderRadius.circular(15)),
+                              child: Row(
+                                children: [
+                                  Text(
+                                    '${glicemia.dataAfericao}',
+                                    style: const TextStyle(
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  ),
+                                  const Spacer(), // Este Spacer vai empurrar o próximo widget para a direita
+                                  Text(
+                                    '${glicemia.glicemia} mg/dL',
+                                    style: TextStyle(
+                                      color: corTexto,
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.w800,
+                                    ),
+                                  ),
+                                ],
                               ),
-                              const Spacer(), // Este Spacer vai empurrar o próximo widget para a direita
-                              Text(
-                                '${glicemia.glicemia} mg/dL',
-                                style: const TextStyle(
-                                  color: Color.fromARGB(255, 78, 101, 61),
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.w800,
-                                ),
-                              ),
-                            ],
-                          ),
+                            ),
+                            caixaAlteracao,
+                          ],
                         ));
                       },
                     );
                   },
                 ),
               ),
-              Align(
-                alignment: Alignment.bottomCenter,
-                child: Padding(
-                  padding: const EdgeInsets.all(15.0),
-                  child: ElevatedButton(
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const NovaGlicemia()),
-                      );
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color.fromARGB(
-                          50, 105, 126, 80), // Cor de fundo do botão
-                      foregroundColor: Colors.white,
-                      shape: const CircleBorder(),
-                    ),
-                    child: const Padding(
-                      padding: EdgeInsets.all(8.0),
-                      child: Icon(Icons.add),
-                    ),
-                  ),
-                ),
-              ),
             ],
+          ),
+        ),
+        Align(
+          alignment: Alignment.bottomCenter,
+          child: Padding(
+            padding: const EdgeInsets.all(15.0),
+            child: ElevatedButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const NovaGlicemia()),
+                );
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: const Color.fromARGB(
+                    50, 105, 126, 80), // Cor de fundo do botão
+                foregroundColor: Colors.white,
+                shape: const CircleBorder(),
+              ),
+              child: const Padding(
+                padding: EdgeInsets.all(8.0),
+                child: Icon(Icons.add),
+              ),
+            ),
           ),
         ),
       ]),

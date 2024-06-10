@@ -1,15 +1,11 @@
 import 'package:app_ye_gestao_de_saude/services/peso_altura_service.dart';
-import 'package:app_ye_gestao_de_saude/models/peso_altura_modelo.dart';
+import 'package:app_ye_gestao_de_saude/models/peso_altura_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:app_ye_gestao_de_saude/pages/novo_peso_altura.dart';
 import 'package:flutter/material.dart';
 
 class PesoAltura extends StatefulWidget {
   const PesoAltura({Key? key});
-
-  // final List<Pressao> historicoPressao = [];
-  // final String pressao
-  // const Pressao({Key? key}) : super (key: key);
 
   @override
   State<PesoAltura> createState() => _PesoAlturaState();
@@ -74,7 +70,7 @@ class _PesoAlturaState extends State<PesoAltura> {
                             child: CircularProgressIndicator(),
                           );
                         }
-                        var pesos = snapshot.data!;
+                        final pesos = snapshot.data!;
 
                         return ListView.builder(
                             itemCount: pesos.length,

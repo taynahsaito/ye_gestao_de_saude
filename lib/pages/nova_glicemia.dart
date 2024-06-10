@@ -250,6 +250,11 @@ class _NovaGlicemiaState extends State<NovaGlicemia> {
                           _selectedDate = null;
                           _glicemiaController.clear();
                         });
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                              content:
+                                  Text('Glicemia cadastrada com sucesso!')),
+                        );
                       }
                     },
                     style: ElevatedButton.styleFrom(

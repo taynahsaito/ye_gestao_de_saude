@@ -1,5 +1,9 @@
+import 'package:app_ye_gestao_de_saude/models/imc_model.dart';
+import 'package:app_ye_gestao_de_saude/pages/imc.dart';
+import 'package:app_ye_gestao_de_saude/services/imc_service.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:uuid/uuid.dart';
 
 class NovoIMC extends StatefulWidget {
   const NovoIMC({super.key});
@@ -13,6 +17,7 @@ class _NovoIMCState extends State<NovoIMC> {
   final TextEditingController _alturaController = TextEditingController();
   final TextEditingController _pesoController = TextEditingController();
   final TextEditingController _dataController = TextEditingController();
+  final IMCService dbService = IMCService();
 
   late DateTime? _selectedDate;
   final DateFormat _dateFormat = DateFormat('dd/MM/yyyy');
@@ -50,6 +55,37 @@ class _NovoIMCState extends State<NovoIMC> {
     }
   }
 
+  final IMCService adicionarIMC = IMCService();
+
+  imcAdicionar() {
+    double peso = double.tryParse(_pesoController.text) ?? 0;
+    double altura = double.tryParse(_alturaController.text) ?? 0;
+    String data = _dateFormat.format(_selectedDate!);
+
+    // Calcular IMC
+    double imc = peso / (altura * altura);
+    String imcString = imc.toStringAsFixed(2);
+
+    // Criando uma instância do modelo IMC
+    ModeloIMC modeloIMC = ModeloIMC(
+      id: const Uuid().v1(),
+      peso: peso.toString(),
+      altura: altura.toString(),
+      data: data,
+      imc: imcString,
+    );
+
+    // Adicionando o IMC ao banco de dados
+    adicionarIMC.adicionarIMC(modeloIMC);
+  }
+
+  @override
+  void dispose() {
+    _pesoController.dispose();
+    _alturaController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -80,7 +116,7 @@ class _NovoIMCState extends State<NovoIMC> {
                 const SizedBox(
                     height: 20), // Espaço adicionado acima do formulário
                 const Text(
-                  'Registre seu IMC',
+                  'Calcule seu IMC',
                   style: TextStyle(
                     fontSize: 22,
                     color: Color.fromARGB(220, 105, 126, 80),
@@ -233,9 +269,6 @@ class _NovoIMCState extends State<NovoIMC> {
                   children: [
                     ElevatedButton(
                       onPressed: () {
-                        if (_formKey.currentState?.validate() ?? false) {
-                          _saveData(true); // Envie "true" para indicar "Certo"
-                        }
                         Navigator.of(context).pop();
                       },
                       style: ElevatedButton.styleFrom(
@@ -253,12 +286,34 @@ class _NovoIMCState extends State<NovoIMC> {
                       ),
                     ),
                     ElevatedButton(
-                      onPressed: () {
-                        if (_formKey.currentState?.validate() ?? false) {
-                          _saveData(
-                              false); // Envie "false" para indicar "Errado"
+                      onPressed: () async {
+                        if (_formKey.currentState!.validate()) {
+                          setState(() {
+                            imcAdicionar();
+                            _alturaController.clear();
+                            _pesoController.clear();
+                            _selectedDate = null;
+                          });
+                          // String altura = _alturaController.text.trim();
+                          // String peso = _pesoController.text.trim();
+
+                          // String imc = ModeloIMC.calcularIMC(peso, altura);
+                          // await dbService.adicionarIMC(
+                          //   ModeloIMC(
+                          //     id: '',
+                          //     altura: altura,
+                          //     peso: peso,
+                          //     data: _selectedDate != null
+                          //         ? _dateFormat.format(_selectedDate!)
+                          //         : '',
+                          //     imc: imc,
+                          //   ),
+                          // );
                         }
-                        Navigator.of(context).pop();
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                              content: Text('IMC cadastrado com sucesso!')),
+                        );
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: const Color.fromARGB(
@@ -279,20 +334,5 @@ class _NovoIMCState extends State<NovoIMC> {
         ),
       ),
     );
-  }
-
-  void _saveData(bool certo) {
-    double altura = double.parse(_alturaController.text);
-    double peso = double.parse(_pesoController.text);
-    String data = _dataController.text;
-    // Agora você pode fazer o que quiser com os dados capturados, como salvá-los em algum lugar
-    print('Altura: $altura');
-    print('Peso: $peso');
-    print('Data: $data');
-    if (certo) {
-      print('Opção escolhida: Certo');
-    } else {
-      print('Opção escolhida: Errado');
-    }
   }
 }

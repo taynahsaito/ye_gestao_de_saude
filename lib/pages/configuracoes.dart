@@ -23,42 +23,41 @@ class _ConfiguracoesState extends State<Configuracoes> {
 
   String nome = '';
   String email = '';
-  String dataNasc = '';
   String senha = '';
   @override
   void initState() {
     super.initState();
-    _fetchUserData();
+    // _fetchUserData();
   }
 
   User? user = FirebaseAuth.instance.currentUser;
 
-  Future<void> _fetchUserData() async {
-    try {
-      User? user = FirebaseAuth.instance.currentUser;
-      if (user != null) {
-        DatabaseReference userRef =
-            FirebaseDatabase.instance.ref().child('usuarios').child(user.uid);
-        DatabaseEvent event = await userRef.once();
-        DataSnapshot snapshot = event.snapshot;
+  // Future<void> _fetchUserData() async {
+  //   try {
+  //     User? user = FirebaseAuth.instance.currentUser;
+  //     if (user != null) {
+  //       DatabaseReference userRef =
+  //           FirebaseDatabase.instance.ref().child('usuarios').child(user.uid);
+  //       DatabaseEvent event = await userRef.once();
+  //       DataSnapshot snapshot = event.snapshot;
 
-        if (snapshot.exists) {
-          setState(() {
-            nome = snapshot.child('nome').value?.toString() ?? 'N/A';
-            email = snapshot.child('email').value?.toString() ?? 'N/A';
-            dataNasc = snapshot.child('dataNasc').value?.toString() ?? 'N/A';
-            senha = snapshot.child('senha').value?.toString() ?? 'N/A';
-          });
-        } else {
-          print('No data available for the user.');
-        }
-      } else {
-        print('No user is currently signed in.');
-      }
-    } catch (e) {
-      print('An error occurred while fetching user data: $e');
-    }
-  }
+  //       if (snapshot.exists) {
+  //         setState(() {
+  //           nome = snapshot.child('nome').value?.toString() ?? 'N/A';
+  //           email = snapshot.child('email').value?.toString() ?? 'N/A';
+  //           dataNasc = snapshot.child('dataNasc').value?.toString() ?? 'N/A';
+  //           senha = snapshot.child('senha').value?.toString() ?? 'N/A';
+  //         });
+  //       } else {
+  //         print('No data available for the user.');
+  //       }
+  //     } else {
+  //       print('No user is currently signed in.');
+  //     }
+  //   } catch (e) {
+  //     print('An error occurred while fetching user data: $e');
+  //   }
+  // }
 
   void _updateName() {
     String name = _nomeController.text.trim();

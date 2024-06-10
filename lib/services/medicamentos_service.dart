@@ -28,16 +28,21 @@ class MedicamentosService {
     }
   }
 
-  Future<void> editarMedicamento(
-      String consultaId, ModeloMedicamentos modeloMedicamentos) async {
+  Future<void> editarMedicamento(String consultaId, String nome,
+      String intervaloHoras, String horario, String periodoTomado) async {
     User? user = _auth.currentUser;
     if (user != null) {
-      DocumentReference consultaDoc = medicamentosCollection
+      DocumentReference medicamentosDoc = medicamentosCollection
           .doc(user.uid)
           .collection('medicamentos do usuário')
           .doc(consultaId);
 
-      await consultaDoc.update(modeloMedicamentos.toFirestore());
+      await medicamentosDoc.update({
+        'nome': nome,
+        'horario': horario,
+        'intervalo de horas': intervaloHoras,
+        'periodo que o medicamento será tomado': periodoTomado,
+      });
     }
   }
 

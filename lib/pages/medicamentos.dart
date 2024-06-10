@@ -5,9 +5,7 @@ import 'package:app_ye_gestao_de_saude/services/medicamentos_service.dart';
 import 'package:flutter/material.dart';
 
 class Medicamentos extends StatefulWidget {
-  final ModeloMedicamentos? modeloMedicamentos;
-
-  const Medicamentos({Key? key, this.modeloMedicamentos});
+  const Medicamentos({Key? key});
 
   @override
   State<Medicamentos> createState() => _MedicamentosState();
@@ -16,26 +14,28 @@ class Medicamentos extends StatefulWidget {
 class _MedicamentosState extends State<Medicamentos> {
   final MedicamentosService medicamentosService = MedicamentosService();
   final MedicamentosService dbService = MedicamentosService();
-  late ModeloMedicamentos medicamentoAtual;
+  // final ModeloMedicamentos medicamentoAtual = ModeloMedicamentos(id: '', nome: nome, horario: horario, intervaloHoras: intervaloHoras, periodoTomado: periodoTomado);
 
-  @override
-  void initState() {
-    // medicamentoAtual = widget.modeloMedicamentos;
-  }
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   medicamentoAtual = ;
+  // }
 
-  Future<void> _editarConsulta(BuildContext context) async {
+  Future<void> _editarMedicamento(
+      BuildContext context, ModeloMedicamentos medicamento) async {
     final result = await Navigator.push(
       context,
       MaterialPageRoute(
         builder: (context) => EditarMedicamento(
-          modeloMedicamentos: medicamentoAtual,
+          modeloMedicamentos: medicamento,
         ),
       ),
     );
 
     if (result != null && result is ModeloMedicamentos) {
       setState(() {
-        medicamentoAtual = result;
+        medicamento = result;
       });
     }
   }
@@ -64,7 +64,7 @@ class _MedicamentosState extends State<Medicamentos> {
             TextButton(
               onPressed: () async {
                 await medicamentosService.deletarMedicamento(idMedicamento);
-                Navigator.of(context).pop();
+                // Navigator.of(context).pop();
                 Navigator.pop(
                     context, true); // Indica que uma consulta foi deletada
               },
@@ -157,10 +157,11 @@ class _MedicamentosState extends State<Medicamentos> {
                                 ),
                                 onSelected: (value) async {
                                   if (value == 'edit') {
-                                    await _editarConsulta(context);
+                                    await _editarMedicamento(
+                                        context, medicamento);
                                   } else if (value == 'delete') {
                                     await _exibirPopUpConfirmacao(
-                                        context, medicamentoAtual.id);
+                                        context, medicamento.id);
                                   }
                                 },
                               )

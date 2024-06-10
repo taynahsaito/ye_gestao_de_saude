@@ -275,7 +275,7 @@ class _HomePageState extends State<HomePage> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => const IMC(tipo: "IMC")),
+                            builder: (context) => const IMC()),
                       );
                     },
                     style: ElevatedButton.styleFrom(

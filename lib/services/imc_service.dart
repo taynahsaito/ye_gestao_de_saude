@@ -1,42 +1,43 @@
+import 'package:app_ye_gestao_de_saude/models/imc_model.dart';
 import 'package:app_ye_gestao_de_saude/models/peso_altura_model.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-class PesoAlturaService {
+class IMCService {
 final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   late String userId;
   
-PesoAlturaService() {
+IMCService() {
     final currentUser = FirebaseAuth.instance.currentUser;
     userId = currentUser?.uid ??
         ''; // Defina userId como uma string vazia se currentUser for nulo
   }
 
   final FirebaseAuth _auth = FirebaseAuth.instance;
-  final CollectionReference pesoealturaCollection =
-      FirebaseFirestore.instance.collection('PesoAltura');
+  final CollectionReference IMCCollection =
+      FirebaseFirestore.instance.collection('IMC');
 
 
-  Future<void> adicionarPesoAltura(ModeloPesoAltura modeloPesoAltura) async {
+  Future<void> adicionarIMC(ModeloIMC modeloIMC) async {
     User? user = _auth.currentUser;
     if (user != null) {
-      DocumentReference userDoc = pesoealturaCollection
+      DocumentReference userDoc = IMCCollection
           .doc(user.uid)
-          .collection('Pesos e alturas do paciente')
+          .collection('IMC do paciente')
           .doc();
-      await userDoc.set(modeloPesoAltura.toFirestore());
+      await userDoc.set(modeloIMC.toFirestore());
     }
   }
 
-Stream<List<ModeloPesoAltura>> getPesoAltura() {//importante
+Stream<List<ModeloIMC>> getIMC() {//importante
     User? user = _auth.currentUser;
     if (user != null) {
-      return pesoealturaCollection
+      return IMCCollection
           .doc(user.uid)
-          .collection('Pesos e alturas do paciente')
+          .collection('IMC do paciente')
           .snapshots()
           .map((snapshot) => snapshot.docs
-              .map((doc) => ModeloPesoAltura.fromFirestore(doc))
+              .map((doc) => ModeloIMC.fromFirestore(doc))
               .toList());
     } else {
       return Stream.empty();

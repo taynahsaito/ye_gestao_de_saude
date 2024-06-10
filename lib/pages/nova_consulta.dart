@@ -104,9 +104,9 @@ class _NovaConsultaState extends State<NovaConsulta> {
       setState(() {
         // Convertendo o TimeOfDay selecionado para DateTime
         _selectedTime = DateTime(
-          _selectedDate!.year,
-          _selectedDate!.month,
-          _selectedDate!.day,
+          // _selectedDate!.year,
+          // _selectedDate!.month,
+          // _selectedDate!.day,
           pickedTime.hour,
           pickedTime.minute,
         );

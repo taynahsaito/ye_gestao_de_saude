@@ -405,7 +405,7 @@ class _EditarConsultasState extends State<EditarConsultas> {
   }
 
   Future<void> _selectData(BuildContext context) async {
-        final ThemeData theme = Theme.of(context);
+    final ThemeData theme = Theme.of(context);
 
     final DateTime? pickedDate = await showDatePicker(
       context: context,
@@ -439,7 +439,7 @@ class _EditarConsultasState extends State<EditarConsultas> {
   }
 
   Future<void> _selectRetorno(BuildContext context) async {
-            final ThemeData theme = Theme.of(context);
+    final ThemeData theme = Theme.of(context);
 
     final DateTime? pickedRetorno = await showDatePicker(
       context: context,
@@ -473,7 +473,7 @@ class _EditarConsultasState extends State<EditarConsultas> {
   }
 
   Future<void> _selectLembrete(BuildContext context) async {
-            final ThemeData theme = Theme.of(context);
+    final ThemeData theme = Theme.of(context);
 
     final DateTime? pickedLembrete = await showDatePicker(
       context: context,

@@ -1,4 +1,5 @@
 import 'package:app_ye_gestao_de_saude/models/medicamentos_model.dart';
+import 'package:app_ye_gestao_de_saude/services/medicamentos_service.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -12,17 +13,57 @@ class EditarMedicamento extends StatefulWidget {
 
 class _EditarMedicamentoState extends State<EditarMedicamento> {
   final _formKey = GlobalKey<FormState>();
-  final _nomeController = TextEditingController();
-  final _horarioController = TextEditingController();
-  final _intervaloController = TextEditingController();
-  // final _periodoController = TextEditingController();
+  late TextEditingController _nomeController;
+  late TextEditingController _horarioController;
+  late TextEditingController _intervaloController;
+  late TextEditingController _periodoController;
   late DateTime? _selectedDate;
   final DateFormat _dateFormat = DateFormat('dd/MM/yyyy');
+  late DateFormat dateFormatter;
+  late DateFormat timeFormatter;
 
   @override
   void initState() {
     super.initState();
-    _selectedDate = null; // Inicializando _selectedDate com a data atual
+    _nomeController =
+        TextEditingController(text: widget.modeloMedicamentos.nome);
+    _horarioController =
+        TextEditingController(text: widget.modeloMedicamentos.horario);
+    _intervaloController =
+        TextEditingController(text: widget.modeloMedicamentos.intervaloHoras);
+    _periodoController =
+        TextEditingController(text: widget.modeloMedicamentos.periodoTomado);
+    _selectedDate = DateTime.now();
+    dateFormatter = DateFormat('dd/MM/yyyy');
+    timeFormatter = DateFormat('HH:mm');
+  }
+
+  Future<void> _selectTime(BuildContext context) async {
+    final TimeOfDay? pickedTime = await showTimePicker(
+      context: context,
+      initialTime: TimeOfDay.now(),
+      builder: (context, child) {
+        return Theme(
+          data: ThemeData.light().copyWith(
+            colorScheme: const ColorScheme.light(
+              primary: Color.fromARGB(220, 105, 126, 80), // Cor primária
+              secondary: Color.fromARGB(220, 105, 126, 80),
+            ),
+          ),
+          child: child!,
+        );
+      },
+    );
+    if (pickedTime != null) {
+      setState(() {
+        // Convertendo TimeOfDay para DateTime para formatar corretamente
+        final selectedDateTime =
+            DateTime(0, 1, 1, pickedTime.hour, pickedTime.minute);
+        // Formatação com AM/PM
+        _horarioController.text =
+            DateFormat('hh:mm a').format(selectedDateTime);
+      });
+    }
   }
 
   Future<void> _selectDate(BuildContext context) async {
@@ -57,7 +98,7 @@ class _EditarMedicamentoState extends State<EditarMedicamento> {
     _nomeController.dispose();
     _horarioController.dispose();
     _intervaloController.dispose();
-    // _periodoController.dispose();
+    _periodoController.dispose();
     super.dispose();
   }
 
@@ -184,7 +225,8 @@ class _EditarMedicamentoState extends State<EditarMedicamento> {
                                         80)), // Altere a cor da borda aqui
                                 borderRadius: BorderRadius.circular(20)),
                           ),
-                          keyboardType: TextInputType.number,
+                          readOnly: true,
+                          onTap: () => _selectTime(context),
                           validator: (value) {
                             if (value == null || value.isEmpty) {
                               return 'Por favor, insira o horário';
@@ -310,15 +352,31 @@ class _EditarMedicamentoState extends State<EditarMedicamento> {
                       ),
                     ),
                     ElevatedButton(
-                      onPressed: () {
-                        if (_formKey.currentState!.validate()) {
-                          // Aqui você pode atualizar os dados do paciente
-                          _nomeController.clear();
-                          _horarioController.clear();
-                          _intervaloController.clear();
-                          // _periodoController.clear();
-                        }
-                        Navigator.of(context).pop();
+                      onPressed: () async {
+                        ModeloMedicamentos medicamentoAtualizado =
+                            ModeloMedicamentos(
+                          id: widget.modeloMedicamentos.id,
+                          nome: _nomeController.text,
+                          horario: _horarioController.text,
+                          intervaloHoras: _intervaloController.text,
+                          periodoTomado: _periodoController.text,
+                        );
+                        await MedicamentosService().editarMedicamento(
+                            medicamentoAtualizado.id,
+                            medicamentoAtualizado.nome,
+                            medicamentoAtualizado.horario,
+                            medicamentoAtualizado.intervaloHoras,
+                            medicamentoAtualizado.periodoTomado);
+
+                        Navigator.pop(context, medicamentoAtualizado);
+                        // if (_formKey.currentState!.validate()) {
+                        //   // Aqui você pode atualizar os dados do paciente
+                        //   _nomeController.clear();
+                        //   _horarioController.clear();
+                        //   _intervaloController.clear();
+                        //   // _periodoController.clear();
+                        // }
+                        // Navigator.of(context).pop();
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: const Color.fromARGB(

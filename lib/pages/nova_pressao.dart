@@ -308,6 +308,10 @@ class _NovaPressaoState extends State<NovaPressao> {
                           _sistolicaController.clear();
                           _diastolicaController.clear();
                         });
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                              content: Text('Pressão cadastrada com sucesso!')),
+                        );
                       }
                     },
                     style: ElevatedButton.styleFrom(

@@ -1,5 +1,6 @@
 import 'package:app_ye_gestao_de_saude/models/medicamentos_model.dart';
 import 'package:app_ye_gestao_de_saude/services/medicamentos_service.dart';
+import 'package:app_ye_gestao_de_saude/widgets/multiple_date_selection.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:uuid/uuid.dart';
@@ -14,7 +15,7 @@ class NovoMedicamento extends StatefulWidget {
 class _NovoMedicamentoState extends State<NovoMedicamento> {
   final _formKey = GlobalKey<FormState>();
   final nomeController = TextEditingController();
-  late TextEditingController horarioController = TextEditingController();
+  late TextEditingController horarioController;
   final intervaloController = TextEditingController();
   // final _periodoController = TextEditingController();
   late DateTime? _selectedTime;
@@ -28,6 +29,7 @@ class _NovoMedicamentoState extends State<NovoMedicamento> {
     super.initState();
     _selectedPeriodo = null;
     _selectedTime = null;
+    horarioController = TextEditingController();
     timeFormatter = DateFormat('HH:mm');
   }
 
@@ -36,8 +38,8 @@ class _NovoMedicamentoState extends State<NovoMedicamento> {
     final DateTime? picked = await showDatePicker(
       context: context,
       initialDate: _selectedPeriodo,
-      firstDate: DateTime(1900),
-      lastDate: DateTime.now(),
+      firstDate: DateTime.now(),
+      lastDate: DateTime(2100),
       builder: (BuildContext context, Widget? child) {
         return Theme(
           data: theme.copyWith(
@@ -57,6 +59,33 @@ class _NovoMedicamentoState extends State<NovoMedicamento> {
       });
     }
   }
+  // Future<void> _selectPeriodo(BuildContext context) async {
+  //   final pickedDates = await showDialog<Set<DateTime>>(
+  //     context: context,
+  //     builder: (context) {
+  //       return AlertDialog(
+  //         title: const Text('Selecione as datas'),
+  //         content: MultipleDateSelection(
+  //           selectedDates: _selectedPeriodo,
+  //         ),
+  //         actions: [
+  //           TextButton(
+  //             onPressed: () {
+  //               Navigator.of(context).pop(_selectedPeriodo);
+  //             },
+  //             child: const Text('OK'),
+  //           ),
+  //         ],
+  //       );
+  //     },
+  //   );
+
+  //   if (pickedDates != null && pickedDates.isNotEmpty) {
+  //     setState(() {
+  //       _selectedPeriodo = pickedDates as DateTime?;
+  //     });
+  //   }
+  // }
 
   @override
   void dispose() {
@@ -105,9 +134,9 @@ class _NovoMedicamentoState extends State<NovoMedicamento> {
       setState(() {
         // Convertendo o TimeOfDay selecionado para DateTime
         _selectedTime = DateTime(
-          _selectedPeriodo!.year,
-          _selectedPeriodo!.month,
-          _selectedPeriodo!.day,
+          // _selectedPeriodo!.year,
+          // _selectedPeriodo!.month,
+          // _selectedPeriodo!.day,
           pickedTime.hour,
           pickedTime.minute,
         );
