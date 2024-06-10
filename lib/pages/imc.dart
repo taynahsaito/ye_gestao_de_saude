@@ -34,166 +34,70 @@ class _IMCState extends State<IMC> {
         ),
       ),
       body: Stack(children: [
-        Padding(
-          padding: const EdgeInsets.fromLTRB(20, 10, 20, 20),
-          child: SingleChildScrollView(
-            child: Center(
-              child: Column(
-                children: [
-                  const SizedBox(
-                    height: 20,
+        const Column(
+          children: [
+            Padding(
+              padding: EdgeInsets.fromLTRB(20, 20, 20, 30),
+              child: Center(
+                child: Text(
+                  'Histórico de IMC',
+                  style: TextStyle(
+                    fontSize: 22,
+                    color: Color.fromARGB(220, 105, 126, 80),
+                    fontWeight: FontWeight.bold,
                   ),
-                  Padding(
-                    padding: const EdgeInsets.only(bottom: 30.0),
-                    child: Text(
-                      "${widget.tipo}",
-                      style: const TextStyle(
-                        fontSize: 22,
-                        color: Color.fromARGB(220, 105, 126, 80),
-                        fontWeight: FontWeight.w900,
-                      ),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(top: 10.0),
-                    child: SizedBox(
-                      height: 80,
-                      width: 450,
-                      child: GestureDetector(
-                        onLongPress: () {
-                          showDialog(
-                            context: context,
-                            builder: (context) => AlertDialog(
-                                title: const Text("Editar exame:"),
-                                content: SizedBox(
-                                  height: 30,
-                                  child: TextFormField(
-                                    controller: _exameController,
-                                    decoration: InputDecoration(
-                                      fillColor: const Color.fromARGB(
-                                          190, 223, 223, 223),
-                                      filled: true,
-                                      border: const OutlineInputBorder(
-                                        borderSide: BorderSide.none,
-                                        borderRadius: BorderRadius.all(
-                                            Radius.circular(25)),
-                                      ),
-                                      labelText:
-                                          "Valor do exame de ${widget.tipo}",
-                                      contentPadding: const EdgeInsets.fromLTRB(
-                                          25, 0, 0, 0),
-                                      labelStyle: const TextStyle(
-                                          fontSize: 18,
-                                          color: Color.fromARGB(
-                                              255, 152, 152, 152)),
-                                    ),
-                                  ),
-                                )),
-                          );
-                          exameTipo = _exameController.text;
-                        },
-                        child: DecoratedBox(
-                          decoration: const BoxDecoration(
-                            color: Color.fromRGBO(219, 127, 88, 0.53),
-                            borderRadius: BorderRadius.all(Radius.circular(17)),
-                          ),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: [
-                              const Text(
-                                "10/05/2024",
-                                style: TextStyle(fontSize: 12),
-                              ),
-                              Text(
-                                '$exameTipo mg/dl',
-                                style: const TextStyle(
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.w900,
-                                  color: Color.fromRGBO(150, 54, 30, 0.829),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(
-                    width: 450,
-                    child: Text(
-                      'Esse resultado está fora dos limites de referência. Consulte seu médico para mais informações.',
-                      style: TextStyle(
-                          fontSize: 12,
-                          color: Color.fromRGBO(150, 54, 30, 0.829)),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(top: 10.0),
-                    child: SizedBox(
-                      height: 80,
-                      width: 450,
-                      child: GestureDetector(
-                        onTap: () {
-                          showDialog(
-                            context: context,
-                            builder: (context) => AlertDialog(
-                                title: const Text("Editar exame:"),
-                                content: SizedBox(
-                                  height: 30,
-                                  child: TextFormField(
-                                    controller: _exameController,
-                                    decoration: InputDecoration(
-                                      fillColor: const Color.fromARGB(
-                                          190, 223, 223, 223),
-                                      filled: true,
-                                      border: const OutlineInputBorder(
-                                        borderSide: BorderSide.none,
-                                        borderRadius: BorderRadius.all(
-                                            Radius.circular(25)),
-                                      ),
-                                      labelText:
-                                          "Valor do exame de ${widget.tipo}",
-                                      contentPadding: const EdgeInsets.fromLTRB(
-                                          25, 0, 0, 0),
-                                      labelStyle: const TextStyle(
-                                          fontSize: 18,
-                                          color: Color.fromARGB(
-                                              255, 152, 152, 152)),
-                                    ),
-                                  ),
-                                )),
-                          );
-                        },
-                        child: const DecoratedBox(
-                          decoration: BoxDecoration(
-                            color: Color.fromRGBO(167, 216, 119, 0.5),
-                            borderRadius: BorderRadius.all(Radius.circular(17)),
-                          ),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: [
-                              Text(
-                                "14/05/2024",
-                                style: TextStyle(fontSize: 12),
-                              ),
-                              Text(
-                                '105 mg/dl',
-                                style: TextStyle(
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.w900,
-                                  color: Color.fromRGBO(62, 100, 23, 1),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
+                ),
               ),
             ),
-          ),
+            // Expanded(
+            //   child: StreamBuilder<List<Modelo>>(
+            //       stream: dbService.getPressao(),
+            //       builder: (context, snapshot) {
+            //         if (!snapshot.hasData) {
+            //           const Center(
+            //             child: CircularProgressIndicator(),
+            //           );
+            //         }
+            //         var pressoes = snapshot.data!;
+
+            //         return ListView.builder(
+            //             itemCount: pressoes.length,
+            //             itemBuilder: (context, index) {
+            //               var pressao = pressoes[index];
+            //               return ListTile(
+            //                 title: Container(
+            //                   padding:
+            //                       const EdgeInsets.fromLTRB(25, 20, 25, 20),
+            //                   decoration: BoxDecoration(
+            //                       color: const Color.fromARGB(
+            //                           150, 203, 230, 176),
+            //                       borderRadius: BorderRadius.circular(15)),
+            //                   child: Row(
+            //                     children: [
+            //                       Text(
+            //                         '${pressao.data}',
+            //                         style: const TextStyle(
+            //                           fontSize: 15,
+            //                           fontWeight: FontWeight.w600,
+            //                         ),
+            //                       ),
+            //                       const Spacer(), // Este Spacer vai empurrar o próximo widget para a direita
+            //                       Text(
+            //                         '${pressao.sistolica}x${pressao.diastolica}',
+            //                         style: const TextStyle(
+            //                           color: Color.fromARGB(255, 78, 101, 61),
+            //                           fontSize: 20,
+            //                           fontWeight: FontWeight.w800,
+            //                         ),
+            //                       ),
+            //                     ],
+            //                   ),
+            //                 ),
+            //               );
+            //             });
+            //       }),
+            // ),
+          ],
         ),
         Align(
           alignment: Alignment.bottomCenter,

@@ -13,14 +13,14 @@ PesoAlturaService() {
   }
 
   final FirebaseAuth _auth = FirebaseAuth.instance;
-  final CollectionReference pressaoCollection =
+  final CollectionReference pesoealturaCollection =
       FirebaseFirestore.instance.collection('PesoAltura');
 
 
   Future<void> adicionarPesoAltura(ModeloPesoAltura modeloPesoAltura) async {
     User? user = _auth.currentUser;
     if (user != null) {
-      DocumentReference userDoc = pressaoCollection
+      DocumentReference userDoc = pesoealturaCollection
           .doc(user.uid)
           .collection('Pesos e alturas do paciente')
           .doc();
@@ -31,7 +31,7 @@ PesoAlturaService() {
 Stream<List<ModeloPesoAltura>> getPesoAltura() {//importante
     User? user = _auth.currentUser;
     if (user != null) {
-      return pressaoCollection
+      return pesoealturaCollection
           .doc(user.uid)
           .collection('Pesos e alturas do paciente')
           .snapshots()

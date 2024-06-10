@@ -20,7 +20,7 @@ class _NovaPressaoState extends State<NovaPressao> {
   final _sistolicaController = TextEditingController();
   final _diastolicaController = TextEditingController();
   final List<String> _pressaoData = [];
-  
+
   final DateFormat _dateFormat = DateFormat('dd/MM/yyyy');
 
   @override
@@ -28,7 +28,6 @@ class _NovaPressaoState extends State<NovaPressao> {
     super.initState();
     _selectedDate = null;
   }
-
 
   Future<void> _selectDate(BuildContext context) async {
     final ThemeData theme = Theme.of(context);
@@ -59,16 +58,15 @@ class _NovaPressaoState extends State<NovaPressao> {
 
   final PressaoService adicionarPressao = PressaoService();
 
-
   pressaoAdicionar() {
     String sistolica = _sistolicaController.text;
-    String diastolica =_diastolicaController.text;
+    String diastolica = _diastolicaController.text;
     String data = _dateFormat.format(_selectedDate!);
 
     ModeloPressao modeloPressao = ModeloPressao(
       id: const Uuid().v1(),
-      sistolica : sistolica,
-      diastolica : diastolica,
+      sistolica: sistolica,
+      diastolica: diastolica,
       data: data,
     );
 
@@ -115,7 +113,7 @@ class _NovaPressaoState extends State<NovaPressao> {
                   fontWeight: FontWeight.w900,
                 ),
               ),
-              const SizedBox(height: 100),
+              const SizedBox(height: 40),
               Padding(
                 padding: const EdgeInsets.fromLTRB(70, 0, 70, 0),
                 child: Column(
@@ -148,7 +146,8 @@ class _NovaPressaoState extends State<NovaPressao> {
                             ),
                             borderRadius: BorderRadius.circular(20),
                           ),
-                          contentPadding: const EdgeInsets.fromLTRB(25, 0, 0, 0),
+                          contentPadding:
+                              const EdgeInsets.fromLTRB(25, 0, 0, 0),
                           labelStyle: const TextStyle(
                             fontSize: 18,
                             color: Color.fromARGB(255, 152, 152, 152),
@@ -167,11 +166,11 @@ class _NovaPressaoState extends State<NovaPressao> {
                           return null;
                         },
                         keyboardType: TextInputType.datetime,
-                            onChanged: (value) {
-                              setState(() {
-                                _selectedDate = DateTime.tryParse(value);
-                              });
-                            },
+                        onChanged: (value) {
+                          setState(() {
+                            _selectedDate = DateTime.tryParse(value);
+                          });
+                        },
                       ),
                     ),
                   ],
@@ -204,7 +203,8 @@ class _NovaPressaoState extends State<NovaPressao> {
                             ),
                             borderRadius: BorderRadius.circular(20),
                           ),
-                          contentPadding: const EdgeInsets.fromLTRB(25, 0, 0, 0),
+                          contentPadding:
+                              const EdgeInsets.fromLTRB(25, 0, 0, 0),
                           labelStyle: const TextStyle(
                             fontSize: 18,
                             color: Color.fromARGB(255, 152, 152, 152),
@@ -255,7 +255,8 @@ class _NovaPressaoState extends State<NovaPressao> {
                             ),
                             borderRadius: BorderRadius.circular(20),
                           ),
-                          contentPadding: const EdgeInsets.fromLTRB(25, 0, 0, 0),
+                          contentPadding:
+                              const EdgeInsets.fromLTRB(25, 0, 0, 0),
                           labelStyle: const TextStyle(
                             fontSize: 18,
                             color: Color.fromARGB(255, 152, 152, 152),

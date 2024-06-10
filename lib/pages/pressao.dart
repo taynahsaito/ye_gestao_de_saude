@@ -67,70 +67,74 @@ class _PressaoState extends State<Pressao> {
       ),
       body: Stack(
         children: [
-          Column(
-            children: [
-              const Padding(
-                padding: EdgeInsets.fromLTRB(20, 20, 20, 30),
-                child: Center(
-                  child: Text(
-                    'Histórico de pressão',
-                    style: TextStyle(
-                      fontSize: 22,
-                      color: Color.fromARGB(220, 105, 126, 80),
-                      fontWeight: FontWeight.bold,
+          Padding(
+            padding: const EdgeInsets.fromLTRB(8, 0, 8, 10),
+            child: Column(
+              children: [
+                const Padding(
+                  padding: EdgeInsets.fromLTRB(0, 20, 0, 30),
+                  child: Center(
+                    child: Text(
+                      'Histórico de pressão',
+                      style: TextStyle(
+                        fontSize: 22,
+                        color: Color.fromARGB(220, 105, 126, 80),
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                   ),
                 ),
-              ),
-              Expanded(
-                child: StreamBuilder<List<ModeloPressao>>(
-                    stream: dbService.getPressao(),
-                    builder: (context, snapshot) {
-                      if (!snapshot.hasData) {
-                        const Center(
-                          child: CircularProgressIndicator(),
-                        );
-                      }
-                      var pressoes = snapshot.data!;
+                Expanded(
+                  child: StreamBuilder<List<ModeloPressao>>(
+                      stream: dbService.getPressao(),
+                      builder: (context, snapshot) {
+                        if (!snapshot.hasData) {
+                          const Center(
+                            child: CircularProgressIndicator(),
+                          );
+                        }
+                        var pressoes = snapshot.data!;
 
-                      return ListView.builder(
-                          itemCount: pressoes.length,
-                          itemBuilder: (context, index) {
-                            var pressao = pressoes[index];
-                            return ListTile(
-                              title: Container(
-                                padding:
-                                    const EdgeInsets.fromLTRB(25, 20, 25, 20),
-                                decoration: BoxDecoration(
-                                    color: const Color.fromARGB(
-                                        150, 203, 230, 176),
-                                    borderRadius: BorderRadius.circular(15)),
-                                child: Row(
-                                  children: [
-                                    Text(
-                                      '${pressao.data}',
-                                      style: const TextStyle(
-                                        fontSize: 15,
-                                        fontWeight: FontWeight.w600,
+                        return ListView.builder(
+                            itemCount: pressoes.length,
+                            itemBuilder: (context, index) {
+                              var pressao = pressoes[index];
+                              return ListTile(
+                                title: Container(
+                                  padding:
+                                      const EdgeInsets.fromLTRB(25, 20, 25, 20),
+                                  decoration: BoxDecoration(
+                                      color: const Color.fromARGB(
+                                          150, 203, 230, 176),
+                                      borderRadius: BorderRadius.circular(15)),
+                                  child: Row(
+                                    children: [
+                                      Text(
+                                        '${pressao.data}',
+                                        style: const TextStyle(
+                                          fontSize: 15,
+                                          fontWeight: FontWeight.w600,
+                                        ),
                                       ),
-                                    ),
-                                    const Spacer(), // Este Spacer vai empurrar o próximo widget para a direita
-                                    Text(
-                                      '${pressao.sistolica}x${pressao.diastolica}',
-                                      style: const TextStyle(
-                                        color: Color.fromARGB(255, 78, 101, 61),
-                                        fontSize: 20,
-                                        fontWeight: FontWeight.w800,
+                                      const Spacer(), // Este Spacer vai empurrar o próximo widget para a direita
+                                      Text(
+                                        '${pressao.sistolica}x${pressao.diastolica} mmHg',
+                                        style: const TextStyle(
+                                          color:
+                                              Color.fromARGB(255, 78, 101, 61),
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.w800,
+                                        ),
                                       ),
-                                    ),
-                                  ],
+                                    ],
+                                  ),
                                 ),
-                              ),
-                            );
-                          });
-                    }),
-              ),
-            ],
+                              );
+                            });
+                      }),
+                ),
+              ],
+            ),
           ),
           Align(
             alignment: Alignment.bottomCenter,

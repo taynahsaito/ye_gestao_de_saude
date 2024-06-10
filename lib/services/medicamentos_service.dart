@@ -59,7 +59,7 @@ class MedicamentosService {
     if (user != null) {
       return medicamentosCollection
           .doc(user.uid)
-          .collection('medicamentos')
+          .collection('medicamentos do usuário')
           .snapshots()
           .map((snapshot) => snapshot.docs
               .map((doc) => ModeloMedicamentos.fromFirestore(doc))

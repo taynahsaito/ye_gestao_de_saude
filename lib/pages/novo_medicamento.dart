@@ -14,10 +14,11 @@ class NovoMedicamento extends StatefulWidget {
 class _NovoMedicamentoState extends State<NovoMedicamento> {
   final _formKey = GlobalKey<FormState>();
   final nomeController = TextEditingController();
-  final horarioController = TextEditingController();
+  late TextEditingController horarioController = TextEditingController();
   final intervaloController = TextEditingController();
   // final _periodoController = TextEditingController();
-    late DateTime? _selectedTime;
+  late DateTime? _selectedTime;
+  late DateFormat timeFormatter;
 
   late DateTime? _selectedPeriodo;
   final DateFormat _dateFormat = DateFormat('dd/MM/yyyy');
@@ -25,7 +26,9 @@ class _NovoMedicamentoState extends State<NovoMedicamento> {
   @override
   void initState() {
     super.initState();
-    _selectedPeriodo = null; // Inicializando _selectedDate com a data atual
+    _selectedPeriodo = null;
+    _selectedTime = null;
+    timeFormatter = DateFormat('HH:mm');
   }
 
   Future<void> _selectPeriodo(BuildContext context) async {
@@ -113,6 +116,7 @@ class _NovoMedicamentoState extends State<NovoMedicamento> {
       });
     }
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:app_ye_gestao_de_saude/services/glicemia_service.dart';
+import 'package:uuid/uuid.dart';
 
 class NovaGlicemia extends StatefulWidget {
   const NovaGlicemia({Key? key}) : super(key: key);
@@ -14,10 +15,10 @@ class NovaGlicemia extends StatefulWidget {
 
 class _NovaGlicemiaState extends State<NovaGlicemia> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  String _glicemia = '';
-  DateTime? _selectedDate;
+  final _glicemiaController = TextEditingController();
+  late DateTime? _selectedDate;
   final DateFormat _dateFormat = DateFormat('dd/MM/yyyy');
-  final GlicemiaService _glicemiaService = GlicemiaService();
+  final List<String> _glicemiaData = [];
 
   @override
   void initState() {
@@ -50,35 +51,45 @@ class _NovaGlicemiaState extends State<NovaGlicemia> {
     }
   }
 
-  Future<void> _saveDataToFirestore() async {
-    if (_formKey.currentState != null && _formKey.currentState!.validate()) {
-      _formKey.currentState!.save();
-      if (_selectedDate != null) {
-        ModeloGlicemia novaGlicemia = ModeloGlicemia(
-          glicemia: _glicemia,
-          dataAfericao: _selectedDate!,
-        );
-        await _glicemiaService.adicionarGlicemia(novaGlicemia);
-        _formKey.currentState!.reset();
-        setState(() {
-          _selectedDate = null;
-        });
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Dados de glicemia salvos com sucesso'),
-            duration: Duration(seconds: 2),
-          ),
-        );
-      } else {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Por favor, insira uma data válida'),
-            duration: Duration(seconds: 2),
-          ),
-        );
-      }
-    }
+  final GlicemiaService adicionarGlicemia = GlicemiaService();
+
+  glicemiaAdicionar() {
+    String glicemia = _glicemiaController.text;
+    String data = _dateFormat.format(_selectedDate!);
+
+    ModeloGlicemia modeloGlicemia = ModeloGlicemia(
+        id: const Uuid().v1(), glicemia: glicemia, dataAfericao: data);
+    adicionarGlicemia.adicionarGlicemia(modeloGlicemia);
   }
+  // Future<void> _saveDataToFirestore() async {
+  //   if (_formKey.currentState != null && _formKey.currentState!.validate()) {
+  //     _formKey.currentState!.save();
+  //     if (_selectedDate != null) {
+  //       ModeloGlicemia novaGlicemia = ModeloGlicemia(
+  //         glicemia: _glicemia,
+  //         dataAfericao: _selectedDate!,
+  //       );
+  //       await _glicemiaService.adicionarGlicemia(novaGlicemia);
+  //       _formKey.currentState!.reset();
+  //       setState(() {
+  //         _selectedDate = null;
+  //       });
+  //       ScaffoldMessenger.of(context).showSnackBar(
+  //         const SnackBar(
+  //           content: Text('Dados de glicemia salvos com sucesso'),
+  //           duration: Duration(seconds: 2),
+  //         ),
+  //       );
+  //     } else {
+  //       ScaffoldMessenger.of(context).showSnackBar(
+  //         const SnackBar(
+  //           content: Text('Por favor, insira uma data válida'),
+  //           duration: Duration(seconds: 2),
+  //         ),
+  //       );
+  //     }
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -131,6 +142,7 @@ class _NovaGlicemiaState extends State<NovaGlicemia> {
               SizedBox(
                 height: 40,
                 child: TextFormField(
+                  controller: _glicemiaController,
                   decoration: InputDecoration(
                     border: OutlineInputBorder(
                       borderSide: const BorderSide(
@@ -153,11 +165,6 @@ class _NovaGlicemiaState extends State<NovaGlicemia> {
                       return 'Por favor, insira sua glicemia';
                     }
                     return null;
-                  },
-                  onSaved: (value) {
-                    if (value != null) {
-                      _glicemia = value;
-                    }
                   },
                 ),
               ),
@@ -237,20 +244,12 @@ class _NovaGlicemiaState extends State<NovaGlicemia> {
                   ),
                   ElevatedButton(
                     onPressed: () {
-                      if (_formKey.currentState != null &&
-                          _formKey.currentState!.validate()) {
-                        _formKey.currentState!.save();
-                        if (_selectedDate != null) {
-                          _saveDataToFirestore();
-                        } else {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                              content:
-                                  Text('Por favor, insira uma data válida'),
-                              duration: Duration(seconds: 2),
-                            ),
-                          );
-                        }
+                      if (_formKey.currentState!.validate()) {
+                        setState(() {
+                          glicemiaAdicionar();
+                          _selectedDate = null;
+                          _glicemiaController.clear();
+                        });
                       }
                     },
                     style: ElevatedButton.styleFrom(
@@ -265,6 +264,7 @@ class _NovaGlicemiaState extends State<NovaGlicemia> {
                   ),
                 ],
               ),
+              ..._glicemiaData.map((item) => Text(item)).toList(),
             ],
           ),
         ),

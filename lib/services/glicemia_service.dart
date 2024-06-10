@@ -21,7 +21,7 @@ class GlicemiaService {
     if (user != null) {
       DocumentReference userDoc = glicemiaCollection
           .doc(user.uid)
-          .collection('Consultas do Usuário')
+          .collection('Glicemias do Usuário')
           .doc();
       await userDoc.set(modeloGlicemia.toFirestore());
     }
@@ -32,7 +32,7 @@ class GlicemiaService {
     if (user != null) {
       return glicemiaCollection
           .doc(user.uid)
-          .collection('Consultas do Usuário')
+          .collection('Glicemias do Usuário')
           .snapshots()
           .map((snapshot) => snapshot.docs
               .map((doc) => ModeloGlicemia.fromFirestore(doc))

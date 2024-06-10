@@ -16,17 +16,14 @@ class PesoAltura extends StatefulWidget {
 }
 
 class _PesoAlturaState extends State<PesoAltura> {
-  List<DocumentSnapshot> historicoPressao =
-      [];
+  List<DocumentSnapshot> historicoPesoAltura = [];
   @override
   void initState() {
     super.initState();
     _getHistoricoPesoAltura();
   }
 
-  Future<void> _getHistoricoPesoAltura() async {
-  
-  }
+  Future<void> _getHistoricoPesoAltura() async {}
 
   final PesoAlturaService dbService = PesoAlturaService();
 
@@ -51,50 +48,83 @@ class _PesoAlturaState extends State<PesoAltura> {
       ),
       body: Stack(
         children: [
-                StreamBuilder<List<ModeloPesoAltura>>(
-              stream: dbService.getPesoAltura(),
-              builder: (context, snapshot) {
-                if (!snapshot.hasData) {
-                  const Center(
-                    child: CircularProgressIndicator(),
-                  );
-                }
-                var pesos = snapshot.data!;
+          Padding(
+            padding: const EdgeInsets.fromLTRB(8, 0, 8, 10),
+            child: Column(
+              children: [
+                const Padding(
+                  padding: EdgeInsets.fromLTRB(0, 20, 0, 30),
+                  child: Center(
+                    child: Text(
+                      'Histórico de peso e altura',
+                      style: TextStyle(
+                        fontSize: 22,
+                        color: Color.fromARGB(220, 105, 126, 80),
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                ),
+                Expanded(
+                  child: StreamBuilder<List<ModeloPesoAltura>>(
+                      stream: dbService.getPesoAltura(),
+                      builder: (context, snapshot) {
+                        if (!snapshot.hasData) {
+                          const Center(
+                            child: CircularProgressIndicator(),
+                          );
+                        }
+                        var pesos = snapshot.data!;
 
-                return ListView.builder(
-                    itemCount: pesos.length,
-                    itemBuilder: (context, index) {
-                      var pesoalturas = pesos[index];
-                      return ListTile(
-                        title: Row(
-                          children: [
-                            Text(
-                              '${pesoalturas.peso}',
-                              style: const TextStyle(
-                                  fontSize: 16, fontWeight: FontWeight.w600),
-                            ),
-                            const Spacer(),
-                            const Icon(Icons.info_outline),
-                            Text(
-                              '${pesoalturas.altura}',
-                              style: const TextStyle(
-                                  fontSize: 16, fontWeight: FontWeight.w600),
-                            ),
-                            const Spacer(),
-                            const Icon(Icons.info_outline),
-                            Text(
-                              '${pesoalturas.data}',
-                              style: const TextStyle(
-                                  fontSize: 16, fontWeight: FontWeight.w600),
-                            ),
-                            const Spacer(),
-                            const Icon(Icons.info_outline),
-                          ],
-
-                        ),
-                      );
-                    });
-              }),
+                        return ListView.builder(
+                            itemCount: pesos.length,
+                            itemBuilder: (context, index) {
+                              var pesoalturas = pesos[index];
+                              return ListTile(
+                                title: Container(
+                                  padding:
+                                      const EdgeInsets.fromLTRB(25, 20, 25, 20),
+                                  decoration: BoxDecoration(
+                                      color: const Color.fromARGB(
+                                          150, 175, 186, 161),
+                                      borderRadius: BorderRadius.circular(15)),
+                                  child: Row(
+                                    children: [
+                                      Text(
+                                        '${pesoalturas.data}',
+                                        style: const TextStyle(
+                                            fontSize: 15,
+                                            fontWeight: FontWeight.w600),
+                                      ),
+                                      Spacer(),
+                                      Column(
+                                        children: [
+                                          Text('${pesoalturas.peso} kg',
+                                              style: const TextStyle(
+                                                color: Color.fromARGB(
+                                                    255, 78, 101, 61),
+                                                fontSize: 18,
+                                                fontWeight: FontWeight.w800,
+                                              )),
+                                          Text('${pesoalturas.altura} m',
+                                              style: const TextStyle(
+                                                color: Color.fromARGB(
+                                                    255, 78, 101, 61),
+                                                fontSize: 18,
+                                                fontWeight: FontWeight.w800,
+                                              )),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              );
+                            });
+                      }),
+                ),
+              ],
+            ),
+          ),
           Align(
             alignment: Alignment.bottomCenter,
             child: Padding(
@@ -103,7 +133,8 @@ class _PesoAlturaState extends State<PesoAltura> {
                 onPressed: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => const NovoPesoAltura()),
+                    MaterialPageRoute(
+                        builder: (context) => const NovoPesoAltura()),
                   );
                 },
                 style: ElevatedButton.styleFrom(

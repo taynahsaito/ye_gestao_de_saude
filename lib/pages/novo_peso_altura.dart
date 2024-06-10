@@ -51,22 +51,21 @@ class _NovoPesoAlturaState extends State<NovoPesoAltura> {
     }
   }
 
-  final PesoAlturaService adicionarPressao = PesoAlturaService();
+  final PesoAlturaService adicionarPesoAltura = PesoAlturaService();
 
-
-  pesoAdicionar() {
-    String sistolica = _pesoController.text;
-    String diastolica =_alturaController.text;
+  pesoAlturaAdicionar() {
+    String peso = _pesoController.text;
+    String altura = _alturaController.text;
     String data = _dateFormat.format(_selectedDate!);
 
-    ModeloPesoAltura modeloPressao = ModeloPesoAltura(
+    ModeloPesoAltura modeloPesoAltura = ModeloPesoAltura(
       id: const Uuid().v1(),
-      peso : sistolica,
-      altura : diastolica,
+      peso: peso,
+      altura: altura,
       data: data,
     );
 
-    adicionarPressao.adicionarPesoAltura(modeloPressao);
+    adicionarPesoAltura.adicionarPesoAltura(modeloPesoAltura);
   }
 
   @override
@@ -100,7 +99,6 @@ class _NovoPesoAlturaState extends State<NovoPesoAltura> {
         child: Column(
           children: [
             const SizedBox(height: 20),
-
             const Text(
               'Registre novo peso e altura',
               style: TextStyle(
@@ -120,7 +118,7 @@ class _NovoPesoAlturaState extends State<NovoPesoAltura> {
                     "Data da aferição:",
                     style: TextStyle(
                       fontSize: 18,
-                      fontWeight: FontWeight.w600,
+                      fontWeight: FontWeight.w500,
                       color: Color.fromARGB(220, 105, 126, 80),
                     ),
                   ),
@@ -207,7 +205,7 @@ class _NovoPesoAlturaState extends State<NovoPesoAltura> {
                     "Altura (em metros):",
                     style: TextStyle(
                       fontSize: 18,
-                      fontWeight: FontWeight.w600,
+                      fontWeight: FontWeight.w500,
                       color: Color.fromARGB(220, 105, 126, 80),
                     ),
                   ),
@@ -242,8 +240,6 @@ class _NovoPesoAlturaState extends State<NovoPesoAltura> {
                       },
                     ),
                   ),
-                  
-                  
                 ],
               ),
             ),
@@ -276,7 +272,7 @@ class _NovoPesoAlturaState extends State<NovoPesoAltura> {
                   onPressed: () {
                     if (_formKey.currentState!.validate()) {
                       // Aqui você pode atualizar os dados do paciente
-                      pesoAdicionar();
+                      pesoAlturaAdicionar();
                       _selectedDate = null;
                       _pesoController.clear();
                       _alturaController.clear();

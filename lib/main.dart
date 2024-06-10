@@ -12,6 +12,16 @@ Future<void> main() async {
   runApp(const MyApp());
 }
 
+//PARA TESTAR NO EMULADOR TROCAR O DE CIMA POR ESSE!!!:: 
+// Future<void> main() async {
+//   WidgetsFlutterBinding.ensureInitialized();
+//   await Firebase.initializeApp(
+//     options: DefaultFirebaseOptions.currentPlatform,
+//   );
+//   runApp(const MyApp());
+// }
+
+
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 

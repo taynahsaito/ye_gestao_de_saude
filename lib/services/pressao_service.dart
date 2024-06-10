@@ -3,10 +3,10 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class PressaoService {
-final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   late String userId;
-  
-PressaoService() {
+
+  PressaoService() {
     final currentUser = FirebaseAuth.instance.currentUser;
     userId = currentUser?.uid ??
         ''; // Defina userId como uma string vazia se currentUser for nulo
@@ -15,7 +15,6 @@ PressaoService() {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final CollectionReference pressaoCollection =
       FirebaseFirestore.instance.collection('Pressao');
-
 
   Future<void> adicionarPressao(ModeloPressao modeloPressao) async {
     User? user = _auth.currentUser;
@@ -28,12 +27,13 @@ PressaoService() {
     }
   }
 
-Stream<List<ModeloPressao>> getPressao() {//importante
+  Stream<List<ModeloPressao>> getPressao() {
+    //importante
     User? user = _auth.currentUser;
     if (user != null) {
       return pressaoCollection
           .doc(user.uid)
-          .collection('Pressões do Usuário')//importante
+          .collection('Pressões do Usuário') //importante
           .snapshots()
           .map((snapshot) => snapshot.docs
               .map((doc) => ModeloPressao.fromFirestore(doc))
@@ -43,4 +43,22 @@ Stream<List<ModeloPressao>> getPressao() {//importante
     }
   }
 
+  // Stream<List<ModeloPressao>> getLatestMedication() {
+  //   User? user = _auth.currentUser;
+  //   if (user != null) {
+  //     final querySnapshot = await _firestore
+  //         .collection('medicamentos')
+  //         .doc(userId)
+  //         .collection('medicamentos do usuário')
+  //         .orderBy('date', descending: true)
+  //         .limit(1)
+  //         .get()
+  //         .snapshots()
+  //         .map((snapshot) => snapshot.docs
+  //             .map((doc) => ModeloConsultas.fromFirestore(doc))
+  //             .toList());
+  //   } else {
+  //     return Stream.empty();
+  //   }
+  // }
 }

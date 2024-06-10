@@ -3,18 +3,17 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:app_ye_gestao_de_saude/services/peso_altura_service.dart';
 
-class ModeloPesoAltura{
+class ModeloPesoAltura {
   final String id;
   final String peso;
   final String altura;
   final String data;
 
-  ModeloPesoAltura({
-    required this.id,
-    required this.peso,
-    required this.altura,
-    required this.data
-  });
+  ModeloPesoAltura(
+      {required this.id,
+      required this.peso,
+      required this.altura,
+      required this.data});
 
   factory ModeloPesoAltura.fromFirestore(DocumentSnapshot doc) {
     Map data = doc.data() as Map<String, dynamic>;
@@ -29,8 +28,8 @@ class ModeloPesoAltura{
   Map<String, dynamic> toFirestore() {
     return {
       'data': data,
-      'sistolica': peso,
-      'diastolica': altura,
+      'peso': peso,
+      'altura': altura,
     };
   }
 }
