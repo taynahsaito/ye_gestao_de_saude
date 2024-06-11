@@ -56,11 +56,11 @@ class _NovaGlicemiaState extends State<NovaGlicemia> {
   glicemiaAdicionar() {
     String glicemia = _glicemiaController.text;
     String data = _dateFormat.format(_selectedDate!);
-
     ModeloGlicemia modeloGlicemia = ModeloGlicemia(
         id: const Uuid().v1(), glicemia: glicemia, dataAfericao: data);
     adicionarGlicemia.adicionarGlicemia(modeloGlicemia);
   }
+
   // Future<void> _saveDataToFirestore() async {
   //   if (_formKey.currentState != null && _formKey.currentState!.validate()) {
   //     _formKey.currentState!.save();

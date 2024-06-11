@@ -1,8 +1,10 @@
+import 'package:app_ye_gestao_de_saude/models/glicemia_model.dart';
 import 'package:app_ye_gestao_de_saude/pages/configuracoes.dart';
 import 'package:app_ye_gestao_de_saude/pages/glicemia.dart';
 import 'package:app_ye_gestao_de_saude/pages/imc.dart';
 import 'package:app_ye_gestao_de_saude/pages/peso_altura.dart';
 import 'package:app_ye_gestao_de_saude/pages/pressao.dart';
+import 'package:app_ye_gestao_de_saude/services/glicemia_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -14,10 +16,26 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  ModeloGlicemia? ultimaGlicemia;
+
+  Future<void> _loadLatestGlucose() async {
+    final ultimaGlicemiaAux = await GlicemiaService().getLatestGlucose();
+    setState(() {
+      ultimaGlicemia = ultimaGlicemiaAux;
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _loadLatestGlucose();
+  }
+
   @override
   Widget build(BuildContext context) {
     User? user = FirebaseAuth.instance.currentUser;
     String userName = user != null ? user.displayName ?? '' : '';
+    final GlicemiaService _glicemiaService = GlicemiaService();
 
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 245, 246, 241),
@@ -171,33 +189,33 @@ class _HomePageState extends State<HomePage> {
                     onPressed: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(
-                            builder: (context) => Glicemia()),
+                        MaterialPageRoute(builder: (context) => Glicemia()),
                       );
                     },
                     style: ElevatedButton.styleFrom(
-                      padding: const EdgeInsets.fromLTRB(
-                          30, 15, 15, 15), // Adiciona espaço à direita
+                      padding: const EdgeInsets.fromLTRB(30, 15, 15, 15),
                       backgroundColor: const Color.fromARGB(255, 223, 223, 223),
                       foregroundColor: const Color.fromARGB(255, 113, 113, 113),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(40),
                       ),
                     ),
-                    child: const Row(
+                    child: Row(
                       children: [
                         Expanded(
                           child: Center(
                             child: Text(
-                              "1000X400 - Normal",
-                              style: TextStyle(
+                              ultimaGlicemia != null
+                                  ? '${ultimaGlicemia!.glicemia} mg/dL'
+                                  : '-mg/dL',
+                              style: const TextStyle(
                                 fontSize: 16,
                                 fontWeight: FontWeight.w600,
                               ),
                             ),
                           ),
                         ),
-                        Icon(
+                        const Icon(
                           Icons.arrow_forward_ios,
                           color: Color.fromARGB(255, 113, 113, 113),
                           size: 20.0,
@@ -223,7 +241,8 @@ class _HomePageState extends State<HomePage> {
                     onPressed: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => const PesoAltura()),
+                        MaterialPageRoute(
+                            builder: (context) => const PesoAltura()),
                       );
                     },
                     style: ElevatedButton.styleFrom(
@@ -274,8 +293,7 @@ class _HomePageState extends State<HomePage> {
                     onPressed: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(
-                            builder: (context) => const IMC()),
+                        MaterialPageRoute(builder: (context) => const IMC()),
                       );
                     },
                     style: ElevatedButton.styleFrom(

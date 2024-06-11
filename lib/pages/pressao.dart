@@ -99,35 +99,92 @@ class _PressaoState extends State<Pressao> {
                             itemCount: pressoes.length,
                             itemBuilder: (context, index) {
                               var pressao = pressoes[index];
-                              return ListTile(
-                                title: Container(
-                                  padding:
-                                      const EdgeInsets.fromLTRB(25, 20, 25, 20),
-                                  decoration: BoxDecoration(
-                                      color: const Color.fromARGB(
-                                          150, 203, 230, 176),
-                                      borderRadius: BorderRadius.circular(15)),
-                                  child: Row(
-                                    children: [
-                                      Text(
-                                        '${pressao.data}',
-                                        style: const TextStyle(
-                                          fontSize: 15,
-                                          fontWeight: FontWeight.w600,
-                                        ),
-                                      ),
-                                      const Spacer(), // Este Spacer vai empurrar o próximo widget para a direita
-                                      Text(
-                                        '${pressao.sistolica}x${pressao.diastolica} mmHg',
-                                        style: const TextStyle(
-                                          color:
-                                              Color.fromARGB(255, 78, 101, 61),
-                                          fontSize: 20,
-                                          fontWeight: FontWeight.w800,
-                                        ),
-                                      ),
-                                    ],
+                              var sistolica = int.parse(pressao.sistolica);
+                              var diastolica = int.parse(pressao.diastolica);
+
+                              Color corbox;
+                              Color corTexto;
+                              SizedBox caixaAlteracao;
+
+                              if (sistolica < 90 && diastolica < 60) {
+                                corbox =
+                                    const Color.fromRGBO(219, 127, 88, 0.53);
+                                corTexto =
+                                    const Color.fromRGBO(150, 54, 30, 0.829);
+                                caixaAlteracao = const SizedBox(
+                                  width: 450,
+                                  child: Padding(
+                                    padding: EdgeInsets.fromLTRB(6, 8, 6, 0),
+                                    child: Text(
+                                      'Sua pressão está baixa. Consulte seu médico para mais informações.',
+                                      style: TextStyle(
+                                          fontSize: 12,
+                                          color: Color.fromRGBO(
+                                              150, 54, 30, 0.829)),
+                                    ),
                                   ),
+                                );
+                              } else if (sistolica >= 140 && diastolica >= 90) {
+                                corbox =
+                                    const Color.fromRGBO(219, 127, 88, 0.53);
+                                corTexto =
+                                    const Color.fromRGBO(150, 54, 30, 0.829);
+                                caixaAlteracao = const SizedBox(
+                                  width: 450,
+                                  child: Padding(
+                                    padding: EdgeInsets.fromLTRB(6, 8, 6, 0),
+                                    child: Text(
+                                      'Sua pressão está alta. Consulte seu médico para mais informações.',
+                                      style: TextStyle(
+                                          fontSize: 12,
+                                          color: Color.fromRGBO(
+                                              150, 54, 30, 0.829)),
+                                    ),
+                                  ),
+                                );
+                              } else {
+                                corbox =
+                                    const Color.fromRGBO(167, 216, 119, 0.5);
+                                corTexto =
+                                    const Color.fromARGB(255, 78, 101, 61);
+                                caixaAlteracao = const SizedBox(width: 0);
+                              }
+
+                              return ListTile(
+                                title: Column(
+                                  children: [
+                                    Container(
+                                      padding: const EdgeInsets.fromLTRB(
+                                          25, 20, 25, 20),
+                                      decoration: BoxDecoration(
+                                          color: const Color.fromARGB(
+                                              150, 203, 230, 176),
+                                          borderRadius:
+                                              BorderRadius.circular(15)),
+                                      child: Row(
+                                        children: [
+                                          Text(
+                                            '${pressao.data}',
+                                            style: const TextStyle(
+                                              fontSize: 15,
+                                              fontWeight: FontWeight.w600,
+                                            ),
+                                          ),
+                                          const Spacer(), // Este Spacer vai empurrar o próximo widget para a direita
+                                          Text(
+                                            '${pressao.sistolica}x${pressao.diastolica} mmHg',
+                                            style: const TextStyle(
+                                              color: Color.fromARGB(
+                                                  255, 78, 101, 61),
+                                              fontSize: 20,
+                                              fontWeight: FontWeight.w800,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    caixaAlteracao,
+                                  ],
                                 ),
                               );
                             });

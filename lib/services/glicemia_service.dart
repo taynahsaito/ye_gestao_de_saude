@@ -22,7 +22,7 @@ class GlicemiaService {
       DocumentReference userDoc = glicemiaCollection
           .doc(user.uid)
           .collection('Glicemias do Usuário')
-          .doc();
+          .doc(modeloGlicemia.id);
       await userDoc.set(modeloGlicemia.toFirestore());
     }
   }
@@ -33,12 +33,37 @@ class GlicemiaService {
       return glicemiaCollection
           .doc(user.uid)
           .collection('Glicemias do Usuário')
+          .orderBy('data de afericao', descending: true)
           .snapshots()
           .map((snapshot) => snapshot.docs
               .map((doc) => ModeloGlicemia.fromFirestore(doc))
               .toList());
     } else {
       return Stream.empty();
+    }
+  }
+
+  Future<ModeloGlicemia?> getLatestGlucose() async {
+    try {
+      // Busque as glicemias mais recentes
+      final querySnapshot = await _firestore
+          .collection('glicemia')
+          .doc(userId)
+          .collection('Glicemias do Usuário')
+          .orderBy('data de afericao', descending: true)
+          .limit(1)
+          .get();
+
+      if (querySnapshot.docs.isNotEmpty) {
+        final ultimaGlicemiaDoc = querySnapshot.docs.first;
+        final latestGlucose = ModeloGlicemia.fromFirestore(ultimaGlicemiaDoc);
+        return latestGlucose;
+      } else {
+        return null;
+      }
+    } catch (error) {
+      print("Erro ao buscar a glicemia mais recente: $error");
+      return null;
     }
   }
 }

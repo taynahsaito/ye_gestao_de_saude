@@ -84,13 +84,6 @@ class GlicemiaState extends State<Glicemia> {
                     final glicemias = snapshot.data!;
                     return ListView.builder(
                       itemCount: glicemias.length,
-
-                      //  if(glicemias.glicemia >=100){
-                      //   corBox = const Color.fromRGBO(219, 127, 88, 0.53);
-                      // }
-                      // else {
-                      //   corBox = Color.fromRGBO(167, 216, 119, 0.5);
-                      // }
                       itemBuilder: (context, index) {
                         var glicemia = glicemias[index];
                         var valor = int.parse(glicemia.glicemia);
@@ -99,7 +92,7 @@ class GlicemiaState extends State<Glicemia> {
                         Color corTexto;
                         SizedBox caixaAlteracao;
 
-                        if (valor >= 100) {
+                        if (valor < 70) {
                           corbox = const Color.fromRGBO(219, 127, 88, 0.53);
                           corTexto = const Color.fromRGBO(150, 54, 30, 0.829);
                           caixaAlteracao = const SizedBox(
@@ -107,7 +100,22 @@ class GlicemiaState extends State<Glicemia> {
                             child: Padding(
                               padding: EdgeInsets.fromLTRB(6, 8, 6, 0),
                               child: Text(
-                                'Esse resultado está fora dos limites de referência. Consulte seu médico para mais informações.',
+                                'Esse resultado está abaixo dos limites de referência. Consulte seu médico para mais informações.',
+                                style: TextStyle(
+                                    fontSize: 12,
+                                    color: Color.fromRGBO(150, 54, 30, 0.829)),
+                              ),
+                            ),
+                          );
+                        } else if (valor >= 100) {
+                          corbox = const Color.fromRGBO(219, 127, 88, 0.53);
+                          corTexto = const Color.fromRGBO(150, 54, 30, 0.829);
+                          caixaAlteracao = const SizedBox(
+                            width: 450,
+                            child: Padding(
+                              padding: EdgeInsets.fromLTRB(6, 8, 6, 0),
+                              child: Text(
+                                'Esse resultado está acima dos limites de referência. Consulte seu médico para mais informações.',
                                 style: TextStyle(
                                     fontSize: 12,
                                     color: Color.fromRGBO(150, 54, 30, 0.829)),
