@@ -1,5 +1,6 @@
 import 'package:app_ye_gestao_de_saude/services/peso_altura_service.dart';
 import 'package:app_ye_gestao_de_saude/models/peso_altura_model.dart';
+import 'package:app_ye_gestao_de_saude/widgets/nav_bar.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:app_ye_gestao_de_saude/pages/novo_peso_altura.dart';
 import 'package:flutter/material.dart';
@@ -37,7 +38,12 @@ class _PesoAlturaState extends State<PesoAltura> {
           child: IconButton(
             icon: const Icon(Icons.arrow_back),
             onPressed: () {
-              Navigator.of(context).pop();
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const NavBar(selectedIndex: 0),
+                ),
+              );
             },
           ),
         ),

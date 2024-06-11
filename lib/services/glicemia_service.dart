@@ -56,8 +56,8 @@ class GlicemiaService {
 
       if (querySnapshot.docs.isNotEmpty) {
         final ultimaGlicemiaDoc = querySnapshot.docs.first;
-        final latestGlucose = ModeloGlicemia.fromFirestore(ultimaGlicemiaDoc);
-        return latestGlucose;
+        final ultimaGlicemia = ModeloGlicemia.fromFirestore(ultimaGlicemiaDoc);
+        return ultimaGlicemia;
       } else {
         return null;
       }

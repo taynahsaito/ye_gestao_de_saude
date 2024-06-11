@@ -1,6 +1,7 @@
 import "package:app_ye_gestao_de_saude/models/imc_model.dart";
 import "package:app_ye_gestao_de_saude/pages/novo_imc.dart";
 import "package:app_ye_gestao_de_saude/services/imc_service.dart";
+import "package:app_ye_gestao_de_saude/widgets/nav_bar.dart";
 import "package:cloud_firestore/cloud_firestore.dart";
 import "package:flutter/material.dart";
 
@@ -29,7 +30,12 @@ class _IMCState extends State<IMC> {
           child: IconButton(
             icon: const Icon(Icons.arrow_back),
             onPressed: () {
-              Navigator.of(context).pop();
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const NavBar(selectedIndex: 0),
+                ),
+              );
             },
           ),
         ),
@@ -67,34 +73,140 @@ class _IMCState extends State<IMC> {
                           itemCount: imcs.length,
                           itemBuilder: (context, index) {
                             var imc = imcs[index];
+                            var valor = double.parse(imc.imc);
+
+                            Color corBox;
+                            Color corTexto;
+                            SizedBox caixaAlteracao;
+
+                            if (valor < 18.5 || valor > 25) {
+                              corBox = const Color.fromRGBO(219, 127, 88, 0.53);
+                              corTexto =
+                                  const Color.fromRGBO(150, 54, 30, 0.827);
+                              if (valor < 18.5) {
+                                caixaAlteracao = const SizedBox(
+                                  width: 450,
+                                  child: Padding(
+                                    padding: EdgeInsets.fromLTRB(6, 8, 6, 0),
+                                    child: Text(
+                                      'Esse resultado está fora dos limites de referência. Consulte seu médico para mais informações. Diagnóstico: SUBPESO.',
+                                      style: TextStyle(
+                                          fontSize: 12,
+                                          color: Color.fromRGBO(
+                                              150, 54, 30, 0.829)),
+                                    ),
+                                  ),
+                                );
+                              } else if (valor < 29.5) {
+                                caixaAlteracao = const SizedBox(
+                                  width: 450,
+                                  child: Padding(
+                                    padding: EdgeInsets.fromLTRB(6, 8, 6, 0),
+                                    child: Text(
+                                      'Esse resultado está fora dos limites de referência. Consulte seu médico para mais informações. Diagnóstico: SOBREPESO.',
+                                      style: TextStyle(
+                                          fontSize: 12,
+                                          color: Color.fromRGBO(
+                                              150, 54, 30, 0.829)),
+                                    ),
+                                  ),
+                                );
+                              } else if (valor < 34.9) {
+                                caixaAlteracao = const SizedBox(
+                                  width: 450,
+                                  child: Padding(
+                                    padding: EdgeInsets.fromLTRB(6, 8, 6, 0),
+                                    child: Text(
+                                      'Esse resultado está fora dos limites de referência. Consulte seu médico para mais informações. Diagnóstico: OBESIDADE',
+                                      style: TextStyle(
+                                          fontSize: 12,
+                                          color: Color.fromRGBO(
+                                              150, 54, 30, 0.829)),
+                                    ),
+                                  ),
+                                );
+                              } else if (valor < 39.5) {
+                                caixaAlteracao = const SizedBox(
+                                  width: 450,
+                                  child: Padding(
+                                    padding: EdgeInsets.fromLTRB(6, 8, 6, 0),
+                                    child: Text(
+                                      'Esse resultado está fora dos limites de referência. Consulte seu médico para mais informações. Diagnóstico: OBESIDADE CLASSE 2',
+                                      style: TextStyle(
+                                          fontSize: 12,
+                                          color: Color.fromRGBO(
+                                              150, 54, 30, 0.829)),
+                                    ),
+                                  ),
+                                );
+                              } else if (valor > 40) {
+                                caixaAlteracao = const SizedBox(
+                                  width: 450,
+                                  child: Padding(
+                                    padding: EdgeInsets.fromLTRB(6, 8, 6, 0),
+                                    child: Text(
+                                      'Esse resultado está fora dos limites de referência. Consulte seu médico para mais informações. Diagnóstico: OBESIDADE CLASSE 3',
+                                      style: TextStyle(
+                                          fontSize: 12,
+                                          color: Color.fromRGBO(
+                                              150, 54, 30, 0.829)),
+                                    ),
+                                  ),
+                                );
+                              } else {
+                                corBox =
+                                    const Color.fromRGBO(219, 127, 88, 0.53);
+                                corTexto =
+                                    const Color.fromRGBO(150, 54, 30, 0.829);
+                                caixaAlteracao = const SizedBox(
+                                  width: 450,
+                                  child: Text(
+                                    'Esse resultado está fora dos limites de referência. Consulte seu médico para mais informações.',
+                                    style: TextStyle(
+                                        fontSize: 12,
+                                        color:
+                                            Color.fromRGBO(150, 54, 30, 0.829)),
+                                  ),
+                                );
+                              }
+                            } else {
+                              corBox = const Color.fromRGBO(167, 216, 119, 0.5);
+                              corTexto = const Color.fromARGB(255, 78, 101, 61);
+                              caixaAlteracao = const SizedBox(width: 0);
+                            }
                             return ListTile(
-                              title: Container(
-                                padding:
-                                    const EdgeInsets.fromLTRB(25, 20, 25, 20),
-                                decoration: BoxDecoration(
-                                    color: const Color.fromARGB(
-                                        150, 203, 230, 176),
-                                    borderRadius: BorderRadius.circular(15)),
-                                child: Row(
-                                  children: [
-                                    Text(
-                                      '${imc.data}',
-                                      style: const TextStyle(
-                                        fontSize: 15,
-                                        fontWeight: FontWeight.w600,
-                                      ),
+                              title: Column(
+                                children: [
+                                  Container(
+                                    padding: const EdgeInsets.fromLTRB(
+                                        25, 20, 25, 20),
+                                    decoration: BoxDecoration(
+                                        color: corBox,
+                                        borderRadius:
+                                            BorderRadius.circular(15)),
+                                    child: Row(
+                                      children: [
+                                        Text(
+                                          '${imc.data}',
+                                          style: const TextStyle(
+                                            fontSize: 15,
+                                            fontWeight: FontWeight.w600,
+                                          ),
+                                        ),
+                                        const Spacer(), // Este Spacer vai empurrar o próximo widget para a direita
+                                        Text(
+                                          '${imc.imc} kg/m^2',
+                                          style: TextStyle(
+                                            color: corTexto,
+                                            fontSize: 20,
+                                            fontWeight: FontWeight.w800,
+                                          ),
+                                        ),
+                                      ],
                                     ),
-                                    const Spacer(), // Este Spacer vai empurrar o próximo widget para a direita
-                                    Text(
-                                      '${imc.imc} kg/m^2',
-                                      style: const TextStyle(
-                                        color: Color.fromARGB(255, 78, 101, 61),
-                                        fontSize: 20,
-                                        fontWeight: FontWeight.w800,
-                                      ),
-                                    ),
-                                  ],
-                                ),
+                                  ),
+                                  caixaAlteracao,
+                                ],
                               ),
                             );
                           });
@@ -131,4 +243,3 @@ class _IMCState extends State<IMC> {
     );
   }
 }
-

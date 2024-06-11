@@ -1,10 +1,16 @@
 import 'package:app_ye_gestao_de_saude/models/glicemia_model.dart';
+import 'package:app_ye_gestao_de_saude/models/imc_model.dart';
+import 'package:app_ye_gestao_de_saude/models/modelo_pressao.dart';
+import 'package:app_ye_gestao_de_saude/models/peso_altura_model.dart';
 import 'package:app_ye_gestao_de_saude/pages/configuracoes.dart';
 import 'package:app_ye_gestao_de_saude/pages/glicemia.dart';
 import 'package:app_ye_gestao_de_saude/pages/imc.dart';
 import 'package:app_ye_gestao_de_saude/pages/peso_altura.dart';
 import 'package:app_ye_gestao_de_saude/pages/pressao.dart';
 import 'package:app_ye_gestao_de_saude/services/glicemia_service.dart';
+import 'package:app_ye_gestao_de_saude/services/imc_service.dart';
+import 'package:app_ye_gestao_de_saude/services/peso_altura_service.dart';
+import 'package:app_ye_gestao_de_saude/services/pressao_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -17,18 +23,51 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   ModeloGlicemia? ultimaGlicemia;
+  ModeloPressao? ultimaPressao;
+  ModeloPesoAltura? ultimoPesoeAltura;
+  ModeloIMC? ultimoIMC;
 
-  Future<void> _loadLatestGlucose() async {
+  Future<void> _carregarUltimaGlicemia() async {
     final ultimaGlicemiaAux = await GlicemiaService().getLatestGlucose();
     setState(() {
       ultimaGlicemia = ultimaGlicemiaAux;
     });
   }
 
+  Future<void> _carregarUltimaPressao() async {
+    final ultimaPressaoAux = await PressaoService().getLatestPressure();
+    setState(() {
+      ultimaPressao = ultimaPressaoAux;
+    });
+  }
+
+  Future<void> _carregarUltimoPesoeAltura() async {
+    final ultimoPesoeAlturaAux =
+        await PesoAlturaService().getLatestWeightandHeight();
+    setState(() {
+      ultimoPesoeAltura = ultimoPesoeAlturaAux;
+    });
+  }
+
+  Future<void> _carregarUltimoIMC() async {
+    final ultimoIMCAux = await IMCService().getLatestIMC();
+    setState(() {
+      ultimoIMC = ultimoIMCAux;
+    });
+  }
+
   @override
   void initState() {
     super.initState();
-    _loadLatestGlucose();
+    final user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      _carregarUltimaGlicemia();
+      _carregarUltimaPressao();
+      _carregarUltimoPesoeAltura();
+      _carregarUltimoIMC();
+    } else {
+      print("Nenhum usuário logado. Não é possível carregar dados.");
+    }
   }
 
   @override
@@ -150,20 +189,22 @@ class _HomePageState extends State<HomePage> {
                         borderRadius: BorderRadius.circular(40),
                       ),
                     ),
-                    child: const Row(
+                    child: Row(
                       children: [
                         Expanded(
                           child: Center(
                             child: Text(
-                              "150X100 - Alta",
-                              style: TextStyle(
+                              ultimaPressao != null
+                                  ? '${ultimaPressao!.sistolica}x${ultimaPressao!.diastolica} mmHg'
+                                  : '-mmHg',
+                              style: const TextStyle(
                                 fontSize: 16,
                                 fontWeight: FontWeight.w600,
                               ),
                             ),
                           ),
                         ),
-                        Icon(
+                        const Icon(
                           Icons.arrow_forward_ios,
                           color: Color.fromARGB(255, 113, 113, 113),
                           size: 20.0,
@@ -254,20 +295,22 @@ class _HomePageState extends State<HomePage> {
                         borderRadius: BorderRadius.circular(40),
                       ),
                     ),
-                    child: const Row(
+                    child: Row(
                       children: [
                         Expanded(
                           child: Center(
                             child: Text(
-                              "64kg - 1.64cm",
-                              style: TextStyle(
+                              ultimoPesoeAltura != null
+                                  ? '${ultimoPesoeAltura!.peso} kg - ${ultimoPesoeAltura!.altura} m'
+                                  : '-mmHg',
+                              style: const TextStyle(
                                 fontSize: 16,
                                 fontWeight: FontWeight.w600,
                               ),
                             ),
                           ),
                         ),
-                        Icon(
+                        const Icon(
                           Icons.arrow_forward_ios,
                           color: Color.fromARGB(255, 113, 113, 113),
                           size: 20.0,
@@ -305,20 +348,22 @@ class _HomePageState extends State<HomePage> {
                         borderRadius: BorderRadius.circular(40),
                       ),
                     ),
-                    child: const Row(
+                    child: Row(
                       children: [
                         Expanded(
                           child: Center(
                             child: Text(
-                              "31.14 - Obesidade I",
-                              style: TextStyle(
+                              ultimoIMC != null
+                                  ? '${ultimoIMC!.imc} kg/m^2'
+                                  : 'kg/m^2',
+                              style: const TextStyle(
                                 fontSize: 16,
                                 fontWeight: FontWeight.w600,
                               ),
                             ),
                           ),
                         ),
-                        Icon(
+                        const Icon(
                           Icons.arrow_forward_ios,
                           color: Color.fromARGB(255, 113, 113, 113),
                           size: 20.0,
