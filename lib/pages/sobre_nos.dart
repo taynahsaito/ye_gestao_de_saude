@@ -54,16 +54,18 @@ class _SobreNosState extends State<SobreNos> {
                 child: SizedBox(
                   width: 500,
                   child: Padding(
-                    padding: EdgeInsets.all(30),
+                    padding: EdgeInsets.all(25),
                     child: Center(
                       child: Text(
-                          "Nós somos o Minha Saúde em Dia, um aplicativo desenvolvido para melhorar a gestão da sua própria saúde e melhorar sua qualidade de vida.Você pode adicionar lembretes de suas consultas, colocar um resumo delas, definir horários de seus medicamentos com apenas quatro informações, organizar os resultados de seus exames, bem como armazenar o resultado deles, e muito mais.",
-                          style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.w500,
-                            color: Colors.white,
-                            height: 2,
-                          )),
+                        "Nós somos o Minha Saúde em Dia, um aplicativo desenvolvido para melhorar a gestão da sua própria saúde e melhorar sua qualidade de vida. Você pode adicionar lembretes de suas consultas, colocar um resumo delas, definir horários de seus medicamentos com apenas quatro informações, organizar os resultados de seus exames, bem como armazenar o resultado deles, e muito mais.",
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.w500,
+                          color: Colors.white,
+                          height: 2,
+                        ),
+                        textAlign: TextAlign.justify,
+                      ),
                     ),
                   ),
                 ),

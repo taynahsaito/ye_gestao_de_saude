@@ -1,8 +1,11 @@
 import 'package:app_ye_gestao_de_saude/components/snackbar.dart';
+import 'package:app_ye_gestao_de_saude/pages/login.dart';
 import 'package:app_ye_gestao_de_saude/pages/sobre_nos.dart';
 import 'package:app_ye_gestao_de_saude/services/auth_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:app_ye_gestao_de_saude/widgets/nav_bar.dart';
+
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -14,50 +17,70 @@ class Configuracoes extends StatefulWidget {
 }
 
 class _ConfiguracoesState extends State<Configuracoes> {
-  final TextEditingController _nomeController = TextEditingController();
-  final TextEditingController _emailController = TextEditingController();
-  final TextEditingController _senhaController = TextEditingController();
-  late DateTime? _selectedDate;
+  TextEditingController _nomeController = TextEditingController();
+  TextEditingController _emailController = TextEditingController();
+  TextEditingController _emailVerificacaoController = TextEditingController();
+  TextEditingController _dataController = TextEditingController();
+
+  DateTime? _selectedDate;
   final DateFormat _dateFormat = DateFormat('dd/MM/yyyy');
-  bool _senhaVisivel = false;
+  late DateFormat dateFormatter;
+  User? user = FirebaseAuth.instance.currentUser;
+  // bool _senhaVisivel = false;
 
   String nome = '';
   String email = '';
-  String senha = '';
+  String dataNasc = '';
   @override
   void initState() {
     super.initState();
-    // _fetchUserData();
+    // Inicialize os controladores aqui
+    _nomeController = TextEditingController(text: nome);
+    _emailController = TextEditingController(text: email);
+    _dataController = TextEditingController(text: dataNasc);
+    // Chame _fetchUserData() aqui
+    _fetchUserData();
+    dateFormatter = DateFormat('dd/MM/yyyy');
   }
 
-  User? user = FirebaseAuth.instance.currentUser;
+  @override
+  void dispose() {
+    _nomeController.dispose();
+    _emailController.dispose();
+    _emailVerificacaoController.dispose();
+    _dataController.dispose();
+    super.dispose();
+  }
 
-  // Future<void> _fetchUserData() async {
-  //   try {
-  //     User? user = FirebaseAuth.instance.currentUser;
-  //     if (user != null) {
-  //       DatabaseReference userRef =
-  //           FirebaseDatabase.instance.ref().child('usuarios').child(user.uid);
-  //       DatabaseEvent event = await userRef.once();
-  //       DataSnapshot snapshot = event.snapshot;
+  Future<void> _fetchUserData() async {
+    try {
+      User? user = FirebaseAuth.instance.currentUser;
+      if (user != null) {
+        DatabaseReference userRef =
+            FirebaseDatabase.instance.ref().child('usuarios').child(user.uid);
+        DatabaseEvent event = await userRef.once();
+        DataSnapshot snapshot = event.snapshot;
 
-  //       if (snapshot.exists) {
-  //         setState(() {
-  //           nome = snapshot.child('nome').value?.toString() ?? 'N/A';
-  //           email = snapshot.child('email').value?.toString() ?? 'N/A';
-  //           dataNasc = snapshot.child('dataNasc').value?.toString() ?? 'N/A';
-  //           senha = snapshot.child('senha').value?.toString() ?? 'N/A';
-  //         });
-  //       } else {
-  //         print('No data available for the user.');
-  //       }
-  //     } else {
-  //       print('No user is currently signed in.');
-  //     }
-  //   } catch (e) {
-  //     print('An error occurred while fetching user data: $e');
-  //   }
-  // }
+        if (snapshot.exists) {
+          setState(() {
+            nome = snapshot.child('nome').value?.toString() ?? 'N/A';
+            email = snapshot.child('email').value?.toString() ?? 'N/A';
+            dataNasc =
+                snapshot.child('dataNascimento').value?.toString() ?? 'N/A';
+            _nomeController = TextEditingController(text: nome);
+            _emailController = TextEditingController(text: email);
+            _dataController = TextEditingController(text: dataNasc);
+          });
+        } else {
+          print('No data available for the user.');
+        }
+      } else {
+        print('No user is currently signed in.');
+      }
+    } catch (e) {
+      print('An error occurred while fetching user data: $e');
+    }
+  }
 
   void _updateName() {
     String name = _nomeController.text.trim();
@@ -69,21 +92,25 @@ class _ConfiguracoesState extends State<Configuracoes> {
           FirebaseDatabase.instance.ref().child('usuarios').child(user!.uid);
       userRef.update({'nome': newName}).then((_) async {
         setState(() {
-          nome = newName; // Atualiza o nome na interface do usuário
+          nome = newName;
+          _nomeController.text = nome;
         });
-        showDialog(
-          context: context,
-          builder: (context) {
-            return showSnackBar(
-              context: context,
-              texto: 'Nome atualizado!',
-            );
-          },
-        );
+        // showDialog(
+        //   context: context,
+        //   builder: (context) {
+        //     return showSnackBar(
+        //       context: context,
+        //       texto: 'Nome atualizado!',
+        //     );
+        //   },
+        // );
 
         await Future.delayed(const Duration(seconds: 1));
 
-        Navigator.pop(context);
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Nome atualizado com sucesso!')),
+        );
+        // Navigator.pop(context);
 
         // Navigator.push(
         //   context,
@@ -102,18 +129,18 @@ class _ConfiguracoesState extends State<Configuracoes> {
     FirebaseAuth.instance
         .sendPasswordResetEmail(email: email)
         .then((value) async {
-      showDialog(
-        context: context,
-        builder: (context) {
-          return showSnackBar(
-            context: context,
-            texto: 'Email para redefinição de senha enviado!',
-          );
-        },
-      );
+      // showDialog(
+      //   context: context,
+      //   builder: (context) {
+      //     return showSnackBar(
+      //       context: context,
+      //       texto: 'E-mail para redefinição de senha enviado!',
+      //     );
+      //   },
+      // );
       await Future.delayed(const Duration(seconds: 1));
 
-      Navigator.pop(context);
+      // Navigator.pop(context);
 
       // Navigator.push(
       //   context,
@@ -155,22 +182,49 @@ class _ConfiguracoesState extends State<Configuracoes> {
     });
   }
 
+  void _updateDate() {
+    if (_selectedDate == null) return;
+
+    if (user != null) {
+      DatabaseReference userRef =
+          FirebaseDatabase.instance.ref().child('usuarios').child(user!.uid);
+      userRef.update({'dataNascimento': _dataController.text}).then((_) async {
+        _dataController.clear(); // Limpa o campo de texto aqui
+        // showDialog(
+        //   context: context,
+        //   builder: (context) {
+        //     return SuccessPopup(
+        //       message: 'Data de nascimento atualizada!',
+        //     );
+        //   },
+        // );
+        // ScaffoldMessenger.of(context).showSnackBar(
+        //   const SnackBar(
+        //       content: Text('Data de nascimento atualizada com sucesso!')),
+        // );
+
+        await Future.delayed(const Duration(seconds: 1));
+      }).catchError((error) {
+        print(
+            'Erro ao atualizar a data de nascimento no Realtime Database: $error');
+      });
+    }
+  }
+
   AuthService authService = AuthService();
 
   Future<void> _selectDate(BuildContext context) async {
     final ThemeData theme = Theme.of(context);
     final DateTime? picked = await showDatePicker(
       context: context,
-      initialDate: _selectedDate,
+      initialDate: _selectedDate ?? DateTime.now(),
       firstDate: DateTime(1900),
       lastDate: DateTime.now(),
       builder: (BuildContext context, Widget? child) {
         return Theme(
           data: theme.copyWith(
-            // Personalize a cor de fundo da seleção aqui
             colorScheme: theme.colorScheme.copyWith(
-              primary: const Color.fromARGB(
-                  220, 105, 126, 80), // Cor de fundo da seleção
+              primary: const Color.fromRGBO(136, 149, 83, 1),
             ),
           ),
           child: child!,
@@ -180,6 +234,7 @@ class _ConfiguracoesState extends State<Configuracoes> {
     if (picked != null && picked != _selectedDate) {
       setState(() {
         _selectedDate = picked;
+        _dataController.text = _dateFormat.format(picked);
       });
     }
   }
@@ -198,7 +253,12 @@ class _ConfiguracoesState extends State<Configuracoes> {
             child: IconButton(
               icon: const Icon(Icons.arrow_back),
               onPressed: () {
-                Navigator.of(context).pop();
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const NavBar(selectedIndex: 0),
+                  ),
+                );
               },
             ),
           ),
@@ -260,69 +320,53 @@ class _ConfiguracoesState extends State<Configuracoes> {
                     labelStyle: TextStyle(
                         fontSize: 18, color: Color.fromARGB(255, 105, 126, 80)),
                   ),
+                  readOnly: true,
                 ),
               ),
-              const SizedBox(height: 20),
+              const SizedBox(height: 10),
+              const Padding(
+                padding: EdgeInsets.fromLTRB(8, 0, 8, 8),
+                child: Text(
+                  "Insira seu e-mail para redefinir sua senha:",
+                  style: TextStyle(
+                    color: Color.fromARGB(220, 105, 126, 80),
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ),
               SizedBox(
                 width: 700,
                 child: TextFormField(
-                  readOnly: true,
-                  onTap: () => _selectDate(context),
-                  controller: TextEditingController(
-                    text: _selectedDate != null
-                        ? _dateFormat.format(_selectedDate!)
-                        : '',
-                  ),
+                  controller: _emailVerificacaoController,
                   decoration: const InputDecoration(
-                    hintText: 'Data de nascimento',
-                    hintStyle: TextStyle(
-                        fontSize: 18, color: Color.fromARGB(255, 105, 126, 80)),
                     fillColor: Color.fromARGB(190, 223, 223, 223),
                     filled: true,
                     border: OutlineInputBorder(
                       borderSide: BorderSide.none,
                       borderRadius: BorderRadius.all(Radius.circular(25)),
                     ),
+                    // labelText: "Insira seu e-mail para redefinir sua senha",
                     contentPadding: EdgeInsets.fromLTRB(25, 0, 0, 0),
                     labelStyle: TextStyle(
                         fontSize: 18, color: Color.fromARGB(255, 105, 126, 80)),
+                    // suffixIcon: IconButton(
+                    //   icon: Padding(
+                    //     padding: const EdgeInsets.fromLTRB(0, 0, 15, 0),
+                    //     child: Icon(
+                    //       _senhaVisivel
+                    //           ? Icons.visibility
+                    //           : Icons.visibility_off,
+                    //       color: const Color.fromARGB(255, 105, 126, 80),
+                    //     ),
+                    //   ),
+                    //   onPressed: () {
+                    //     setState(() {
+                    //       _senhaVisivel = !_senhaVisivel;
+                    //     });
+                    //   },
+                    // ),
                   ),
-                ),
-              ),
-              const SizedBox(height: 20),
-              SizedBox(
-                width: 700,
-                child: TextFormField(
-                  controller: _senhaController,
-                  decoration: InputDecoration(
-                    fillColor: const Color.fromARGB(190, 223, 223, 223),
-                    filled: true,
-                    border: const OutlineInputBorder(
-                      borderSide: BorderSide.none,
-                      borderRadius: BorderRadius.all(Radius.circular(25)),
-                    ),
-                    labelText: "Senha",
-                    contentPadding: const EdgeInsets.fromLTRB(25, 0, 0, 0),
-                    labelStyle: const TextStyle(
-                        fontSize: 18, color: Color.fromARGB(255, 105, 126, 80)),
-                    suffixIcon: IconButton(
-                      icon: Padding(
-                        padding: const EdgeInsets.fromLTRB(0, 0, 15, 0),
-                        child: Icon(
-                          _senhaVisivel
-                              ? Icons.visibility
-                              : Icons.visibility_off,
-                          color: const Color.fromARGB(255, 105, 126, 80),
-                        ),
-                      ),
-                      onPressed: () {
-                        setState(() {
-                          _senhaVisivel = !_senhaVisivel;
-                        });
-                      },
-                    ),
-                  ),
-                  obscureText: !_senhaVisivel,
+                  // obscureText: !_senhaVisivel,
                 ),
               ),
               const SizedBox(
@@ -331,7 +375,11 @@ class _ConfiguracoesState extends State<Configuracoes> {
               FractionallySizedBox(
                 widthFactor: 0.4,
                 child: ElevatedButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    _updateDate();
+                    _updateName();
+                    resetPassword();
+                  },
                   style: ElevatedButton.styleFrom(
                     padding: const EdgeInsets.all(10),
                     foregroundColor: const Color.fromARGB(255, 255, 255, 255),
@@ -360,7 +408,14 @@ class _ConfiguracoesState extends State<Configuracoes> {
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: ElevatedButton(
-                  onPressed: () {},
+                  onPressed: () async {
+                    await authService.logOut();
+
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => const Login()),
+                    );
+                  },
                   style: ElevatedButton.styleFrom(
                     padding: const EdgeInsets.all(10),
                     backgroundColor: const Color.fromARGB(

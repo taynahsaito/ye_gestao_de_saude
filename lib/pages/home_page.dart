@@ -12,6 +12,7 @@ import 'package:app_ye_gestao_de_saude/services/imc_service.dart';
 import 'package:app_ye_gestao_de_saude/services/peso_altura_service.dart';
 import 'package:app_ye_gestao_de_saude/services/pressao_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 
 class HomePage extends StatefulWidget {
@@ -26,7 +27,7 @@ class _HomePageState extends State<HomePage> {
   ModeloPressao? ultimaPressao;
   ModeloPesoAltura? ultimoPesoeAltura;
   ModeloIMC? ultimoIMC;
-
+  String nome = '';
   Future<void> _carregarUltimaGlicemia() async {
     final ultimaGlicemiaAux = await GlicemiaService().getLatestGlucose();
     setState(() {
@@ -56,6 +57,31 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
+  User? user = FirebaseAuth.instance.currentUser;
+
+  Future<void> _fetchUserName() async {
+    try {
+      if (user != null) {
+        DatabaseReference userRef =
+            FirebaseDatabase.instance.ref().child('usuarios').child(user!.uid);
+        DatabaseEvent event = await userRef.once();
+        DataSnapshot snapshot = event.snapshot;
+
+        if (snapshot.exists) {
+          setState(() {
+            nome = snapshot.child('nome').value?.toString() ?? 'N/A';
+          });
+        } else {
+          print('No data available for the user.');
+        }
+      } else {
+        print('No user is currently signed in.');
+      }
+    } catch (e) {
+      print('An error occurred while fetching user data: $e');
+    }
+  }
+
   @override
   void initState() {
     super.initState();
@@ -65,6 +91,7 @@ class _HomePageState extends State<HomePage> {
       _carregarUltimaPressao();
       _carregarUltimoPesoeAltura();
       _carregarUltimoIMC();
+      _fetchUserName();
     } else {
       print("Nenhum usuário logado. Não é possível carregar dados.");
     }
@@ -132,7 +159,7 @@ class _HomePageState extends State<HomePage> {
                                 .start, // Ajuste conforme necessário
                             children: [
                               Text(
-                                "$userName",
+                                "$nome",
                                 style: const TextStyle(
                                   color: Color.fromARGB(220, 105, 126, 80),
                                   fontSize: 22,
@@ -355,7 +382,7 @@ class _HomePageState extends State<HomePage> {
                             child: Text(
                               ultimoIMC != null
                                   ? '${ultimoIMC!.imc} kg/m^2'
-                                  : 'kg/m^2',
+                                  : '-kg/m^2',
                               style: const TextStyle(
                                 fontSize: 16,
                                 fontWeight: FontWeight.w600,

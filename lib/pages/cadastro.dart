@@ -306,7 +306,7 @@ class _CadastroState extends State<Cadastro> {
                           await databaseReference.child(idUsuario!).set({
                             'nome': _nomeController.text,
                             'email': _emailController.text,
-                            'senha': _senhaController.text,
+                            // 'senha': _senhaController.text,
                             'dataNascimento': dataNascimento,
                           });
 
